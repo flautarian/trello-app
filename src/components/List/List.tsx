@@ -7,7 +7,7 @@ import {
   AddCardButton,
 } from './List.styles';
 import Card from '../Card/Card';
-import uuidv1 from 'uuid/v1';
+import { v1 as uuidv1 } from 'uuid';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { IList, ICard } from '../../models';
 

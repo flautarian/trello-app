@@ -1,5 +1,5 @@
 import { IList, ICard } from '../models';
-import uuidv1 from 'uuid/v1';
+import { v1 as uuidv1 } from 'uuid';
 
 export const reorder = <T>(
   list: T[],

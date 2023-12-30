@@ -4,11 +4,10 @@ import React, {
   useReducer,
   useCallback,
 } from 'react';
-import ls from 'local-storage';
-import uuidv1 from 'uuid/v1';
+import { v1 as uuidv1 } from 'uuid';
 import groupBy from 'lodash.groupby';
 import List from './components/List/List';
-import { DragDropContext } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd';
 import Options from './components/Options/Options';
 import { cardsReducer, listsReducer } from './reducers';
 import { IList, ICard } from './models';
@@ -18,9 +17,10 @@ import { reorder } from './utils';
 import './styles.css';
 
 export default function App() {
-  const listsFromLs = ls.get<IList[]>('lists');
-  const cardsFromLs = ls.get<ICard[]>('cards');
-  const bgColorFromLs = ls.get<string>('bgColor');
+
+  const listsFromLs = localStorage.getItem('lists') as unknown as string;
+  const cardsFromLs = localStorage.getItem('cards');
+  const bgColorFromLs = localStorage.getItem('bgColor');
 
   const [bgColor, setBgColor] = useState(
     bgColorFromLs ? bgColorFromLs : 'dodgerblue',
@@ -28,26 +28,26 @@ export default function App() {
 
   const [cards, cardsDispatch] = useReducer(
     cardsReducer,
-    cardsFromLs ? cardsFromLs : initialCards,
+    cardsFromLs ? JSON.parse(cardsFromLs) : initialCards,
   );
 
   const [lists, listsDispatch] = useReducer(
     listsReducer,
-    listsFromLs ? listsFromLs : initialLists,
+    listsFromLs ? JSON.parse(listsFromLs) : initialLists,
   );
 
   useEffect(() => {
-    ls.set<ICard[]>('cards', cards);
-    ls.set<IList[]>('lists', lists);
+    localStorage.setItem('cards', JSON.stringify(cards));
+    localStorage.setItem('lists', JSON.stringify(lists));
   }, [cards, lists]);
 
   const handleBgColorChange = (color: { hex: string }) => {
     setBgColor(color.hex);
-    ls.set<string>('bgColor', color.hex);
+    localStorage.setItem('bgColor', color.hex);
   };
 
   const onDragEnd = useCallback(
-    result => {
+    (result: DropResult, provided: ResponderProvided) => {
       // dropped outside the list
       if (!result.destination) {
         return;
@@ -96,7 +96,7 @@ export default function App() {
 
         const target = cards.filter(
           (card: ICard) =>
-            card.listId === result.destination.droppableId,
+            card.listId === result.destination?.droppableId,
         );
 
         const itemWithNewId = {
@@ -109,7 +109,7 @@ export default function App() {
         const filteredCards = cards.filter(
           (card: any) =>
             card.listId !== result.source.droppableId &&
-            card.listId !== result.destination.droppableId,
+            card.listId !== result.destination?.droppableId,
         );
 
         cardsDispatch({
