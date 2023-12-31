@@ -45,8 +45,15 @@ export const listsReducer = (
   switch (action.type) {
     case 'ADD':
       return [...state, { id, listTitle }];
+
     case 'REMOVE':
       return state.filter(list => list.id !== id);
+
+    case 'REORDER':
+      let element = state[action.payload[0]];
+      const lCopy = state.filter((l, i) => i !== action.payload[0]);
+      lCopy.splice(action.payload[1], 0, element);
+      return lCopy;
 
     case 'UPDATE_NAME':
       const listsCopy = [...state];
@@ -56,6 +63,10 @@ export const listsReducer = (
         foundCard.listTitle = value;
       }
       return listsCopy;
+
+    case 'SET':
+      return action.payload.newState;
+
     default:
       return state;
   }

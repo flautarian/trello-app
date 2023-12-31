@@ -8,6 +8,14 @@ export const Container = styled.div<{ bgColor: string }>`
   font-family: sans-serif;
 `;
 
+export const BoardContainer = styled.div<{ bgColor: string }>`
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  background-color: ${({ bgColor }) => bgColor};
+  font-family: sans-serif;
+`;
+
 export const Lists = styled.div`
   display: flex;
   align-items: flex-start;

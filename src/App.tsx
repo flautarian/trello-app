@@ -7,12 +7,12 @@ import React, {
 import { v1 as uuidv1 } from 'uuid';
 import groupBy from 'lodash.groupby';
 import List from './components/List/List';
-import { DragDropContext, DropResult, ResponderProvided } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult, Droppable, ResponderProvided } from 'react-beautiful-dnd';
 import Options from './components/Options/Options';
 import { cardsReducer, listsReducer } from './reducers';
 import { IList, ICard } from './models';
 import { initialCards, initialLists } from './utils';
-import { Container, Lists, NewListButton } from './App.styles';
+import { BoardContainer, Container, Lists, NewListButton } from './App.styles';
 import { reorder } from './utils';
 import './styles.css';
 
@@ -48,8 +48,21 @@ export default function App() {
 
   const onDragEnd = useCallback(
     (result: DropResult, provided: ResponderProvided) => {
-      // dropped outside the list
+      // dropped outside the list or same position
       if (!result.destination) {
+        return;
+      }
+
+      if (result.type === "COLUMN") {
+        // Get rid of old list and replace with updated one
+        const filteredLists = lists.filter(
+          (list: IList) => list.id !== result.source.droppableId,
+        );
+
+        listsDispatch({
+          type: 'REORDER',
+          payload: [result.source.index, result.destination.index] ,
+        })
         return;
       }
 
@@ -130,19 +143,33 @@ export default function App() {
   return (
     <Container bgColor={bgColor}>
       <Options handleBgColorChange={handleBgColorChange} />
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Lists>
-          {lists.map((list: IList) => (
-            <List
-              key={list.id}
-              list={list}
-              cards={cards.filter(
-                (card: ICard) => card.listId === list.id,
-              )}
-              cardsDispatch={cardsDispatch}
-              listsDispatch={listsDispatch}
-            />
-          ))}
+      <Lists>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable
+            droppableId={"board"}
+            type="COLUMN"
+            direction="horizontal"
+            ignoreContainerClipping={false}
+            isCombineEnabled={false}>
+            {(provided, snapshot) => (
+              <BoardContainer bgColor={bgColor} ref={provided.innerRef} {...provided.droppableProps}>
+                {lists.map((list: IList, index: number) => (
+                  <List
+                    key={list.id}
+                    index={index}
+                    list={list}
+                    cards={cards.filter(
+                      (card: ICard) => card.listId === list.id,
+                    )}
+                    cardsDispatch={cardsDispatch}
+                    listsDispatch={listsDispatch}
+                  />
+                ))}
+                {provided.placeholder}
+              </BoardContainer>
+            )}
+
+          </Droppable>
           <NewListButton
             onClick={() => {
               listsDispatch({
@@ -156,8 +183,10 @@ export default function App() {
           >
             + New list
           </NewListButton>
-        </Lists>
-      </DragDropContext>
+
+
+        </DragDropContext>
+      </Lists>
     </Container>
   );
 }

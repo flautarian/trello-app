@@ -12,11 +12,13 @@ export const Container = styled.div`
   min-height: 100px;
 `;
 
-export const Header = styled.header`
+export const Header = styled.header<{ isDragging: boolean }>`
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: ${({ isDragging }) =>
+    isDragging ? "rgb(235, 236, 240)" : "rgb(100, 200, 200)"};
   padding-bottom: 5px;
 `;
 export const Title = styled.div``;

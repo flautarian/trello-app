@@ -13,6 +13,7 @@ import { IList, ICard } from '../../models';
 
 interface IListProps {
   list: IList;
+  index: number;
   cards: ICard[];
   cardsDispatch: any;
   listsDispatch: any;
@@ -20,6 +21,7 @@ interface IListProps {
 
 const List: FunctionComponent<IListProps> = ({
   list,
+  index,
   cards,
   cardsDispatch,
   listsDispatch,
@@ -35,12 +37,12 @@ const List: FunctionComponent<IListProps> = ({
     marginBottom: '5px',
     borderRadius: '5px',
     borderBottom: '1px solid rgb(178,185,197)',
-
     ...draggableStyle,
   });
 
+  //TODO: isDraggingOver need functionality
   const getListStyle = (isDraggingOver: boolean) => ({
-    minHeight: 70,
+    minHeight: 70
   });
 
   const handleNameChange = (evt: any) => {
@@ -52,91 +54,91 @@ const List: FunctionComponent<IListProps> = ({
   };
 
   return (
-    <Container>
-      <Header>
-        {isEditingName ? (
-          <input
-            type="text"
-            defaultValue={list.listTitle}
-            onChange={handleNameChange}
-            onBlur={() => setEditingName(false)}
-            onKeyPress={evt => {
-              if (evt.key === 'Enter') {
-                setEditingName(false);
+    <Draggable key={list.id} draggableId={list.id} index={index}>
+      {(provided, snapshot) => (
+        <Container ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+          <Header isDragging={snapshot.isDragging}>
+            {isEditingName ? (
+              <input
+                type="text"
+                defaultValue={list.listTitle}
+                onChange={handleNameChange}
+                onBlur={() => setEditingName(false)}
+                onKeyPress={evt => {
+                  if (evt.key === 'Enter') {
+                    setEditingName(false);
+                  }
+                }}
+              />
+            ) : (
+              <Title onClick={() => setEditingName(true)}>
+                {list.listTitle}
+              </Title>
+            )}
+            <CloseButton
+              onClick={() =>
+                listsDispatch({
+                  type: 'REMOVE',
+                  payload: { id: list.id },
+                })
               }
-            }}
-          />
-        ) : (
-          <Title onClick={() => setEditingName(true)}>
-            {list.listTitle}
-          </Title>
-        )}
-        <CloseButton
-          onClick={() =>
-            listsDispatch({
-              type: 'REMOVE',
-              payload: { id: list.id },
-            })
-          }
-        >
-          &times;
-        </CloseButton>
-      </Header>
-      <Droppable droppableId={list.id}>
-        {(provided, snapshot) => (
-          <div
-            {...provided.droppableProps}
-            ref={provided.innerRef}
-            style={getListStyle(snapshot.isDraggingOver)}
+            >
+              &times;
+            </CloseButton>
+          </Header>
+          <Droppable
+            droppableId={list.id}>
+            {(provided, snapshot) => (
+              <div
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                style={getListStyle(snapshot.isDraggingOver)}>
+                {cards.map((post: ICard, index: number) => (
+                  <Draggable
+                    key={post.id}
+                    index={index}
+                    draggableId={`draggable-${post.id}`}>
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={getItemStyle(
+                          snapshot.isDragging,
+                          provided.draggableProps.style,
+                        )}
+                      >
+                        <Card
+                          key={post.id}
+                          text={post.text}
+                          id={post.id}
+                          cardsDispatch={cardsDispatch}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+          <AddCardButton
+            onClick={evt =>
+              cardsDispatch({
+                type: 'ADD',
+                payload: {
+                  listId: list.id,
+                  text: 'new item',
+                  id: uuidv1(),
+                },
+              })
+            }
           >
-            <>
-              {cards.map((post: ICard, index: number) => (
-                <Draggable
-                  key={post.id}
-                  index={index}
-                  draggableId={`draggable-${post.id}`}
-                >
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style,
-                      )}
-                    >
-                      <Card
-                        key={post.id}
-                        text={post.text}
-                        id={post.id}
-                        cardsDispatch={cardsDispatch}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-            </>
-
-            {provided.placeholder}
-          </div>
-        )}
-      </Droppable>
-      <AddCardButton
-        onClick={evt =>
-          cardsDispatch({
-            type: 'ADD',
-            payload: {
-              listId: list.id,
-              text: 'new item',
-              id: uuidv1(),
-            },
-          })
-        }
-      >
-        + Add a card
-      </AddCardButton>
-    </Container>
+            + Add a card
+          </AddCardButton>
+        </Container>
+      )}
+    </Draggable>
   );
 };
 
