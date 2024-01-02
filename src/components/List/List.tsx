@@ -36,7 +36,8 @@ const List: FunctionComponent<IListProps> = ({
     padding: '10px',
     marginBottom: '5px',
     borderRadius: '5px',
-    borderBottom: '1px solid rgb(178,185,197)',
+    border: '1px solid rgb(178,185,197)',
+    borderBottom: '2px solid rgb(178,185,197)',
     ...draggableStyle,
   });
 
@@ -128,7 +129,7 @@ const List: FunctionComponent<IListProps> = ({
                 type: 'ADD',
                 payload: {
                   listId: list.id,
-                  text: 'new item',
+                  text: 'New item',
                   id: uuidv1(),
                 },
               })
