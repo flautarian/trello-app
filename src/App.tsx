@@ -166,11 +166,7 @@ export default function App() {
                   />
                 ))}
                 {provided.placeholder}
-              </BoardContainer>
-            )}
-
-          </Droppable>
-          <NewListButton
+                <NewListButton
             onClick={() => {
               listsDispatch({
                 type: 'ADD',
@@ -183,6 +179,11 @@ export default function App() {
           >
             + New list
           </NewListButton>
+              </BoardContainer>
+            )}
+
+          </Droppable>
+          
 
 
         </DragDropContext>

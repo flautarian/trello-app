@@ -36,10 +36,8 @@ export const Lists = styled.div`
 
 export const NewListButton = styled.button`
   min-width: 250px;
-  min-height: 300px;
   background: rgba(255, 255, 255, 0.2);
   margin: 0 5px;
-  height: 30px;
   transition: background-color 0.25s ease, transform 0.2s ease-in-out;
   cursor: pointer;
   
