@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
-import { Container, Left, Right, SaveButton } from './Card.styles';
+import { Container, DeleteButton, EditButton, Left, Right, SaveButton } from './Card.styles';
 
 interface ICard {
   text: string;
@@ -55,8 +55,8 @@ const Card: FunctionComponent<ICard> = ({
           </SaveButton>
         ) : (
           <>
-            <button onClick={evt => onEditClick(evt, id)}>✎</button>
-            <button onClick={onDeleteClick}>&times;</button>
+            <EditButton onClick={evt => setIsEdit(true)}>✎</EditButton>
+            <DeleteButton onClick={onDeleteClick}>&times;</DeleteButton>
           </>
         )}
       </Right>

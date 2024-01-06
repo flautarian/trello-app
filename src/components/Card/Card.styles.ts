@@ -25,3 +25,26 @@ export const SaveButton = styled.button`
     background: lightseagreen;
   }
 `;
+
+export const DeleteButton = styled.button`
+  border-radius: 25px;
+  max-width: 35px;
+  transition: background-color 0.1s ease-in-out;
+
+  &:hover{
+    background-color: rgb(255, 100, 100);
+  }
+`
+
+
+export const EditButton = styled.button`
+  border-radius: 25px;
+  max-width: 24px;
+  transition: background-color 0.1s ease-in-out;
+  display: flex;
+  justify-content: center;
+
+  &:hover{
+    background-color: rgb(100, 100, 255);
+  }
+`

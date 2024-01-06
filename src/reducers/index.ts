@@ -1,4 +1,4 @@
-import { ICard, IList } from '../models';
+import { ICard, IList, IBoard } from '../models';
 
 export const cardsReducer = (
   state: ICard[],
@@ -63,6 +63,41 @@ export const listsReducer = (
         foundCard.listTitle = value;
       }
       return listsCopy;
+
+    case 'SET':
+      return action.payload.newState;
+
+    default:
+      return state;
+  }
+};
+
+export const boardsReducer = (
+  state: IBoard[],
+  action: { type: string; payload: any },
+) => {
+  const { id, boardTitle } = action.payload;
+  switch (action.type) {
+    case 'ADD':
+      return [...state, { id, boardTitle }];
+
+    case 'REMOVE':
+      return state.filter(list => list.id !== id);
+
+    case 'REORDER':
+      let element = state[action.payload[0]];
+      const lCopy = state.filter((l, i) => i !== action.payload[0]);
+      lCopy.splice(action.payload[1], 0, element);
+      return lCopy;
+
+    case 'UPDATE_NAME':
+      const copy = [...state];
+      const { value } = action.payload;
+      const found = copy.find(card => card.id === id);
+      if (found) {
+        found.title = value;
+      }
+      return copy;
 
     case 'SET':
       return action.payload.newState;

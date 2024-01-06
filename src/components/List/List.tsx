@@ -57,7 +57,7 @@ const List: FunctionComponent<IListProps> = ({
   return (
     <Draggable key={list.id} draggableId={list.id} index={index}>
       {(provided, snapshot) => (
-        <Container ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+        <Container isDragging={snapshot.isDragging} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <Header isDragging={snapshot.isDragging}>
             {isEditingName ? (
               <input
@@ -82,8 +82,7 @@ const List: FunctionComponent<IListProps> = ({
                   type: 'REMOVE',
                   payload: { id: list.id },
                 })
-              }
-            >
+              }>
               &times;
             </CloseButton>
           </Header>

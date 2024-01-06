@@ -1,17 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 
-const bounceAnimation = keyframes`
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(0.8);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
-
 export const Container = styled.div<{ bgColor: string }>`
   height: 100%;
   flex-direction: column;

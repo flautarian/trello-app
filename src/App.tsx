@@ -11,20 +11,37 @@ import { DragDropContext, DropResult, Droppable, ResponderProvided } from 'react
 import Options from './components/Options/Options';
 import { cardsReducer, listsReducer } from './reducers';
 import { IList, ICard } from './models';
-import { initialCards, initialLists } from './utils';
+import { initialCards, initialLists, initialBoards } from './utils';
 import { BoardContainer, Container, Lists, NewListButton } from './App.styles';
 import { reorder } from './utils';
 import './styles.css';
+import Header from './components/Header/Header';
 
 export default function App() {
 
   const listsFromLs = localStorage.getItem('lists') as unknown as string;
   const cardsFromLs = localStorage.getItem('cards');
   const bgColorFromLs = localStorage.getItem('bgColor');
+  const bgColorFromLsD = localStorage.getItem('bgColorD');
+  const bgColorFromLsL = localStorage.getItem('bgColorL');
 
   const [bgColor, setBgColor] = useState(
     bgColorFromLs ? bgColorFromLs : 'dodgerblue',
   );
+
+  const [bgColorD, setBgColorD] = useState(
+    bgColorFromLs ? bgColorFromLsD : 'dodgerblue',
+  );
+
+  const [bgColorL, setBgColorL] = useState(
+    bgColorFromLs ? bgColorFromLsL : 'dodgerblue',
+  );
+
+  const updateColors = () => {
+    setBgColor(localStorage.getItem('bgColor') || 'dodgerblue');
+    setBgColorD(localStorage.getItem('bgColorD') || 'dodgerblue');
+    setBgColorL(localStorage.getItem('bgColorL') || 'dodgerblue');
+  };
 
   const [cards, cardsDispatch] = useReducer(
     cardsReducer,
@@ -41,11 +58,6 @@ export default function App() {
     localStorage.setItem('lists', JSON.stringify(lists));
   }, [cards, lists]);
 
-  const handleBgColorChange = (color: { hex: string }) => {
-    setBgColor(color.hex);
-    localStorage.setItem('bgColor', color.hex);
-  };
-
   const onDragEnd = useCallback(
     (result: DropResult, provided: ResponderProvided) => {
       // dropped outside the list or same position
@@ -61,7 +73,7 @@ export default function App() {
 
         listsDispatch({
           type: 'REORDER',
-          payload: [result.source.index, result.destination.index] ,
+          payload: [result.source.index, result.destination.index],
         })
         return;
       }
@@ -142,7 +154,7 @@ export default function App() {
 
   return (
     <Container bgColor={bgColor}>
-      <Options handleBgColorChange={handleBgColorChange} />
+      <Header colorDispatch={updateColors}/>
       <Lists>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable
@@ -167,25 +179,20 @@ export default function App() {
                 ))}
                 {provided.placeholder}
                 <NewListButton
-            onClick={() => {
-              listsDispatch({
-                type: 'ADD',
-                payload: {
-                  id: uuidv1(),
-                  listTitle: 'new list',
-                },
-              });
-            }}
-          >
-            + New list
-          </NewListButton>
+                  onClick={() => {
+                    listsDispatch({
+                      type: 'ADD',
+                      payload: {
+                        id: uuidv1(),
+                        listTitle: 'new list',
+                      },
+                    });
+                  }}>
+                  + New list
+                </NewListButton>
               </BoardContainer>
             )}
-
           </Droppable>
-          
-
-
         </DragDropContext>
       </Lists>
     </Container>

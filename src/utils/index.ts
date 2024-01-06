@@ -1,4 +1,4 @@
-import { IList, ICard } from '../models';
+import { IList, ICard, IBoard } from '../models';
 import { v1 as uuidv1 } from 'uuid';
 
 export const reorder = <T>(
@@ -13,18 +13,32 @@ export const reorder = <T>(
   return result;
 };
 
+export const initialBoards: IBoard[] = [
+  {
+    id: 'id0',
+    title: 'First board',
+  },
+  {
+    id: 'id1',
+    title: 'Second board',
+  },
+];
+
 export const initialLists: IList[] = [
   {
     id: 'id0',
     listTitle: 'Todo 📝',
+    boardId: 'board0'
   },
   {
     id: 'id1',
     listTitle: 'In progress 👌',
+    boardId: 'board0'
   },
   {
     id: 'id2',
     listTitle: 'Done ✅',
+    boardId: 'board0'
   },
 ];
 
