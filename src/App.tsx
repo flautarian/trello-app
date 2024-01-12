@@ -1,160 +1,152 @@
 import React, {
   useState,
-  useEffect,
-  useReducer,
   useCallback,
 } from 'react';
 import { v1 as uuidv1 } from 'uuid';
-import groupBy from 'lodash.groupby';
 import List from './components/List/List';
 import { DragDropContext, DropResult, Droppable, ResponderProvided } from 'react-beautiful-dnd';
-import Options from './components/Options/Options';
-import { cardsReducer, listsReducer } from './reducers';
-import { IList, ICard } from './models';
-import { initialCards, initialLists, initialBoards } from './utils';
+import { IBoard, ICard, IList } from './models';
+import { initialBoards } from './utils';
 import { BoardContainer, Container, Lists, NewListButton } from './App.styles';
-import { reorder } from './utils';
 import './styles.css';
 import Header from './components/Header/Header';
+import Sidebar from './components/Sidebar/Sidebar';
 
 export default function App() {
 
-  const listsFromLs = localStorage.getItem('lists') as unknown as string;
-  const cardsFromLs = localStorage.getItem('cards');
+  const boardsFromLs: IBoard[] = initialBoards;
+
   const bgColorFromLs = localStorage.getItem('bgColor');
   const bgColorFromLsD = localStorage.getItem('bgColorD');
   const bgColorFromLsL = localStorage.getItem('bgColorL');
+  const bgColorFromLsN = localStorage.getItem('bgColorN');
 
   const [bgColor, setBgColor] = useState(
     bgColorFromLs ? bgColorFromLs : 'dodgerblue',
   );
 
   const [bgColorD, setBgColorD] = useState(
-    bgColorFromLs ? bgColorFromLsD : 'dodgerblue',
+    bgColorFromLsD ? bgColorFromLsD : 'dodgerblue',
   );
 
   const [bgColorL, setBgColorL] = useState(
-    bgColorFromLs ? bgColorFromLsL : 'dodgerblue',
+    bgColorFromLsL ? bgColorFromLsL : 'dodgerblue',
+  );
+
+  const [bgColorN, setBgColorN] = useState(
+    bgColorFromLsN ? bgColorFromLsN : 'dodgerblue',
   );
 
   const updateColors = () => {
     setBgColor(localStorage.getItem('bgColor') || 'dodgerblue');
     setBgColorD(localStorage.getItem('bgColorD') || 'dodgerblue');
     setBgColorL(localStorage.getItem('bgColorL') || 'dodgerblue');
+    setBgColorN(localStorage.getItem('bgColorN') || 'dodgerblue');
   };
 
-  const [cards, cardsDispatch] = useReducer(
-    cardsReducer,
-    cardsFromLs ? JSON.parse(cardsFromLs) : initialCards,
-  );
+  const [boards, setBoards] = useState(boardsFromLs);
 
-  const [lists, listsDispatch] = useReducer(
-    listsReducer,
-    listsFromLs ? JSON.parse(listsFromLs) : initialLists,
-  );
+  const [boardIndex, setBoardIndex] = useState(0);
 
-  useEffect(() => {
-    localStorage.setItem('cards', JSON.stringify(cards));
-    localStorage.setItem('lists', JSON.stringify(lists));
-  }, [cards, lists]);
-
-  const onDragEnd = useCallback(
-    (result: DropResult, provided: ResponderProvided) => {
-      // dropped outside the list or same position
-      if (!result.destination) {
-        return;
-      }
-
-      if (result.type === "COLUMN") {
-        // Get rid of old list and replace with updated one
-        const filteredLists = lists.filter(
-          (list: IList) => list.id !== result.source.droppableId,
-        );
-
-        listsDispatch({
-          type: 'REORDER',
-          payload: [result.source.index, result.destination.index],
-        })
-        return;
-      }
-
-      const itemsSplitByListIds = groupBy(cards, (card: any) => {
-        return card.listId;
-      });
-
-      if (
-        result.source.droppableId === result.destination.droppableId
-      ) {
-        // Items are in the same list, so just re-order the list array
-        const target =
-          itemsSplitByListIds[result.destination.droppableId];
-        const reordered: any = reorder<ICard>(
-          [...target],
-          result.source.index,
-          result.destination.index,
-        );
-
-        // Get rid of old list and replace with updated one
-        const filteredCards = cards.filter(
-          (card: any) => card.listId !== result.source.droppableId,
-        );
-
-        cardsDispatch({
-          type: 'SET',
-          payload: { newState: [...filteredCards, ...reordered] },
-        });
-      } else {
-        // Items are in different lists, so just change the item's listId
-
-        const removeByIndex = (list: any[], index: number) => [
-          ...list.slice(0, index),
-          ...list.slice(index + 1),
-        ];
-
-        const source = cards.filter(
-          (card: ICard) => card.listId === result.source.droppableId,
-        );
-        const sourceWithoutDragged = removeByIndex(
-          source,
-          result.source.index,
-        );
-
-        const target = cards.filter(
-          (card: ICard) =>
-            card.listId === result.destination?.droppableId,
-        );
-
-        const itemWithNewId = {
-          ...source[result.source.index],
-          listId: result.destination.droppableId,
+  const updateBoard = (action: { type: string; payload: any }) => {
+    const { indexList, indexCard, indexDestinationList, indexDestinationCard, editCardValue, editListValue } = action.payload;
+    const state = [...boards];
+    switch (action.type) {
+      case "ADD_LIST":
+        let newList: IList = {
+          listTitle: 'New list',
+          cards: []
         };
+        state[boardIndex].list.push(newList);
+        break;
 
-        target.splice(result.destination.index, 0, itemWithNewId);
+      case "REMOVE_LIST":
+        state[boardIndex].list = state[boardIndex].list.filter((l, i) => i !== indexList);
+        break;
 
-        const filteredCards = cards.filter(
-          (card: any) =>
-            card.listId !== result.source.droppableId &&
-            card.listId !== result.destination?.droppableId,
-        );
+      case "REORDER_LIST":
+        let element = state[boardIndex].list[indexList];
+        const lCopy = state[boardIndex].list.filter((l, i) => i !== indexList);
+        lCopy.splice(indexDestinationList, 0, element);
+        state[boardIndex].list = lCopy;
+        break;
 
-        cardsDispatch({
-          type: 'SET',
+      case "EDIT_LIST":
+        state[boardIndex].list[indexList].listTitle = editListValue;
+        break;
+
+      case "ADD_CARD":
+        let newCard: ICard = {
+          text: 'New Card'
+        };
+        state[boardIndex].list[indexList].cards.push(newCard);
+        break;
+
+      case "REMOVE_CARD":
+        state[boardIndex].list[indexList].cards = state[boardIndex].list[indexList].cards.filter((c, i) => i !== indexCard);
+        break;
+
+      case "REORDER_CARD":
+        let card = state[boardIndex].list[indexList].cards[indexCard];
+        state[boardIndex].list[indexList].cards = state[boardIndex].list[indexList].cards.filter((c, i) => i !== indexCard);
+        state[boardIndex].list[indexDestinationList].cards.splice(indexDestinationCard, 0, card);
+        break;
+
+      case "EDIT_CARD":
+        state[boardIndex].list[indexList].cards[indexCard].text = editCardValue;
+        break;
+    }
+    setBoards([...state]);
+  }
+
+  /*  useEffect(() => {
+     localStorage.setItem('boards', JSON.stringify(boards));
+   }, [boards, boardIndex]); */
+
+  const onDragEnd = useCallback((result: DropResult, provided: ResponderProvided) => {
+    // dropped outside the list or same position
+    if (!result.destination || sameTargetAsSource(result)) {
+      return;
+    }
+
+    if (result.type === "COLUMN") {
+      updateBoard(
+        {
+          type: 'REORDER_LIST',
           payload: {
-            newState: [
-              ...filteredCards,
-              ...sourceWithoutDragged,
-              ...target,
-            ],
+            indexList: result.source.index,
+            indexDestinationList: result.destination.index
           },
-        });
-      }
-    },
-    [cards],
+        })
+      return;
+    }
+    else {
+      updateBoard(
+        {
+          type: 'REORDER_CARD',
+          payload: {
+            indexList: parseInt(result.source.droppableId),
+            indexDestinationList: parseInt(result.destination.droppableId),
+            indexCard: result.source.index,
+            indexDestinationCard: result.destination.index
+          },
+        })
+    }
+
+  },
+    [boards],
   );
+
+
+  const sameTargetAsSource = (result: DropResult): boolean => {
+    return result.source.index == result.destination?.index &&
+      result.source.droppableId == result.destination?.droppableId;
+  }
 
   return (
     <Container bgColor={bgColor}>
-      <Header colorDispatch={updateColors}/>
+      <Header colorDispatch={updateColors} />
+      <Sidebar color={bgColorL} colorN={bgColorN} boards={boards}></Sidebar>
       <Lists>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable
@@ -165,27 +157,18 @@ export default function App() {
             isCombineEnabled={false}>
             {(provided, snapshot) => (
               <BoardContainer bgColor={bgColor} ref={provided.innerRef} {...provided.droppableProps}>
-                {lists.map((list: IList, index: number) => (
+                {boards[boardIndex].list.map((list: IList, index: number) => (
                   <List
-                    key={list.id}
                     index={index}
                     list={list}
-                    cards={cards.filter(
-                      (card: ICard) => card.listId === list.id,
-                    )}
-                    cardsDispatch={cardsDispatch}
-                    listsDispatch={listsDispatch}
-                  />
+                    dispatcher={updateBoard} />
                 ))}
                 {provided.placeholder}
                 <NewListButton
                   onClick={() => {
-                    listsDispatch({
-                      type: 'ADD',
-                      payload: {
-                        id: uuidv1(),
-                        listTitle: 'new list',
-                      },
+                    updateBoard({
+                      type: 'ADD_LIST',
+                      payload: {}
                     });
                   }}>
                   + New list
@@ -199,5 +182,3 @@ export default function App() {
   );
 }
 
-// When list deleted, delete all cards with that listId, otherwise loads of cards hang around in localstorage
-// Remove anys

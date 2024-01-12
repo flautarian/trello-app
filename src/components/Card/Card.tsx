@@ -3,18 +3,20 @@ import { Container, DeleteButton, EditButton, Left, Right, SaveButton } from './
 
 interface ICard {
   text: string;
-  id: string;
-  cardsDispatch: any;
+  indexCard: number;
+  indexList: number;
+  dispatcher: any;
 }
 
 const Card: FunctionComponent<ICard> = ({
   text,
-  id,
-  cardsDispatch,
+  indexCard,
+  indexList,
+  dispatcher,
 }) => {
   const [isEdit, setIsEdit] = useState(false);
   const onDeleteClick = () => {
-    cardsDispatch({ type: 'REMOVE', payload: { id } });
+    dispatcher({ type: 'REMOVE_CARD', payload: { indexCard, indexList } });
   };
 
   const onEditClick = (evt: any, id: string) => {
@@ -23,9 +25,9 @@ const Card: FunctionComponent<ICard> = ({
 
   const handleNameChange = (evt: any) => {
     const { value } = evt.target;
-    cardsDispatch({
-      type: 'EDIT',
-      payload: { id, editValue: value },
+    dispatcher({
+      type: 'EDIT_CARD',
+      payload: { editCardValue: value, indexList, indexCard },
     });
   };
 

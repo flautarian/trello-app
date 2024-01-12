@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { IList, ICard, IBoard } from '../models';
 import { v1 as uuidv1 } from 'uuid';
 
@@ -13,49 +14,44 @@ export const reorder = <T>(
   return result;
 };
 
-export const initialBoards: IBoard[] = [
+export const initialCards: ICard[] = [
   {
-    id: 'id0',
-    title: 'First board',
+    text: 'First Card',
   },
   {
-    id: 'id1',
-    title: 'Second board',
+    text: 'Second Card',
   },
 ];
 
 export const initialLists: IList[] = [
   {
-    id: 'id0',
     listTitle: 'Todo 📝',
-    boardId: 'board0'
+    cards: _.cloneDeep(initialCards)
   },
   {
-    id: 'id1',
     listTitle: 'In progress 👌',
-    boardId: 'board0'
+    cards: _.cloneDeep(initialCards)
   },
   {
-    id: 'id2',
     listTitle: 'Done ✅',
-    boardId: 'board0'
+    cards: _.cloneDeep(initialCards)
   },
 ];
 
-export const initialCards: ICard[] = [
+export const initialBoards: IBoard[] = [
   {
     id: uuidv1(),
-    text: 'Feed cat',
-    listId: 'id0',
+    title: 'Board 1',
+    list: [...initialLists],
   },
   {
     id: uuidv1(),
-    text: 'Take out bins',
-    listId: 'id0',
+    title: 'Board 2',
+    list: [...initialLists],
   },
   {
     id: uuidv1(),
-    text: 'Housework',
-    listId: 'id1',
+    title: 'Board 3',
+    list: [...initialLists],
   },
 ];

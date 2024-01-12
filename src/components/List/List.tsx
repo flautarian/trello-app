@@ -14,17 +14,13 @@ import { IList, ICard } from '../../models';
 interface IListProps {
   list: IList;
   index: number;
-  cards: ICard[];
-  cardsDispatch: any;
-  listsDispatch: any;
+  dispatcher: any;
 }
 
 const List: FunctionComponent<IListProps> = ({
   list,
-  index,
-  cards,
-  cardsDispatch,
-  listsDispatch,
+  index: indexList,
+  dispatcher,
 }) => {
   const [isEditingName, setEditingName] = useState(false);
 
@@ -48,14 +44,14 @@ const List: FunctionComponent<IListProps> = ({
 
   const handleNameChange = (evt: any) => {
     const { value } = evt.target;
-    listsDispatch({
-      type: 'UPDATE_NAME',
-      payload: { id: list.id, value },
+    dispatcher({
+      type: 'EDIT_LIST',
+      payload: { editListValue: value, indexList },
     });
   };
 
   return (
-    <Draggable key={list.id} draggableId={list.id} index={index}>
+    <Draggable key={indexList} draggableId={`${indexList}`} index={indexList}>
       {(provided, snapshot) => (
         <Container isDragging={snapshot.isDragging} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
           <Header isDragging={snapshot.isDragging}>
@@ -78,26 +74,26 @@ const List: FunctionComponent<IListProps> = ({
             )}
             <CloseButton
               onClick={() =>
-                listsDispatch({
-                  type: 'REMOVE',
-                  payload: { id: list.id },
+                dispatcher({
+                  type: 'REMOVE_LIST',
+                  payload: { indexList },
                 })
               }>
               &times;
             </CloseButton>
           </Header>
           <Droppable
-            droppableId={list.id}>
+            droppableId={`${indexList}`}>
             {(provided, snapshot) => (
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 style={getListStyle(snapshot.isDraggingOver)}>
-                {cards.map((post: ICard, index: number) => (
+                {list.cards.map((card: ICard, cardIndex: number) => (
                   <Draggable
-                    key={post.id}
-                    index={index}
-                    draggableId={`draggable-${post.id}`}>
+                    key={cardIndex}
+                    index={cardIndex}
+                    draggableId={`draggable-${indexList}-${cardIndex}`}>
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
@@ -109,10 +105,11 @@ const List: FunctionComponent<IListProps> = ({
                         )}
                       >
                         <Card
-                          key={post.id}
-                          text={post.text}
-                          id={post.id}
-                          cardsDispatch={cardsDispatch}
+                          key={cardIndex}
+                          text={card.text}
+                          indexCard={cardIndex}
+                          indexList={indexList}
+                          dispatcher={dispatcher}
                         />
                       </div>
                     )}
@@ -124,13 +121,9 @@ const List: FunctionComponent<IListProps> = ({
           </Droppable>
           <AddCardButton
             onClick={evt =>
-              cardsDispatch({
-                type: 'ADD',
-                payload: {
-                  listId: list.id,
-                  text: 'New item',
-                  id: uuidv1(),
-                },
+              dispatcher({
+                type: 'ADD_CARD',
+                payload: { indexList },
               })
             }
           >
