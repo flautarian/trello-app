@@ -1,29 +1,71 @@
 import React, { useState, FunctionComponent } from 'react';
-import { Container } from './Sidebar.styles';
+import { BoardElement, Container, SidebarButton } from './Sidebar.styles';
 import { IBoard } from '../../models';
+import { ChevronsLeft, ChevronsRight, Plus } from 'react-feather';
+import { Tooltip } from 'react-tooltip'
 
 interface ISidebarProps {
-    color: string;
-    colorN: string;
-    boards: IBoard[];
-  }
+  color: string;
+  colorD: string;
+  colorN: string;
+  boards: IBoard[];
+  boardSelectedIndex: number;
+  updateBoardIndex: any;
+  updateBoard: any;
+}
 
-const Sidebar: FunctionComponent<ISidebarProps> = ({color, colorN, boards}) => {
+const Sidebar: FunctionComponent<ISidebarProps> = ({ color, colorD, colorN, boards, boardSelectedIndex, updateBoardIndex, updateBoard }) => {
 
-    const [boardList, setBoardList] = useState(boards);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+  const getBoardsListStyle = () => ({
+    marginTop: 50
+  });
 
-    const toggleSidebar = () => {
-      setSidebarOpen(!sidebarOpen);
-    };
+  const toggleSidebar = () => {
+    setSidebarOpen(!sidebarOpen);
+  };
 
-    return (
-        <Container color={color || ''} textColor={colorN || ''}>
-            <button onClick={toggleSidebar}>Toggle Sidebar</button>
-            {/* Your sidebar content here */}
-        </Container>
-    )
+  return (
+    <Container color={color || ''} textColor={colorN || ''} showSidebar={sidebarOpen}>
+      <SidebarButton onClick={toggleSidebar} showSidebar={sidebarOpen}>
+        {sidebarOpen && <ChevronsLeft />}
+        {!sidebarOpen && <ChevronsRight />}
+      </SidebarButton>
+      <div style={getBoardsListStyle()}>
+        {
+          boards.map((b, index: number) => (
+            <>
+              <BoardElement
+                color={(index === boardSelectedIndex ? colorD : color || 'white')}
+                textColor={colorN}
+                onClick={() => updateBoardIndex(index)}
+                data-tooltip-id={"board-" + `${index}`}
+                data-tooltip-content={b.title}>
+                {index + 1}
+              </BoardElement>
+              <Tooltip id={"board-" + `${index}`} />
+            </>
+          ))
+        }
+      </div>
+
+      {/* Add new Board button */}
+      <BoardElement
+        color={color || 'white'}
+        textColor={colorN}
+        onClick={() => updateBoard(
+          {
+            type: 'ADD_BOARD',
+            payload: {},
+          }
+        )}
+        data-tooltip-id={"new-board"}
+        data-tooltip-content={"Add new board"}>
+        <Plus></Plus>
+      </BoardElement>
+    </Container>
+  )
 };
 
 export default Sidebar;

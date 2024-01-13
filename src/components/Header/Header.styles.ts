@@ -6,4 +6,14 @@ export const Container = styled.div<{color: string, textColor: string}>`
     background: ${({ color }) => color};
     color: ${({ textColor }) => textColor};
     font-size: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 `;
+
+export const EditTitle = styled.input`
+    width: fit-content;
+`;
+
+export const Title = styled.div``;

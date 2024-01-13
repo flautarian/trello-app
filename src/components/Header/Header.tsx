@@ -1,12 +1,27 @@
 import React, { useState, FunctionComponent } from 'react';
-import { Container } from './Header.styles';
+import { Container, EditTitle, Title } from './Header.styles';
 import Options from '../Options/Options';
+import { IBoard } from '../../models';
+import { Tooltip } from 'react-tooltip';
+import { Edit2 } from 'react-feather';
 
 interface IHeaderProps {
+    currentBoard: IBoard;
     colorDispatch: any;
+    updateBoard: any;
   }
 
-const Header: FunctionComponent<IHeaderProps> = ({colorDispatch}) => {
+const Header: FunctionComponent<IHeaderProps> = ({colorDispatch, currentBoard, updateBoard}) => {
+
+    const [isEditingBoardTitle, setEditingBoardTitle] = useState(false);
+
+    const handleBoardNameChange = (evt: any) => {
+        const { value } = evt.target;
+        updateBoard({
+          type: 'EDIT_BOARD',
+          payload: { editBoardValue: value },
+        });
+      };
 
     const handleBgColorChange = (color: { hex: string, rgb: { r: number, g: number, b: number, a: number } }) => {
         localStorage.setItem('bgColor', color.hex);
@@ -47,7 +62,26 @@ const Header: FunctionComponent<IHeaderProps> = ({colorDispatch}) => {
 
     return (
         <Container color={localStorage.getItem('bgColorL') || ''} textColor={localStorage.getItem('bgColorN') || ''}>
-            Test
+            {isEditingBoardTitle ? (
+              <EditTitle
+                type="text"
+                defaultValue={currentBoard.title}
+                onChange={handleBoardNameChange}
+                onBlur={() => setEditingBoardTitle(false)}
+                onKeyPress={evt => {
+                  if (evt.key === 'Enter') {
+                    setEditingBoardTitle(false);
+                  }
+                }}
+              />
+            ) : (
+              <Title onClick={() => setEditingBoardTitle(true)}
+              data-tooltip-id={"board-edit-tooltip"}
+              data-tooltip-content={ "edit" }>
+                {currentBoard.title}
+              </Title>
+            )}
+              <Tooltip id={"board-edit-tooltip"} />
             <Options handleBgColorChange={handleBgColorChange} />
         </Container>
     )

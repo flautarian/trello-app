@@ -1,6 +1,7 @@
 import React, {
   useState,
   useCallback,
+  useEffect,
 } from 'react';
 import { v1 as uuidv1 } from 'uuid';
 import List from './components/List/List';
@@ -22,19 +23,19 @@ export default function App() {
   const bgColorFromLsN = localStorage.getItem('bgColorN');
 
   const [bgColor, setBgColor] = useState(
-    bgColorFromLs ? bgColorFromLs : 'dodgerblue',
+    bgColorFromLs ? bgColorFromLs : 'white',
   );
 
   const [bgColorD, setBgColorD] = useState(
-    bgColorFromLsD ? bgColorFromLsD : 'dodgerblue',
+    bgColorFromLsD ? bgColorFromLsD : 'grey',
   );
 
   const [bgColorL, setBgColorL] = useState(
-    bgColorFromLsL ? bgColorFromLsL : 'dodgerblue',
+    bgColorFromLsL ? bgColorFromLsL : 'white',
   );
 
   const [bgColorN, setBgColorN] = useState(
-    bgColorFromLsN ? bgColorFromLsN : 'dodgerblue',
+    bgColorFromLsN ? bgColorFromLsN : 'black',
   );
 
   const updateColors = () => {
@@ -49,9 +50,19 @@ export default function App() {
   const [boardIndex, setBoardIndex] = useState(0);
 
   const updateBoard = (action: { type: string; payload: any }) => {
-    const { indexList, indexCard, indexDestinationList, indexDestinationCard, editCardValue, editListValue } = action.payload;
+    const { indexList, indexCard, indexDestinationList, indexDestinationCard, editCardValue, editListValue, editBoardValue } = action.payload;
     const state = [...boards];
     switch (action.type) {
+      case "EDIT_BOARD":
+        state[boardIndex].title = editBoardValue;
+        break;
+      case "ADD_BOARD":
+        state.push({
+          id: uuidv1(),
+          title: 'New Board',
+          list: []
+        });
+        break;
       case "ADD_LIST":
         let newList: IList = {
           listTitle: 'New list',
@@ -99,10 +110,6 @@ export default function App() {
     setBoards([...state]);
   }
 
-  /*  useEffect(() => {
-     localStorage.setItem('boards', JSON.stringify(boards));
-   }, [boards, boardIndex]); */
-
   const onDragEnd = useCallback((result: DropResult, provided: ResponderProvided) => {
     // dropped outside the list or same position
     if (!result.destination || sameTargetAsSource(result)) {
@@ -134,7 +141,7 @@ export default function App() {
     }
 
   },
-    [boards],
+    [boards, boardIndex],
   );
 
 
@@ -145,8 +152,15 @@ export default function App() {
 
   return (
     <Container bgColor={bgColor}>
-      <Header colorDispatch={updateColors} />
-      <Sidebar color={bgColorL} colorN={bgColorN} boards={boards}></Sidebar>
+      <Header colorDispatch={updateColors} currentBoard={boards[boardIndex]} updateBoard={updateBoard} />
+      <Sidebar
+        color={bgColorL}
+        colorD={bgColorD}
+        colorN={bgColorN}
+        boards={boards}
+        boardSelectedIndex={boardIndex}
+        updateBoardIndex={setBoardIndex}
+        updateBoard={updateBoard}></Sidebar>
       <Lists>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable

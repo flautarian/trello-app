@@ -28,6 +28,7 @@ export const Header = styled.header<{ isDragging: boolean }>`
   background-color: ${({ isDragging }) => isDragging ? localStorage.getItem('bgColorD') : "rgb(200, 200, 200)"};
   padding-bottom: 10px;
 `;
+
 export const Title = styled.div``;
 
 export const CloseButton = styled.button`

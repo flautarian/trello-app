@@ -3,16 +3,16 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   position: fixed;
-  left: 0;
-  right: 0;
+  right: 20px;
 `;
 
 export const MenuButton = styled.button`
-  right: 0;
-  position: absolute;
-
+  border-radius: 20px;
+  transition: background 0.15s ease-in-out, transform 0.1s ease-in-out;
+  transform: scale(1);
   :hover {
     background: rgba(0, 0, 0, 0.05);
+    transform: scale(0.95);
   }
 `;
 

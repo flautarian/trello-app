@@ -5,6 +5,7 @@ import {
   CirclePickerContainer,
 } from './Options.styles';
 import { CirclePicker } from 'react-color';
+import { Edit2 } from 'react-feather';
 
 interface IOptionsProps {
   handleBgColorChange: any;
@@ -18,7 +19,7 @@ const Options: FunctionComponent<IOptionsProps> = ({
   return (
     <Container>
       <MenuButton onClick={() => setSidebarOpen(!sidebarOpen)}>
-        ... Choose theme
+        <Edit2></Edit2>
       </MenuButton>
       {sidebarOpen && (
         <CirclePickerContainer>
