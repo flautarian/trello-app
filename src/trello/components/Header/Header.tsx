@@ -1,9 +1,9 @@
 import React, { useState, FunctionComponent } from 'react';
 import { Container, EditTitle, Title } from './Header.styles';
 import Options from '../Options/Options';
-import { IBoard } from '../../models';
 import { Tooltip } from 'react-tooltip';
 import { Edit2 } from 'react-feather';
+import { IBoard } from '../../models';
 
 interface IHeaderProps {
     currentBoard: IBoard;
@@ -63,17 +63,20 @@ const Header: FunctionComponent<IHeaderProps> = ({colorDispatch, currentBoard, u
     return (
         <Container color={localStorage.getItem('bgColorL') || ''} textColor={localStorage.getItem('bgColorN') || ''}>
             {isEditingBoardTitle ? (
-              <EditTitle
-                type="text"
-                defaultValue={currentBoard.title}
-                onChange={handleBoardNameChange}
-                onBlur={() => setEditingBoardTitle(false)}
-                onKeyPress={evt => {
-                  if (evt.key === 'Enter') {
-                    setEditingBoardTitle(false);
-                  }
-                }}
-              />
+                <>
+                    <EditTitle
+                        type="text"
+                        defaultValue={currentBoard.title}
+                        onChange={handleBoardNameChange}
+                        onBlur={() => setEditingBoardTitle(false)}
+                        onKeyPress={evt => {
+                            if (evt.key === 'Enter') {
+                                setEditingBoardTitle(false);
+                            }
+                        }}
+                    />
+                    <Edit2 size={18}></Edit2>
+                </>
             ) : (
               <Title onClick={() => setEditingBoardTitle(true)}
               data-tooltip-id={"board-edit-tooltip"}

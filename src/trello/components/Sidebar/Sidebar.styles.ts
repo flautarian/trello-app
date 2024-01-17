@@ -50,3 +50,24 @@ export const BoardElement = styled.div<{color: string, textColor: string}>`
       background-color: rgba(255, 255, 255, 0.6);
     }
 `
+
+export const BoardElementAdd = styled.div<{color: string, textColor: string}>`
+    border-radius: 25px;
+    width: 40px;
+    height: 40px;
+    margin-top: 20px;
+    background: ${({ color }) => color};
+    color: ${({ textColor }) => textColor};
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    align-items: center;
+    border-style: solid;
+    border-color: ${({ textColor }) => textColor};
+    border-width: 2px;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.6);
+    }
+`

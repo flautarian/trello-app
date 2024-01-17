@@ -1,5 +1,5 @@
 import React, { useState, FunctionComponent } from 'react';
-import { BoardElement, Container, SidebarButton } from './Sidebar.styles';
+import { BoardElement, BoardElementAdd, Container, SidebarButton } from './Sidebar.styles';
 import { IBoard } from '../../models';
 import { ChevronsLeft, ChevronsRight, Plus } from 'react-feather';
 import { Tooltip } from 'react-tooltip'
@@ -51,7 +51,7 @@ const Sidebar: FunctionComponent<ISidebarProps> = ({ color, colorD, colorN, boar
       </div>
 
       {/* Add new Board button */}
-      <BoardElement
+      <BoardElementAdd
         color={color || 'white'}
         textColor={colorN}
         onClick={() => updateBoard(
@@ -63,7 +63,7 @@ const Sidebar: FunctionComponent<ISidebarProps> = ({ color, colorD, colorN, boar
         data-tooltip-id={"new-board"}
         data-tooltip-content={"Add new board"}>
         <Plus></Plus>
-      </BoardElement>
+      </BoardElementAdd>
     </Container>
   )
 };
