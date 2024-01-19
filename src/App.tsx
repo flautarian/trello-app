@@ -12,24 +12,17 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Navigate
-              to={authState.isLoggedIn ? location.pathname : "/user/login"}
-            />
-          }
-        />
         {!authState.isLoggedIn && (
           <Route path="user">
+            <Route path="*" element={<Navigate to="/user/login" />} />
             <Route path="register" element={<Auth />} />
             <Route path="login" element={<Auth />} />
-            <Route path="*" element={<Auth />} />
           </Route>
         )}
         {authState.isLoggedIn && (
           <Route path="boards" element={<Trello />} />
         )}
+        <Route path="*" element={<Navigate to={authState.isLoggedIn ? "/boards" : "/user/login"} />} />
       </Routes>
     </div>
   );

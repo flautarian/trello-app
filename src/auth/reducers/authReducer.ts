@@ -12,8 +12,8 @@ export const defaultAuthState: AuthState = {
 };
 
 const authReducer: Reducer<AuthState, AuthAction> = (state, action) => {
-  // user successfully authenticated
-  if (action.type === "LOG_IN") {
+  // user successfully authenticated or Refresh token
+  if (action.type === "LOG_IN" || action.type === "REFRESH_TOKEN") {
     localStorage.setItem("user", JSON.stringify(action.payload));
     return {
       ...state,

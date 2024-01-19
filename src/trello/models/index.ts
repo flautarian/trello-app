@@ -12,3 +12,10 @@ export interface IList {
 export interface ICard {
   text: string;
 }
+
+export interface IColors{
+  bgColorFromLs: string;
+  bgColorFromLsD: string;
+  bgColorFromLsL: string;
+  bgColorFromLsN: string;
+}

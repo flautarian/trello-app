@@ -9,7 +9,6 @@ import { AuthData } from "../hooks/api/apiData";
 import { useLocation } from "react-router-dom";
 import LoginForm from "../components/LoginForm/LoginForm";
 import RegisterForm from "../components/RegisterForm/RegisterForm";
-import { isExpired, decodeToken } from "react-jwt";
 import React from "react";
 
 const Auth = () => {
@@ -29,6 +28,10 @@ const Auth = () => {
             });
         }
     }, [authData, globalLogInDispatch]);
+
+    useEffect(() => {
+        localStorage.removeItem("user");
+    }), [];
 
     const authHandler: FormEventHandler<HTMLFormElement> = async (event) => {
         event.preventDefault();

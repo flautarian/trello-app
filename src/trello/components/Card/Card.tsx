@@ -38,11 +38,11 @@ const Card: FunctionComponent<ICard> = ({
           <input
             type="text"
             defaultValue={text}
-            onChange={handleNameChange}
             onBlur={() => setIsEdit(false)}
             onKeyPress={evt => {
               if (evt.key === 'Enter') {
                 setIsEdit(false);
+                handleNameChange(evt);
               }
             }}
           />

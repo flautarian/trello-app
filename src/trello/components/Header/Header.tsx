@@ -9,19 +9,19 @@ interface IHeaderProps {
     currentBoard: IBoard;
     colorDispatch: any;
     updateBoard: any;
-  }
+}
 
-const Header: FunctionComponent<IHeaderProps> = ({colorDispatch, currentBoard, updateBoard}) => {
+const Header: FunctionComponent<IHeaderProps> = ({ colorDispatch, currentBoard, updateBoard }) => {
 
     const [isEditingBoardTitle, setEditingBoardTitle] = useState(false);
 
     const handleBoardNameChange = (evt: any) => {
         const { value } = evt.target;
         updateBoard({
-          type: 'EDIT_BOARD',
-          payload: { editBoardValue: value },
+            type: 'EDIT_BOARD',
+            payload: { editBoardValue: value },
         });
-      };
+    };
 
     const handleBgColorChange = (color: { hex: string, rgb: { r: number, g: number, b: number, a: number } }) => {
         localStorage.setItem('bgColor', color.hex);
@@ -30,7 +30,7 @@ const Header: FunctionComponent<IHeaderProps> = ({colorDispatch, currentBoard, u
         localStorage.setItem('bgColorN', createNegativeColor(color.rgb));
         colorDispatch();
     };
-    
+
     const lightenColor = (color: { r: number, g: number, b: number, a: number }, factor: number): string => {
         const result = {
             r: Math.min(Math.round(color.r + 255 * factor), 255),
@@ -40,7 +40,7 @@ const Header: FunctionComponent<IHeaderProps> = ({colorDispatch, currentBoard, u
         };
         return `#${(result.r << 16 | result.g << 8 | result.b).toString(16).padStart(6, '0')}`;
     }
-    
+
     const darkenColor = (color: { r: number, g: number, b: number, a: number }, factor: number): string => {
         const result = {
             r: Math.max(Math.round(color.r - 255 * factor), 0),
@@ -56,7 +56,7 @@ const Header: FunctionComponent<IHeaderProps> = ({colorDispatch, currentBoard, u
         const negativeRed = 150 - colorAvg;
         const negativeGreen = 150 - colorAvg;
         const negativeBlue = 150 - colorAvg;
-        
+
         return `rgb(${negativeRed}, ${negativeGreen}, ${negativeBlue})`;
     }
 
@@ -67,24 +67,24 @@ const Header: FunctionComponent<IHeaderProps> = ({colorDispatch, currentBoard, u
                     <EditTitle
                         type="text"
                         defaultValue={currentBoard.title}
-                        onChange={handleBoardNameChange}
                         onBlur={() => setEditingBoardTitle(false)}
                         onKeyPress={evt => {
                             if (evt.key === 'Enter') {
                                 setEditingBoardTitle(false);
+                                handleBoardNameChange(evt);
                             }
                         }}
                     />
                     <Edit2 size={18}></Edit2>
                 </>
             ) : (
-              <Title onClick={() => setEditingBoardTitle(true)}
-              data-tooltip-id={"board-edit-tooltip"}
-              data-tooltip-content={ "edit" }>
-                {currentBoard.title}
-              </Title>
+                <Title onClick={() => setEditingBoardTitle(true)}
+                    data-tooltip-id={"board-edit-tooltip"}
+                    data-tooltip-content={"edit"}>
+                    {currentBoard.title}
+                </Title>
             )}
-              <Tooltip id={"board-edit-tooltip"} />
+            <Tooltip id={"board-edit-tooltip"} />
             <Options handleBgColorChange={handleBgColorChange} />
         </Container>
     )

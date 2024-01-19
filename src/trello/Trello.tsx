@@ -8,78 +8,110 @@ import { v1 as uuidv1 } from 'uuid';
 import List from './components/List/List';
 import { DragDropContext, DropResult, Droppable, ResponderProvided } from 'react-beautiful-dnd';
 import { IBoard, ICard, IList } from './models';
-import { initialBoards } from './utils';
+import { initialBoards, initialColors } from './utils';
 import { BoardContainer, Container, Lists, NewListButton } from './Trello.styles';
 import './styles.css';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
 import authCtx from "../auth/AuthContextProvider";
 import useApi from '../auth/hooks/api/useApi';
+import { AuthData } from '../auth/hooks/api/apiData';
+import { IColors } from './models/index';
 
 export default function Trello() {
-  
-  const [data, setData] = useState();
-  const { request, setError } = useApi();
-  const { authState, globalLogOutDispatch } = useContext(authCtx);
 
-  const fetchData = useCallback(async () => {
+  // Boards
+  const [boards, setBoards] = useState<IBoard[]>();
+  const [boardIndex, setBoardIndex] = useState(0);
+  const [initialChange, setInitialChange] = useState(true);
+  // Colors
+  const [colors, setColors] = useState(initialColors);
+
+  // Auth
+  const [authData, setAuthData] = useState<AuthData>();
+  const { request, setError } = useApi();
+  const { authState, globalLogOutDispatch, globalRefreshDispatch } = useContext(authCtx);
+
+  // Upon successful response from the api for login user, dispatch global auth LOG_IN event
+  useEffect(() => {
+    if (authData && "success" in authData) {
+      globalRefreshDispatch({
+        authToken: authData.user.auth_token,
+        email: authData.user.email
+      });
+    }
+  }, [authData, globalRefreshDispatch]);
+
+  const pullData = useCallback(async () => {
     try {
-      const token = authState.authToken;
       const params = {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${authState.authToken}`,
         }
       };
-      await request("/check_session", params, (result) => {
-        setData(result.data);
+      const endpoint = '/pull';
+      await request(endpoint, params, (result) => {
+        const requestData = result.data;
+        const boards = requestData?.boards || initialBoards;
+        const colors = requestData?.colors || initialColors;
+        setBoards(boards);
+        setColors(colors);
+        setInitialChange(false);
       });
     } catch (error: any) {
       setError(error.message || error);
     }
-  }, [request, setError]);
+  }, []);
+
+
+  const pushData = useCallback(async () => {
+    try {
+      const params = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${authState.authToken}`,
+        },
+        body: JSON.stringify({
+          data: { boards: boards, colors: colors },
+          appcode: "trelloapp"
+        }),
+      };
+      const endpoint = '/push';
+      await request(endpoint, params, (result) => {
+        setAuthData(result);
+      });
+    } catch (error: any) {
+      setError(error.message || error);
+    }
+  }, [boards, colors]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    pullData();
+  }, []);
 
-  const boardsFromLs: IBoard[] = initialBoards;
 
-  const bgColorFromLs = localStorage.getItem('bgColor');
-  const bgColorFromLsD = localStorage.getItem('bgColorD');
-  const bgColorFromLsL = localStorage.getItem('bgColorL');
-  const bgColorFromLsN = localStorage.getItem('bgColorN');
-
-  const [bgColor, setBgColor] = useState(
-    bgColorFromLs ? bgColorFromLs : 'white',
-  );
-
-  const [bgColorD, setBgColorD] = useState(
-    bgColorFromLsD ? bgColorFromLsD : 'grey',
-  );
-
-  const [bgColorL, setBgColorL] = useState(
-    bgColorFromLsL ? bgColorFromLsL : 'white',
-  );
-
-  const [bgColorN, setBgColorN] = useState(
-    bgColorFromLsN ? bgColorFromLsN : 'black',
-  );
+  useEffect(() => {
+    if(!initialChange)
+      pushData();
+    
+  }, [boards, colors]);
 
   const updateColors = () => {
-    setBgColor(localStorage.getItem('bgColor') || 'dodgerblue');
-    setBgColorD(localStorage.getItem('bgColorD') || 'dodgerblue');
-    setBgColorL(localStorage.getItem('bgColorL') || 'dodgerblue');
-    setBgColorN(localStorage.getItem('bgColorN') || 'dodgerblue');
+    setColors({
+      bgColorFromLs: localStorage.getItem('bgColor') || 'white',
+      bgColorFromLsD: localStorage.getItem('bgColorD') || 'grey',
+      bgColorFromLsL: localStorage.getItem('bgColorL') || 'white',
+      bgColorFromLsN: localStorage.getItem('bgColorN') || 'black'
+    });
   };
-
-  const [boards, setBoards] = useState(boardsFromLs);
-
-  const [boardIndex, setBoardIndex] = useState(0);
 
   const updateBoard = (action: { type: string; payload: any }) => {
     const { indexList, indexCard, indexDestinationList, indexDestinationCard, editCardValue, editListValue, editBoardValue } = action.payload;
+    if(!boards)
+      return;
     const state = [...boards];
     switch (action.type) {
       case "EDIT_BOARD":
@@ -180,47 +212,49 @@ export default function Trello() {
   }
 
   return (
-    <Container bgColor={bgColor}>
-      <Header colorDispatch={updateColors} currentBoard={boards[boardIndex]} updateBoard={updateBoard} />
-      <Sidebar
-        color={bgColorL}
-        colorD={bgColorD}
-        colorN={bgColorN}
-        boards={boards}
-        boardSelectedIndex={boardIndex}
-        updateBoardIndex={setBoardIndex}
-        updateBoard={updateBoard}></Sidebar>
-      <Lists>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable
-            droppableId={"board"}
-            type="COLUMN"
-            direction="horizontal"
-            ignoreContainerClipping={false}
-            isCombineEnabled={false}>
-            {(provided, snapshot) => (
-              <BoardContainer bgColor={bgColor} ref={provided.innerRef} {...provided.droppableProps}>
-                {boards[boardIndex].list.map((list: IList, index: number) => (
-                  <List
-                    index={index}
-                    list={list}
-                    dispatcher={updateBoard} />
-                ))}
-                {provided.placeholder}
-                <NewListButton
-                  onClick={() => {
-                    updateBoard({
-                      type: 'ADD_LIST',
-                      payload: {}
-                    });
-                  }}>
-                  + New list
-                </NewListButton>
-              </BoardContainer>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </Lists>
+    <Container bgColor={colors.bgColorFromLs}>
+      {boards &&
+        <>
+          <Header colorDispatch={updateColors} currentBoard={boards[boardIndex]} updateBoard={updateBoard} />
+          <Sidebar
+            colors={colors}
+            boards={boards}
+            boardSelectedIndex={boardIndex}
+            updateBoardIndex={setBoardIndex}
+            updateBoard={updateBoard}></Sidebar>
+          <Lists>
+            <DragDropContext onDragEnd={onDragEnd}>
+              <Droppable
+                droppableId={"board"}
+                type="COLUMN"
+                direction="horizontal"
+                ignoreContainerClipping={false}
+                isCombineEnabled={false}>
+                {(provided, snapshot) => (
+                  <BoardContainer bgColor={colors.bgColorFromLs} ref={provided.innerRef} {...provided.droppableProps}>
+                    {boards[boardIndex].list.map((list: IList, index: number) => (
+                      <List
+                        index={index}
+                        list={list}
+                        dispatcher={updateBoard} />
+                    ))}
+                    {provided.placeholder}
+                    <NewListButton
+                      onClick={() => {
+                        updateBoard({
+                          type: 'ADD_LIST',
+                          payload: {}
+                        });
+                      }}>
+                      + New list
+                    </NewListButton>
+                  </BoardContainer>
+                )}
+              </Droppable>
+            </DragDropContext>
+          </Lists>
+        </>
+      }
     </Container>
   );
 }

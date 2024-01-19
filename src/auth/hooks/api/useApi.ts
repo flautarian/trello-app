@@ -4,7 +4,7 @@ import { useState, useCallback, useContext } from "react";
 // Project dependencies
 import AuthContext from "../../AuthContextProvider";
 
-const BASE_URL = "http://localhost:7071";
+const BASE_URL = "https://giacconidev-api.azurewebsites.net";
 
 const useApi = () => {
   const [loading, setLoading] = useState(false);

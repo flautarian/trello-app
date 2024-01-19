@@ -1,20 +1,18 @@
 import React, { useState, FunctionComponent } from 'react';
 import { BoardElement, BoardElementAdd, Container, SidebarButton } from './Sidebar.styles';
-import { IBoard } from '../../models';
+import { IBoard, IColors } from '../../models';
 import { ChevronsLeft, ChevronsRight, Plus } from 'react-feather';
 import { Tooltip } from 'react-tooltip'
 
 interface ISidebarProps {
-  color: string;
-  colorD: string;
-  colorN: string;
+  colors: IColors;
   boards: IBoard[];
   boardSelectedIndex: number;
   updateBoardIndex: any;
   updateBoard: any;
 }
 
-const Sidebar: FunctionComponent<ISidebarProps> = ({ color, colorD, colorN, boards, boardSelectedIndex, updateBoardIndex, updateBoard }) => {
+const Sidebar: FunctionComponent<ISidebarProps> = ({ colors, boards, boardSelectedIndex, updateBoardIndex, updateBoard }) => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -27,7 +25,7 @@ const Sidebar: FunctionComponent<ISidebarProps> = ({ color, colorD, colorN, boar
   };
 
   return (
-    <Container color={color || ''} textColor={colorN || ''} showSidebar={sidebarOpen}>
+    <Container color={colors.bgColorFromLs || 'white'} textColor={colors.bgColorFromLsN || ''} showSidebar={sidebarOpen}>
       <SidebarButton onClick={toggleSidebar} showSidebar={sidebarOpen}>
         {sidebarOpen && <ChevronsLeft />}
         {!sidebarOpen && <ChevronsRight />}
@@ -37,8 +35,8 @@ const Sidebar: FunctionComponent<ISidebarProps> = ({ color, colorD, colorN, boar
           boards.map((b, index: number) => (
             <>
               <BoardElement
-                color={(index === boardSelectedIndex ? colorD : color || 'white')}
-                textColor={colorN}
+                color={(index === boardSelectedIndex ? colors.bgColorFromLsD : colors.bgColorFromLs)}
+                textColor={colors.bgColorFromLsN}
                 onClick={() => updateBoardIndex(index)}
                 data-tooltip-id={"board-" + `${index}`}
                 data-tooltip-content={b.title}>
@@ -52,8 +50,8 @@ const Sidebar: FunctionComponent<ISidebarProps> = ({ color, colorD, colorN, boar
 
       {/* Add new Board button */}
       <BoardElementAdd
-        color={color || 'white'}
-        textColor={colorN}
+        color={colors.bgColorFromLs}
+        textColor={colors.bgColorFromLsN}
         onClick={() => updateBoard(
           {
             type: 'ADD_BOARD',

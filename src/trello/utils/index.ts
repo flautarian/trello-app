@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { IList, ICard, IBoard } from '../models';
+import { IList, ICard, IBoard, IColors } from '../models';
 import { v1 as uuidv1 } from 'uuid';
 
 export const reorder = <T>(
@@ -55,3 +55,10 @@ export const initialBoards: IBoard[] = [
     list: _.cloneDeep(initialLists),
   },
 ];
+
+export const initialColors: IColors = {
+  bgColorFromLs: 'white',
+  bgColorFromLsD: 'gray',
+  bgColorFromLsL: 'white',
+  bgColorFromLsN: 'black',
+}

@@ -59,11 +59,11 @@ const List: FunctionComponent<IListProps> = ({
               <input
                 type="text"
                 defaultValue={list.listTitle}
-                onChange={handleNameChange}
                 onBlur={() => setEditingName(false)}
                 onKeyPress={evt => {
                   if (evt.key === 'Enter') {
                     setEditingName(false);
+                    handleNameChange(evt);
                   }
                 }}
               />
