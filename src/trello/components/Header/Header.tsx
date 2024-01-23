@@ -1,34 +1,37 @@
-import React, { useState, FunctionComponent } from 'react';
-import { Container, EditTitle, Title } from './Header.styles';
+import React, { useState, FunctionComponent, useContext } from 'react';
+import { Container, EditTitle, LogOutButton, Title } from './Header.styles';
 import Options from '../Options/Options';
 import { Tooltip } from 'react-tooltip';
-import { Edit2 } from 'react-feather';
-import { IBoard } from '../../models';
+import { Edit2, LogOut } from 'react-feather';
+import trelloCtx from '../../providers/TrelloContextProvider';
+import { TrelloActionEnum } from '../../action/TrelloActions';
 
-interface IHeaderProps {
-    currentBoard: IBoard;
-    colorDispatch: any;
-    updateBoard: any;
-}
-
-const Header: FunctionComponent<IHeaderProps> = ({ colorDispatch, currentBoard, updateBoard }) => {
+const Header: FunctionComponent = ({ }) => {
 
     const [isEditingBoardTitle, setEditingBoardTitle] = useState(false);
+    const { updateState, currentBoardIndex, trelloState } = useContext(trelloCtx);
 
     const handleBoardNameChange = (evt: any) => {
         const { value } = evt.target;
-        updateBoard({
-            type: 'EDIT_BOARD',
-            payload: { editBoardValue: value },
+        updateState({
+            type: TrelloActionEnum.EDIT_BOARD,
+            payload: {
+                editBoardValue: value,
+                indexBoard: currentBoardIndex,
+            },
         });
     };
 
     const handleBgColorChange = (color: { hex: string, rgb: { r: number, g: number, b: number, a: number } }) => {
-        localStorage.setItem('bgColor', color.hex);
-        localStorage.setItem('bgColorL', lightenColor(color.rgb, 0.5));
-        localStorage.setItem('bgColorD', darkenColor(color.rgb, 0.1));
-        localStorage.setItem('bgColorN', createNegativeColor(color.rgb));
-        colorDispatch();
+        updateState({
+            type: TrelloActionEnum.UPDATE_COLORS,
+            payload: { newColors: {
+                bgColorFromLs: color.hex,
+                bgColorFromLsD: darkenColor(color.rgb, 0.1) || 'white',
+                bgColorFromLsL: lightenColor(color.rgb, 0.5) || 'grey',
+                bgColorFromLsN: createNegativeColor(color.rgb) || 'black'
+            } }
+        });
     };
 
     const lightenColor = (color: { r: number, g: number, b: number, a: number }, factor: number): string => {
@@ -61,12 +64,12 @@ const Header: FunctionComponent<IHeaderProps> = ({ colorDispatch, currentBoard, 
     }
 
     return (
-        <Container color={localStorage.getItem('bgColorL') || ''} textColor={localStorage.getItem('bgColorN') || ''}>
+        <Container color={trelloState.colors.bgColorFromLsL} textColor={trelloState.colors.bgColorFromLsN}>
             {isEditingBoardTitle ? (
                 <>
                     <EditTitle
                         type="text"
-                        defaultValue={currentBoard.title}
+                        defaultValue={trelloState.boards[currentBoardIndex].title}
                         onBlur={() => setEditingBoardTitle(false)}
                         onKeyPress={evt => {
                             if (evt.key === 'Enter') {
@@ -81,11 +84,14 @@ const Header: FunctionComponent<IHeaderProps> = ({ colorDispatch, currentBoard, 
                 <Title onClick={() => setEditingBoardTitle(true)}
                     data-tooltip-id={"board-edit-tooltip"}
                     data-tooltip-content={"edit"}>
-                    {currentBoard.title}
+                    {trelloState.boards[currentBoardIndex].title}
                 </Title>
             )}
             <Tooltip id={"board-edit-tooltip"} />
             <Options handleBgColorChange={handleBgColorChange} />
+            <LogOutButton color={trelloState.colors.bgColorFromLs} textColor={trelloState.colors.bgColorFromLsN}>
+                <LogOut></LogOut>
+            </LogOutButton>
         </Container>
     )
 };

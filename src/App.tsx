@@ -1,16 +1,17 @@
 import { Route, Routes, Navigate, useLocation } from "react-router-dom";
-import AuthContext from "./auth/AuthContextProvider";
+import AuthContext from "./auth/providers/AuthContextProvider";
 import { useContext } from "react";
 import Auth from "./auth/pages/Auth";
 import React from 'react';
 import Trello from "./trello/Trello";
+import { TrelloContextProvider } from './trello/providers/TrelloContextProvider';
+import authCtx from "./auth/providers/AuthContextProvider";
 
 function App() {
-  const { authState } = useContext(AuthContext);
-  const location = useLocation();
+  const { authState } = useContext(authCtx);
 
   return (
-    <div>
+    <>
       <Routes>
         {!authState.isLoggedIn && (
           <Route path="user">
@@ -20,11 +21,15 @@ function App() {
           </Route>
         )}
         {authState.isLoggedIn && (
-          <Route path="boards" element={<Trello />} />
+          <Route path="boards" element={
+            <TrelloContextProvider>
+              <Trello />
+            </TrelloContextProvider>
+        } />
         )}
         <Route path="*" element={<Navigate to={authState.isLoggedIn ? "/boards" : "/user/login"} />} />
       </Routes>
-    </div>
+    </>
   );
 }
 

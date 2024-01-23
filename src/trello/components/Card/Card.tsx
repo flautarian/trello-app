@@ -1,22 +1,26 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useContext, useState } from 'react';
 import { Container, DeleteButton, EditButton, Left, Right, SaveButton } from './Card.styles';
+import trelloCtx from '../../providers/TrelloContextProvider';
+import { TrelloActionEnum } from '../../action/TrelloActions';
 
 interface ICard {
   text: string;
   indexCard: number;
   indexList: number;
-  dispatcher: any;
 }
 
 const Card: FunctionComponent<ICard> = ({
   text,
   indexCard,
   indexList,
-  dispatcher,
 }) => {
+
   const [isEdit, setIsEdit] = useState(false);
+
+  const { trelloState, updateState, currentBoardIndex } = useContext(trelloCtx);
+
   const onDeleteClick = () => {
-    dispatcher({ type: 'REMOVE_CARD', payload: { indexCard, indexList } });
+    updateState({ type: TrelloActionEnum.REMOVE_CARD, payload: { indexBoard: currentBoardIndex, indexCard, indexList } });
   };
 
   const onEditClick = (evt: any, id: string) => {
@@ -25,9 +29,14 @@ const Card: FunctionComponent<ICard> = ({
 
   const handleNameChange = (evt: any) => {
     const { value } = evt.target;
-    dispatcher({
-      type: 'EDIT_CARD',
-      payload: { editCardValue: value, indexList, indexCard },
+    updateState({
+      type: TrelloActionEnum.EDIT_CARD,
+      payload: {
+        indexBoard: currentBoardIndex,
+        indexList,
+        indexCard,
+        editCardValue: value,
+      },
     });
   };
 
@@ -52,7 +61,10 @@ const Card: FunctionComponent<ICard> = ({
       </Left>
       <Right>
         {isEdit ? (
-          <SaveButton onClick={() => setIsEdit(false)}>
+          <SaveButton onClick={(evt) => {
+            setIsEdit(false);
+            handleNameChange(evt);
+            }}>
             Save
           </SaveButton>
         ) : (

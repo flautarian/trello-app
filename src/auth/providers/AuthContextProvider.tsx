@@ -8,8 +8,8 @@ import React, {
 import { useNavigate } from "react-router-dom";
 
 // Project dependencies
-import { AuthActionEnum } from "./action/authActions";
-import authReducer, { AuthState, defaultAuthState } from "./reducers/authReducer";
+import { AuthActionEnum } from "../action/AuthActions";
+import authReducer, { AuthState, defaultAuthState } from "../reducers/AuthReducer";
 
 type AuthProviderProps = {
   children: React.ReactElement;
@@ -25,7 +25,7 @@ export interface AuthContext {
   globalLogInDispatch: (props: UserData) => void;
   globalLogOutDispatch: () => void;
   globalRefreshDispatch: (props: UserData) => void;
-}
+};
 
 // Auth context
 const authCtx = createContext<AuthContext>({
@@ -51,16 +51,16 @@ export const AuthContextProvider = (props: AuthProviderProps) => {
   }, []);
 
   const globalLogInDispatch = useCallback((props: UserData) => {
-      const { authToken, email } = props;
-      authDispatch({
-        type: AuthActionEnum.LOG_IN,
-        payload: {
-          authToken,
-          email
-        },
-      });
-      navigate("/boards");
-    },
+    const { authToken, email } = props;
+    authDispatch({
+      type: AuthActionEnum.LOG_IN,
+      payload: {
+        authToken,
+        email
+      },
+    });
+    navigate("/boards");
+  },
     [navigate]
   );
 

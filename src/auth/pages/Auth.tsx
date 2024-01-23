@@ -3,7 +3,7 @@ import { useEffect, useState, useContext, FormEventHandler } from "react";
 
 // Project dependencies
 import useApi from "../hooks/api/useApi";
-import AuthContext from "../AuthContextProvider";
+import AuthContext from "../providers/AuthContextProvider";
 import { validatePasswordLength, validateEmailFormat } from "../validations/AuthValidations";
 import { AuthData } from "../hooks/api/apiData";
 import { useLocation } from "react-router-dom";

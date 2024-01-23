@@ -40,17 +40,14 @@ export const initialLists: IList[] = [
 
 export const initialBoards: IBoard[] = [
   {
-    id: uuidv1(),
     title: 'Board 1',
     list: _.cloneDeep(initialLists),
   },
   {
-    id: uuidv1(),
     title: 'Board 2',
     list: _.cloneDeep(initialLists),
   },
   {
-    id: uuidv1(),
     title: 'Board 3',
     list: _.cloneDeep(initialLists),
   },

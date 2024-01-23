@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent } from 'react';
+import React, { useState, FunctionComponent, useContext } from 'react';
 import {
   Container,
   Header,
@@ -7,22 +7,21 @@ import {
   AddCardButton,
 } from './List.styles';
 import Card from '../Card/Card';
-import { v1 as uuidv1 } from 'uuid';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { IList, ICard } from '../../models';
+import trelloCtx from '../../providers/TrelloContextProvider';
+import { TrelloActionEnum } from '../../action/TrelloActions';
 
 interface IListProps {
   list: IList;
-  index: number;
-  dispatcher: any;
+  indexList: number;
 }
 
-const List: FunctionComponent<IListProps> = ({
-  list,
-  index: indexList,
-  dispatcher,
-}) => {
+const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
+
   const [isEditingName, setEditingName] = useState(false);
+
+  const { trelloState, updateState, currentBoardIndex } = useContext(trelloCtx);
 
   const getItemStyle = (
     isDragging: boolean,
@@ -44,17 +43,21 @@ const List: FunctionComponent<IListProps> = ({
 
   const handleNameChange = (evt: any) => {
     const { value } = evt.target;
-    dispatcher({
-      type: 'EDIT_LIST',
-      payload: { editListValue: value, indexList },
+    updateState({
+      type: TrelloActionEnum.EDIT_LIST,
+      payload: {
+        indexBoard: currentBoardIndex,
+        indexList,
+        editListValue: value
+      }
     });
   };
 
   return (
     <Draggable key={indexList} draggableId={`${indexList}`} index={indexList}>
       {(provided, snapshot) => (
-        <Container isDragging={snapshot.isDragging} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-          <Header isDragging={snapshot.isDragging}>
+        <Container colorL={trelloState.colors.bgColorFromLsL} isDragging={snapshot.isDragging} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+          <Header colorD={trelloState.colors.bgColorFromLsD} isDragging={snapshot.isDragging}>
             {isEditingName ? (
               <input
                 type="text"
@@ -74,9 +77,12 @@ const List: FunctionComponent<IListProps> = ({
             )}
             <CloseButton
               onClick={() =>
-                dispatcher({
-                  type: 'REMOVE_LIST',
-                  payload: { indexList },
+                updateState({
+                  type: TrelloActionEnum.REMOVE_LIST,
+                  payload: {
+                    indexBoard: currentBoardIndex,
+                    indexList
+                  },
                 })
               }>
               &times;
@@ -109,7 +115,6 @@ const List: FunctionComponent<IListProps> = ({
                           text={card.text}
                           indexCard={cardIndex}
                           indexList={indexList}
-                          dispatcher={dispatcher}
                         />
                       </div>
                     )}
@@ -121,9 +126,12 @@ const List: FunctionComponent<IListProps> = ({
           </Droppable>
           <AddCardButton
             onClick={evt =>
-              dispatcher({
-                type: 'ADD_CARD',
-                payload: { indexList },
+              updateState({
+                type: TrelloActionEnum.ADD_CARD,
+                payload: {
+                  indexBoard: currentBoardIndex,
+                  indexList,
+                },
               })
             }
           >

@@ -2,14 +2,15 @@
 import { useState, useCallback, useContext } from "react";
 
 // Project dependencies
-import AuthContext from "../../AuthContextProvider";
+import AuthContext from "../../providers/AuthContextProvider";
+import { UserData } from '../../providers/AuthContextProvider';
 
-const BASE_URL = "https://giacconidev-api.azurewebsites.net";
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const useApi = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const { authState, globalLogOutDispatch } = useContext(AuthContext);
+  const { authState, globalLogOutDispatch, globalRefreshDispatch } = useContext(AuthContext);
 
   const request = useCallback(
     async (
@@ -24,6 +25,8 @@ const useApi = () => {
       try {
         // NOTE: If user is logged in, insert the auth token into request headers for authorization
         if (authState.isLoggedIn) {
+          //params.headers['Authorization'] = authState.authToken;
+          
           params.headers["x-access-token"] = authState.authToken;
         }
         
@@ -34,6 +37,13 @@ const useApi = () => {
         }
         const data = await response.json(); // Assume always json response
 
+        if(authState.isLoggedIn && !!data.user){
+          const user = data.user;
+          globalRefreshDispatch({
+            authToken: user.auth_token,
+            email: user.email
+          });
+        }
         // If response is okay and no errors, then successful request
         handleSuccessResponse && (await handleSuccessResponse(data));
       } catch (error: any) {

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Container = styled.div<{ isDragging: boolean }>`
+export const Container = styled.div<{ isDragging: boolean, colorL : string }>`
   min-width: 250px;
   padding: 5px;
   box-sizing: border-box;
@@ -8,12 +8,12 @@ export const Container = styled.div<{ isDragging: boolean }>`
   border-radius: 5px;
   background: white;
   transition: background-color 0.1s ease-out;
-  background-color: ${({ isDragging }) => isDragging ? localStorage.getItem('bgColorL') : "rgb(200, 200, 200)"};
+  background-color: ${({ isDragging, colorL }) => isDragging ? colorL : "rgb(200, 200, 200)"};
   width: 250px;
   min-height: 100px;
 `;
 
-export const Header = styled.header<{ isDragging: boolean }>`
+export const Header = styled.header<{ isDragging: boolean, colorD : string  }>`
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -25,7 +25,7 @@ export const Header = styled.header<{ isDragging: boolean }>`
   margin-top: -5px;
   align-items: center;
   transition: background-color 0.1s ease-out;
-  background-color: ${({ isDragging }) => isDragging ? localStorage.getItem('bgColorD') : "rgb(200, 200, 200)"};
+  background-color: ${({ isDragging, colorD }) => isDragging ? colorD : "rgb(200, 200, 200)"};
   padding-bottom: 10px;
 `;
 

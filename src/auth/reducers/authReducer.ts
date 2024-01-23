@@ -1,5 +1,5 @@
 import { Reducer } from "react";
-import { AuthAction } from "../action/authActions";
+import { AuthAction } from "../action/AuthActions";
 
 export interface AuthState {
   isLoggedIn: boolean;
