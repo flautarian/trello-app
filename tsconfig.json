@@ -1,7 +1,5 @@
 {
-  "include": [
-    "./src/*"
-, "src/trello/models", "src/trello/Trello.tsx", "src/trello/Trello.styles.ts"  ],
+  "include": ["./src/*"],
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,

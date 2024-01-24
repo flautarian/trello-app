@@ -3,7 +3,6 @@ import { useState, useCallback, useContext } from "react";
 
 // Project dependencies
 import AuthContext from "../../providers/AuthContextProvider";
-import { UserData } from '../../providers/AuthContextProvider';
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 

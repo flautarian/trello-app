@@ -1,5 +1,4 @@
-import { Route, Routes, Navigate, useLocation } from "react-router-dom";
-import AuthContext from "./auth/providers/AuthContextProvider";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import Auth from "./auth/pages/Auth";
 import React from 'react';
@@ -25,7 +24,7 @@ function App() {
             <TrelloContextProvider>
               <Trello />
             </TrelloContextProvider>
-        } />
+          } />
         )}
         <Route path="*" element={<Navigate to={authState.isLoggedIn ? "/boards" : "/user/login"} />} />
       </Routes>
