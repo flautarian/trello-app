@@ -2,22 +2,34 @@
 import { useEffect, useState, useContext, FormEventHandler } from "react";
 
 // Project dependencies
-import useApi from "../hooks/api/useApi";
-import AuthContext from "../providers/AuthContextProvider";
 import { validatePasswordLength, validateEmailFormat } from "../validations/AuthValidations";
+import RegisterForm from "../components/RegisterForm/RegisterForm";
+import AuthContext from "../providers/AuthContextProvider";
 import { AuthData } from "../hooks/api/apiData";
 import { useLocation } from "react-router-dom";
-import LoginForm from "../components/LoginForm/LoginForm";
-import RegisterForm from "../components/RegisterForm/RegisterForm";
+import useApi from "../hooks/api/useApi";
 import React from "react";
+import { AnimationName } from "../../utils/components/globalAnimationsComponent/globalAnimationsComponent";
+import LoginForm from '../components/LoginForm/LoginForm';
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const Auth = () => {
     const [authData, setAuthData] = useState<AuthData>();
+
     const { request, setError } = useApi();
-    const { globalLogInDispatch } = useContext(AuthContext);
+
+    const { globalLogInDispatch, navigateTo } = useContext(AuthContext);
+
     const location = useLocation();
+
     const currentPathArray = location.pathname.split('/');
+
     const isLogin = currentPathArray[currentPathArray.length - 1] === 'login';
+
+    const [formAnimation, setFormAnimation] = useState<AnimationName>("appear");
+
+    const { t } = useTranslation(['home']);
 
     // Upon successful response from the api for login user, dispatch global auth LOG_IN event
     useEffect(() => {
@@ -34,6 +46,7 @@ const Auth = () => {
     }), [];
 
     const authHandler: FormEventHandler<HTMLFormElement> = async (event) => {
+        setFormAnimation("disappear");
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         // Validations first!
@@ -59,19 +72,29 @@ const Auth = () => {
             };
 
             const endpoint = `/${isLogin ? 'login' : 'register'}`
-            await request(endpoint, params, setAuthData);
+            await request(endpoint, params, (data) => {
+                toast.success(t("login_success"));
+                if(isLogin)
+                    setAuthData(data);
+                else
+                    navigateTo("/user/login")
+            }, (error) => {
+                toast.error(error.message);
+                setFormAnimation("appear");
+            });
         } catch (error: any) {
+            toast.error(error.message);
             setError(error.message || error);
+            setFormAnimation("appear");
         }
     };
 
     return (
         <>
-            <h2>{isLogin ? 'Log In' : 'Sign Up'}</h2>
             {
                 isLogin
-                    ? <LoginForm onSubmit={authHandler} />
-                    : <RegisterForm onSubmit={authHandler} />
+                    ? <LoginForm onSubmit={authHandler} animation={formAnimation}/>
+                    : <RegisterForm onSubmit={authHandler} animation={formAnimation}/>
             }
         </>
     );

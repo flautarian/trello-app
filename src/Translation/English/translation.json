@@ -1,0 +1,12 @@
+{
+    "login": "Login",
+    "logout": "Logout",
+    "email": "Email:",
+    "password": "Password:",
+    "submit": "Submit:",
+    "register": "Register",
+    "login_success": "Login successful",
+    "data_updated": "Data updated",
+    "lang_changed": "Language changed",
+    "edit": "Edit"
+}

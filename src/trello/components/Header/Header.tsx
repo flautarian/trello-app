@@ -1,15 +1,22 @@
 import React, { useState, FunctionComponent, useContext } from 'react';
-import { Container, EditTitle, LogOutButton, Title } from './Header.styles';
+import { Container, EditTitle, ItemsContainer, LoadingIcon, LogOutButton, Title } from './Header.styles';
 import Options from '../Options/Options';
 import { Tooltip } from 'react-tooltip';
-import { Edit2, LogOut } from 'react-feather';
+import { Edit2, LogOut, Save } from 'react-feather';
 import trelloCtx from '../../providers/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
+import authCtx from '../../../auth/providers/AuthContextProvider';
+import { useTranslation } from 'react-i18next';
+import LanguageButton from '../../../utils/components/LanguageButton/LanguageButton';
+import { LanguageContainer } from '../../../utils/components/LanguageButton/LanguageButton.style';
+import { createNegativeColor, darkenColor, lightenColor } from '../../../utils/components/globalUtils/globalutils';
 
 const Header: FunctionComponent = ({ }) => {
 
     const [isEditingBoardTitle, setEditingBoardTitle] = useState(false);
-    const { updateState, currentBoardIndex, trelloState } = useContext(trelloCtx);
+    const { updateState, currentBoardIndex, trelloState, isLoading } = useContext(trelloCtx);
+    const { globalLogOutDispatch} = useContext(authCtx);
+    const { t } = useTranslation(['home']);
 
     const handleBoardNameChange = (evt: any) => {
         const { value } = evt.target;
@@ -34,35 +41,6 @@ const Header: FunctionComponent = ({ }) => {
         });
     };
 
-    const lightenColor = (color: { r: number, g: number, b: number, a: number }, factor: number): string => {
-        const result = {
-            r: Math.min(Math.round(color.r + 255 * factor), 255),
-            g: Math.min(Math.round(color.g + 255 * factor), 255),
-            b: Math.min(Math.round(color.b + 255 * factor), 255),
-            a: 1
-        };
-        return `#${(result.r << 16 | result.g << 8 | result.b).toString(16).padStart(6, '0')}`;
-    }
-
-    const darkenColor = (color: { r: number, g: number, b: number, a: number }, factor: number): string => {
-        const result = {
-            r: Math.max(Math.round(color.r - 255 * factor), 0),
-            g: Math.max(Math.round(color.g - 255 * factor), 0),
-            b: Math.max(Math.round(color.b - 255 * factor), 0),
-            a: 1
-        };
-        return `#${(result.r << 16 | result.g << 8 | result.b).toString(16).padStart(6, '0')}`;
-    }
-
-    function createNegativeColor(color: { r: number, g: number, b: number, a: number }): string {
-        const colorAvg = (color.r + color.g + color.b) / 3;
-        const negativeRed = 150 - colorAvg;
-        const negativeGreen = 150 - colorAvg;
-        const negativeBlue = 150 - colorAvg;
-
-        return `rgb(${negativeRed}, ${negativeGreen}, ${negativeBlue})`;
-    }
-
     return (
         <Container color={trelloState.colors.bgColorFromLsL} textColor={trelloState.colors.bgColorFromLsN}>
             {isEditingBoardTitle ? (
@@ -83,15 +61,26 @@ const Header: FunctionComponent = ({ }) => {
             ) : (
                 <Title onClick={() => setEditingBoardTitle(true)}
                     data-tooltip-id={"board-edit-tooltip"}
-                    data-tooltip-content={"edit"}>
+                    data-tooltip-content={t("edit")}>
                     {trelloState.boards[currentBoardIndex].title}
                 </Title>
             )}
             <Tooltip id={"board-edit-tooltip"} />
-            <Options handleBgColorChange={handleBgColorChange} />
-            <LogOutButton color={trelloState.colors.bgColorFromLs} textColor={trelloState.colors.bgColorFromLsN}>
-                <LogOut></LogOut>
-            </LogOutButton>
+            <ItemsContainer>
+                <LanguageContainer >
+                    <LanguageButton/>
+                </LanguageContainer>
+                <Options 
+                    handleBgColorChange={handleBgColorChange}
+                    backgroundColor={trelloState.colors.bgColorFromLsL}/>
+                <LogOutButton
+                    textColor={trelloState.colors.bgColorFromLsN}
+                    onClick={() => globalLogOutDispatch()}
+                    data-tooltip-id={"board-logout-tooltip"}
+                    data-tooltip-content={t("logout")}>
+                    <LogOut></LogOut>
+                </LogOutButton>
+            </ItemsContainer>
         </Container>
     )
 };

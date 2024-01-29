@@ -20,6 +20,9 @@ import { AuthState } from '../../auth/reducers/AuthReducer';
 
 // useApi middleware
 import useApi from '../../auth/hooks/api/useApi';
+import { initialBoards, initialColors } from "../utils";
+import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 type TrelloProviderProps = {
     children: React.ReactElement;
@@ -72,6 +75,9 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     // useNavigate
     const navigate = useNavigate();
 
+    // I18n const
+    const { t } = useTranslation(['home']);
+
 
     const pullState = useCallback(() => {
         try {
@@ -87,8 +93,8 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
             const endpoint = '/pull';
             request(endpoint, params, (result) => {
                 const requestData = result.data;
-                const boards = requestData?.boards;
-                const colors = requestData?.colors;
+                const boards = requestData?.boards || initialBoards;
+                const colors = requestData?.colors || initialColors;
                 trelloDispatch({
                     type: TrelloActionEnum.PULL,
                     payload: {
@@ -143,7 +149,10 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
             };
 
             const endpoint = '/push';
-            request(endpoint, params, (result) => setIsLoading(false));
+            request(endpoint, params, (result) => {
+                setIsLoading(false);
+                toast.success(t("data_updated"), {duration: 1500});
+            });
 
         } catch (error: any) {
             setError(error.message || error);

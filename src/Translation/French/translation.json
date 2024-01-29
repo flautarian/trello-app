@@ -1,0 +1,12 @@
+{
+    "login": "L' identificant",
+    "logout": "Se déconnecter",
+    "email": "E-mail:",
+    "password": "Mot de passe :",
+    "submit": "Soumettre:",
+    "register": "S'inscrire",
+    "login_success": "Connexion réussie",
+    "data_updated": "Data updated",
+    "lang_changed": "Language changed",
+    "edit": "Modifier"
+}

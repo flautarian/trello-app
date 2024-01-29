@@ -9,10 +9,12 @@ import { Edit2 } from 'react-feather';
 
 interface IOptionsProps {
   handleBgColorChange: any;
+  backgroundColor: string;
 }
 
 const Options: FunctionComponent<IOptionsProps> = ({
   handleBgColorChange,
+  backgroundColor,
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -21,16 +23,14 @@ const Options: FunctionComponent<IOptionsProps> = ({
       <MenuButton onClick={() => setSidebarOpen(!sidebarOpen)}>
         <Edit2></Edit2>
       </MenuButton>
-      {sidebarOpen && (
-        <CirclePickerContainer>
-          <CirclePicker
-            onChangeComplete={color => {
-              handleBgColorChange(color);
-              setSidebarOpen(false);
-            }}
-          />
-        </CirclePickerContainer>
-      )}
+      <CirclePickerContainer color={backgroundColor} display={sidebarOpen}>
+        <CirclePicker
+          onChangeComplete={color => {
+            handleBgColorChange(color);
+            setSidebarOpen(false);
+          }}
+        />
+      </CirclePickerContainer>
     </Container>
   );
 };

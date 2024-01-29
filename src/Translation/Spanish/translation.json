@@ -1,0 +1,12 @@
+{
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "email": "Correo electrónico:",
+    "password": "Contraseña:",
+    "enviar":  "Enviar",
+    "register": "Registrarse",
+    "login_success": "Inicio de sesión exitoso",
+    "data_updated": "Datos guardados correctamente",
+    "lang_changed": "Idioma cambiado",
+    "edit": "Editar"
+}

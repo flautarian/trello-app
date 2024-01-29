@@ -2,15 +2,18 @@ import { FormEventHandler } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
 import { RegisterFormContainer } from "./RegisterForm.styles";
+import { AnimationName } from "../../../utils/components/globalAnimationsComponent/globalAnimationsComponent";
 
 type Props = {
   onSubmit: FormEventHandler<HTMLFormElement>;
+  animation: AnimationName;
 };
 
 const RegisterForm = (props: Props) => {
   const { onSubmit } = props;
   return (
-    <RegisterFormContainer onSubmit={onSubmit}>
+    <RegisterFormContainer onSubmit={onSubmit} animation={props.animation}>
+      <h2 className="poppins-medium">Register</h2>
       <div>
         <label htmlFor="name">Name</label>
         <input

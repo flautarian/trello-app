@@ -1,4 +1,4 @@
-import React, { useState, FunctionComponent, useContext } from 'react';
+import React, { useState, FunctionComponent, useContext, useEffect } from 'react';
 import {
   Container,
   Header,
@@ -11,6 +11,7 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { IList, ICard } from '../../models';
 import trelloCtx from '../../providers/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
+import { AnimationName } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent';
 
 interface IListProps {
   list: IList;
@@ -23,6 +24,10 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
 
   const { trelloState, updateState, currentBoardIndex } = useContext(trelloCtx);
 
+  const [animation, setAnimation] = useState<AnimationName>("listappear");
+
+
+
   const getItemStyle = (
     isDragging: boolean,
     draggableStyle: any,
@@ -33,12 +38,8 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
     borderRadius: '5px',
     border: '1px solid rgb(178,185,197)',
     borderBottom: '2px solid rgb(178,185,197)',
+    transform: 'rotate 45',
     ...draggableStyle,
-  });
-
-  //TODO: isDraggingOver need functionality
-  const getListStyle = (isDraggingOver: boolean) => ({
-    minHeight: 70
   });
 
   const handleNameChange = (evt: any) => {
@@ -56,7 +57,13 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
   return (
     <Draggable key={indexList} draggableId={`${indexList}`} index={indexList}>
       {(provided, snapshot) => (
-        <Container colorL={trelloState.colors.bgColorFromLsL} isDragging={snapshot.isDragging} ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+        <Container
+          colorL={trelloState.colors.bgColorFromLsL}
+          isDragging={snapshot.isDragging}
+          ref={provided.innerRef}
+          animation={animation}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}>
           <Header colorD={trelloState.colors.bgColorFromLsD} isDragging={snapshot.isDragging}>
             {isEditingName ? (
               <input
@@ -94,7 +101,8 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={getListStyle(snapshot.isDraggingOver)}>
+                style={{minHeight: 70}}
+                >
                 {list.cards.map((card: ICard, cardIndex: number) => (
                   <Draggable
                     key={cardIndex}

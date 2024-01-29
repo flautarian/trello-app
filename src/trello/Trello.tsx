@@ -1,7 +1,5 @@
 import React, {
-  useState,
   useCallback,
-  useEffect,
   useContext,
   FunctionComponent,
 } from 'react';
@@ -11,7 +9,7 @@ import { BoardContainer, Container, Lists, NewListButton } from './Trello.styles
 import './styles.css';
 import Header from './components/Header/Header';
 import Sidebar from './components/Sidebar/Sidebar';
-import trelloCtx, { TrelloContextProvider } from './providers/TrelloContextProvider';
+import trelloCtx from './providers/TrelloContextProvider';
 import { TrelloActionEnum } from './action/TrelloActions';
 import { IList } from './models';
 

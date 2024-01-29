@@ -9,6 +9,8 @@ import { useNavigate } from "react-router-dom";
 
 // Project dependencies
 import { AuthActionEnum } from "../action/AuthActions";
+
+// Reducer
 import authReducer, { AuthState, defaultAuthState } from "../reducers/AuthReducer";
 
 type AuthProviderProps = {
@@ -25,6 +27,7 @@ export interface AuthContext {
   globalLogInDispatch: (props: UserData) => void;
   globalLogOutDispatch: () => void;
   globalRefreshDispatch: (props: UserData) => void;
+  navigateTo: (path: string) => void;
 };
 
 // Auth context
@@ -33,6 +36,7 @@ const authCtx = createContext<AuthContext>({
   globalLogInDispatch: () => { },
   globalLogOutDispatch: () => { },
   globalRefreshDispatch: () => { },
+  navigateTo: () => {},
 });
 
 export const AuthContextProvider = (props: AuthProviderProps) => {
@@ -64,6 +68,10 @@ export const AuthContextProvider = (props: AuthProviderProps) => {
     [navigate]
   );
 
+  const navigateTo = (path: string) => {
+    navigate(path);
+  }
+
   const globalLogOutDispatch = useCallback(() => {
     authDispatch({ type: AuthActionEnum.LOG_OUT, payload: null });
     navigate("/user/login");
@@ -85,7 +93,8 @@ export const AuthContextProvider = (props: AuthProviderProps) => {
     authState,
     globalLogInDispatch,
     globalLogOutDispatch,
-    globalRefreshDispatch
+    globalRefreshDispatch,
+    navigateTo
   };
 
   return <authCtx.Provider value={ctx}>{children}</authCtx.Provider>;

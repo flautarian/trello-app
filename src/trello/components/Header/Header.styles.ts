@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div<{color: string, textColor: string}>`
+export const Container = styled.div<{ color: string, textColor: string }>`
     padding: 10px;
     text-align: center;
     background: ${({ color }) => color};
@@ -16,11 +16,31 @@ export const EditTitle = styled.input`
     width: fit-content;
 `;
 
-export const LogOutButton = styled.button<{color: string, textColor: string}>`
-    padding: 10px;
-    text-align: center;
-    background: ${({ color }) => color};
+export const LogOutButton = styled.button<{ textColor: string }>`
+    border-radius: 25%;
+    max-height: 30px;
     color: ${({ textColor }) => textColor};
+
+    transition: background 0.15s ease-in-out, transform 0.1s ease-in-out;
+    transform: scale(1);
+
+    :hover {
+        background: rgba(0, 0, 0, 0.05);
+        transform: scale(0.95);
+    }
+`;
+
+export const ItemsContainer = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+    width: 250px;
+    position: fixed;
+    right: 10px;
 `;
 
 export const Title = styled.div``;
+
+export const LoadingIcon = styled.div`
+    display: flex;
+    align-items: center;
+`;

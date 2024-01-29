@@ -1,6 +1,7 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import { AnimationName, animations } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent'
 
-export const Container = styled.div<{ isDragging: boolean, colorL : string }>`
+export const Container = styled.div<{ isDragging: boolean, colorL : string, animation: AnimationName }>`
   min-width: 250px;
   padding: 5px;
   box-sizing: border-box;
@@ -11,6 +12,7 @@ export const Container = styled.div<{ isDragging: boolean, colorL : string }>`
   background-color: ${({ isDragging, colorL }) => isDragging ? colorL : "rgb(200, 200, 200)"};
   width: 250px;
   min-height: 100px;
+  animation: ${({ animation }) => animations[animation].keyframes} ${({ animation }) => animations[animation].duration} ${({ animation }) => animations[animation].type};
 `;
 
 export const Header = styled.header<{ isDragging: boolean, colorD : string  }>`
