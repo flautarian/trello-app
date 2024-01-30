@@ -14,7 +14,7 @@ root.render(
   //<React.StrictMode>
   <>
     {/* Sooner declaration */}
-    <Toaster position="top-right" richColors style={{marginTop: "25px"}}/>
+    <Toaster position="bottom-center" richColors style={{marginTop: "25px"}}/>
     {/* global style constant */}
     <GlobalStyle />
     <BrowserRouter>

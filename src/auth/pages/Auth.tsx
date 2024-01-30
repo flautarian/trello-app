@@ -20,7 +20,7 @@ const Auth = () => {
 
     const [authData, setAuthData] = useState<AuthData>();
 
-    const { request, setError } = useApi();
+    const { request, error } = useApi();
 
     const { globalLogInDispatch, navigateTo } = useContext(AuthContext);
 
@@ -76,18 +76,17 @@ const Auth = () => {
 
             const endpoint = `/${isLogin ? 'login' : 'register'}`
             await request(endpoint, params, (data) => {
-                toast.success(t("login_success"));
+                toast.success(t("login_success"),  {duration: 1000});
                 if (isLogin)
                     setAuthData(data);
                 else
                     setIsLogin(LoginState.LOG_IN);
-            }, (error) => {
-                toast.error(error.message);
+            }, (error:any) => {
+                toast.error(error.message || error.error || error, {duration: 2000});
                 setFormAnimation("appear");
             });
         } catch (error: any) {
-            toast.error(error.message);
-            setError(error.message || error);
+            toast.error(error.message || error.error || error);
             setFormAnimation("appear");
         }
     };
