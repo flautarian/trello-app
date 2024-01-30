@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { AnimationName, animations } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent'
 
 export const LoginFormContainer = styled.form<{ animation: AnimationName }>`
-    height: 45%;
-    width: 20%;
+    height: 50vh;
+    width: 30vh;
     background-color: rgba(230,230,230,1);
     position: absolute;
     transform: translate(-50%,-50%);
