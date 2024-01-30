@@ -26,18 +26,18 @@ const LanguageButton = () => {
     const onClickLanguageChange = (evt: string) => {
         const language = evt;
         i18n.changeLanguage(language);
-        toast.success(t("lang_changed"), {duration: 1000});
+        toast.success(t("lang_changed"), { duration: 1000 });
         setSelectorState(false);
     }
 
     return (
         <>
-            <LanguageButtonContainer 
-                src={flags.find(flag => flag.code === i18n.language)?.img} 
+            <LanguageButtonContainer
+                src={flags.find(flag => flag.code === i18n.language)?.img}
                 alt="Current language"
-                onClick={(evt) => setSelectorState(!selectorState)} 
-                activateGrayscale={true}/>
-            <LanguagesContainer enabled={selectorState}>
+                onClick={(evt) => setSelectorState(!selectorState)}
+                activategrayscale={1} />
+            <LanguagesContainer enabled={selectorState ? 1 : 0}>
                 {
                     flags.map((flag: any, index: number) => (
                         <LanguageButtonContainer key={index} src={flag.img} onClick={(evt) => { onClickLanguageChange(flag.code); }} />

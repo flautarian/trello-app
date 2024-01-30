@@ -57,7 +57,7 @@ export const animations: Record<AnimationName, Animation> = {
         duration: "0.5s",
         type: "ease-in-out",
     },
-    none:{
+    none: {
         keyframes: keyframes`
           0% {} 100% {}
         `,
@@ -65,3 +65,20 @@ export const animations: Record<AnimationName, Animation> = {
         type: "ease-in",
     }
 };
+
+export const authBackgroundAnimation = keyframes`
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+`
+export const authBackgroundAnimationReverse = keyframes`
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+`

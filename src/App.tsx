@@ -15,7 +15,6 @@ function App() {
         {!authState.isLoggedIn && (
           <Route path="user">
             <Route path="*" element={<Navigate to="/user/login" />} />
-            <Route path="register" element={<Auth />} />
             <Route path="login" element={<Auth />} />
           </Route>
         )}

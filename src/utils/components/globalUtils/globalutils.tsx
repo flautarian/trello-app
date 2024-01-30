@@ -26,3 +26,8 @@ export const createNegativeColor = (color: { r: number, g: number, b: number, a:
 
     return `rgb(${negativeRed}, ${negativeGreen}, ${negativeBlue})`;
 }
+
+export enum LoginState {
+    LOG_IN = 'LOG_IN',
+    REGISTER = 'REGISTER',
+};

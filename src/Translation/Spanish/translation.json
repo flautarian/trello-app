@@ -1,9 +1,10 @@
 {
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
-    "email": "Correo electrónico:",
-    "password": "Contraseña:",
-    "enviar":  "Enviar",
+    "username": "Usuario",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit":  "Enviar",
     "register": "Registrarse",
     "login_success": "Inicio de sesión exitoso",
     "data_updated": "Datos guardados correctamente",

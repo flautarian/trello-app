@@ -13,8 +13,11 @@ import { AnimationName } from "../../utils/components/globalAnimationsComponent/
 import LoginForm from '../components/LoginForm/LoginForm';
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { LoginState } from "../../utils/components/globalUtils/globalutils";
+import { AuthContainer } from "../../utils/components/globalStyledComponent/globalStyledComponent";
 
 const Auth = () => {
+
     const [authData, setAuthData] = useState<AuthData>();
 
     const { request, setError } = useApi();
@@ -25,7 +28,7 @@ const Auth = () => {
 
     const currentPathArray = location.pathname.split('/');
 
-    const isLogin = currentPathArray[currentPathArray.length - 1] === 'login';
+    const [isLogin, setIsLogin] = useState(LoginState.LOG_IN);
 
     const [formAnimation, setFormAnimation] = useState<AnimationName>("appear");
 
@@ -74,10 +77,10 @@ const Auth = () => {
             const endpoint = `/${isLogin ? 'login' : 'register'}`
             await request(endpoint, params, (data) => {
                 toast.success(t("login_success"));
-                if(isLogin)
+                if (isLogin)
                     setAuthData(data);
                 else
-                    navigateTo("/user/login")
+                    setIsLogin(LoginState.LOG_IN);
             }, (error) => {
                 toast.error(error.message);
                 setFormAnimation("appear");
@@ -89,13 +92,22 @@ const Auth = () => {
         }
     };
 
+    const getContainerStyle = (color: string): React.CSSProperties => ({
+        width: "100%",
+        height: "100%",
+        background: "linear-gradient(to bottom, " + color + " 0%, " + color + " 90%, rgba(255,255,255,1) 100%)",
+        transition: 'background linear-gradient 5s ease',
+    });
+
     return (
         <>
-            {
-                isLogin
-                    ? <LoginForm onSubmit={authHandler} animation={formAnimation}/>
-                    : <RegisterForm onSubmit={authHandler} animation={formAnimation}/>
-            }
+            <AuthContainer animationorientation={isLogin === LoginState.LOG_IN ? 1 : 0}>
+                {
+                    isLogin === LoginState.LOG_IN
+                        ? <LoginForm onSubmit={authHandler} animation={formAnimation} setIsLogin={setIsLogin}/>
+                        : <RegisterForm onSubmit={authHandler} animation={formAnimation} setIsLogin={setIsLogin}/>
+                }
+            </AuthContainer>
         </>
     );
 };

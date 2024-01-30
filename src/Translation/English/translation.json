@@ -1,9 +1,10 @@
 {
     "login": "Login",
     "logout": "Logout",
-    "email": "Email:",
-    "password": "Password:",
-    "submit": "Submit:",
+    "username": "Username",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Submit",
     "register": "Register",
     "login_success": "Login successful",
     "data_updated": "Data updated",

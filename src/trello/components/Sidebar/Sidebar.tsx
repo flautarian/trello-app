@@ -5,6 +5,7 @@ import { ChevronsLeft, ChevronsRight, Plus } from 'react-feather';
 import { Tooltip } from 'react-tooltip'
 import trelloCtx from '../../providers/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
+import { useTranslation } from 'react-i18next';
 
 const Sidebar: FunctionComponent = ({}) => {
 
@@ -19,6 +20,7 @@ const Sidebar: FunctionComponent = ({}) => {
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+  const { t } = useTranslation(['home']);
 
   return (
     <Container color={trelloState.colors.bgColorFromLsL || 'white'} textColor={trelloState.colors.bgColorFromLsN || ''} showSidebar={sidebarOpen}>
@@ -38,7 +40,13 @@ const Sidebar: FunctionComponent = ({}) => {
                 data-tooltip-content={b.title}>
                 {index + 1}
               </BoardElement>
-              <Tooltip id={"board-" + `${index}`} />
+              
+              <Tooltip 
+                id={"board-" + `${index}`} 
+                style={{ 
+                    backgroundColor: trelloState.colors.bgColorFromLsL, 
+                    color: trelloState.colors.bgColorFromLsN}}
+                  className='poppins-medium'/>
             </>
           ))
         }

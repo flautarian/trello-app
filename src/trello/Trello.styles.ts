@@ -1,4 +1,5 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
+import { animations } from '../utils/components/globalAnimationsComponent/globalAnimationsComponent';
 
 export const Container = styled.div<{ bgColor: string }>`
   height: 100%;
@@ -37,4 +38,6 @@ export const NewListButton = styled.button`
   &:active {
     transform: scale(1);
   }
+  
+  animation: ${({}) => animations["listappear"].keyframes} ${({}) => animations["listappear"].duration} ${({}) => animations["listappear"].type};
 `;

@@ -74,6 +74,7 @@ const Trello: FunctionComponent = ({ }) => {
                       ))}
                       {provided.placeholder}
                       <NewListButton
+                        key={"new-list-board-" + currentBoardIndex}
                         onClick={() => {
                           updateState({
                             type: TrelloActionEnum.ADD_LIST,

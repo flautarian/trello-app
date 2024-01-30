@@ -1,21 +1,32 @@
-import { FormEventHandler } from "react";
+import { Dispatch, FormEventHandler, SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
-import { RegisterFormContainer } from "./RegisterForm.styles";
+import { ElementContainer, LabelElement, RegisterButton, RegisterContainer, RegisterFormContainer, SubmitButton, Title } from "./RegisterForm.styles";
 import { AnimationName } from "../../../utils/components/globalAnimationsComponent/globalAnimationsComponent";
+import { ArrowLeft } from "react-feather";
+import { LanguageContainer } from "../../../utils/components/LanguageButton/LanguageButton.style";
+import LanguageButton from "../../../utils/components/LanguageButton/LanguageButton";
+import { useTranslation } from "react-i18next";
+import { LoginState } from "../../../utils/components/globalUtils/globalutils";
 
 type Props = {
   onSubmit: FormEventHandler<HTMLFormElement>;
+  setIsLogin: Dispatch<SetStateAction<LoginState>>;
   animation: AnimationName;
 };
 
 const RegisterForm = (props: Props) => {
+
+
   const { onSubmit } = props;
+
+  const { t } = useTranslation(['home']);
+
   return (
     <RegisterFormContainer onSubmit={onSubmit} animation={props.animation}>
       <h2 className="poppins-medium">Register</h2>
-      <div>
-        <label htmlFor="name">Name</label>
+      <ElementContainer>
+        <LabelElement htmlFor="name">{t("username")}</LabelElement>
         <input
           id="name"
           name="name"
@@ -23,9 +34,9 @@ const RegisterForm = (props: Props) => {
           required
           placeholder="Full Name"
         />
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
+      </ElementContainer>
+      <ElementContainer>
+        <LabelElement htmlFor="email">{t("email")}</LabelElement>
         <input
           id="email"
           name="email"
@@ -33,9 +44,9 @@ const RegisterForm = (props: Props) => {
           required
           placeholder="Email Address"
         />
-      </div>
+      </ElementContainer>
       <div>
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">{t("password")}</label>
         <input
           id="password"
           name="password"
@@ -44,10 +55,15 @@ const RegisterForm = (props: Props) => {
           placeholder="Password"
         />
       </div>
-      <button type="submit">Submit</button>
-      <Link to={"/user/login"}>
-        Already have an account? Sign in
-      </Link>
+      <SubmitButton type="submit">{t("submit")}</SubmitButton>
+      <RegisterContainer>
+        <RegisterButton onClick={() => {props.setIsLogin(LoginState.LOG_IN)}}>
+            <ArrowLeft size={28}></ArrowLeft>
+        </RegisterButton>
+        <LanguageContainer>
+          <LanguageButton />
+        </LanguageContainer>
+      </RegisterContainer>
     </RegisterFormContainer>
   );
 };

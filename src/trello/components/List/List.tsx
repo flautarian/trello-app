@@ -55,7 +55,7 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
   };
 
   return (
-    <Draggable key={indexList} draggableId={`${indexList}`} index={indexList}>
+    <Draggable key={currentBoardIndex + "-" + indexList} draggableId={`${indexList}`} index={indexList}>
       {(provided, snapshot) => (
         <Container
           colorL={trelloState.colors.bgColorFromLsL}

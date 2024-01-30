@@ -1,4 +1,4 @@
-import { FormEventHandler } from "react";
+import { Dispatch, FormEventHandler, SetStateAction } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
 import { ElementContainer, LabelElement, LoginFormContainer, RegisterButton, RegisterContainer, SubmitButton, Title } from "./LoginForm.styles";
@@ -6,9 +6,12 @@ import { useTranslation } from "react-i18next";
 import { AnimationName } from "../../../utils/components/globalAnimationsComponent/globalAnimationsComponent";
 import LanguageButton from '../../../utils/components/LanguageButton/LanguageButton';
 import { LanguageContainer } from "../../../utils/components/LanguageButton/LanguageButton.style";
+import { UserPlus } from "react-feather";
+import { LoginState } from "../../../utils/components/globalUtils/globalutils";
 
 type Props = {
   onSubmit: FormEventHandler<HTMLFormElement>;
+  setIsLogin: Dispatch<SetStateAction<LoginState>>;
   animation: AnimationName
 };
 
@@ -21,7 +24,6 @@ const LoginForm = (props: Props) => {
   return (
     <LoginFormContainer onSubmit={onSubmit} animation={props.animation}>
       <Title className="poppins-medium">My FG TrelloApp</Title>
-      <h2 className="poppins-medium">{t("login")}</h2>
       <ElementContainer>
         <LabelElement htmlFor="email">{t("email")}</LabelElement>
         <input
@@ -44,10 +46,8 @@ const LoginForm = (props: Props) => {
       </div>
       <SubmitButton type="submit">{t("submit")}</SubmitButton>
       <RegisterContainer>
-        <RegisterButton>
-          <Link to={"/user/register"} style={({ width: "100%", height: "100%", textAlign: "center", verticalAlign: "center", color: "inherit", textDecoration: "none" })}>
-            {t("register")}
-          </Link>
+        <RegisterButton onClick={() => {props.setIsLogin(LoginState.REGISTER)}}>
+            <UserPlus size={30}></UserPlus>
         </RegisterButton>
         <LanguageContainer>
           <LanguageButton />
