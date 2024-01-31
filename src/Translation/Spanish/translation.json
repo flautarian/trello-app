@@ -7,6 +7,7 @@
     "submit":  "Enviar",
     "register": "Registrarse",
     "login_success": "Inicio de sesión exitoso",
+    "register_success": "Registro de usuario exitoso",
     "data_updated": "Datos guardados correctamente",
     "lang_changed": "Idioma cambiado",
     "lang_select": "Seleccione el idioma",

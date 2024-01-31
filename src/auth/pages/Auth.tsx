@@ -74,15 +74,20 @@ const Auth = () => {
                 }),
             };
 
-            const endpoint = `/${isLogin ? 'login' : 'register'}`
+            const endpoint = `/${isLogin === LoginState.LOG_IN ? 'login' : 'register'}`
             await request(endpoint, params, (data) => {
-                toast.success(t("login_success"),  {duration: 1000});
-                if (isLogin)
+                
+                if (isLogin === LoginState.LOG_IN){
+                    toast.success(t("login_success"), { duration: 1000 });
                     setAuthData(data);
-                else
+                }
+                else {
+                    toast.success(t("register_success"), { duration: 1000 });
                     setIsLogin(LoginState.LOG_IN);
-            }, (error:any) => {
-                toast.error(error.message || error.error || error, {duration: 2000});
+                    setFormAnimation("appear");
+                }
+            }, (error: any) => {
+                toast.error(error.message || error.error || error, { duration: 2000 });
                 setFormAnimation("appear");
             });
         } catch (error: any) {
@@ -103,8 +108,8 @@ const Auth = () => {
             <AuthContainer animationorientation={isLogin === LoginState.LOG_IN ? 1 : 0}>
                 {
                     isLogin === LoginState.LOG_IN
-                        ? <LoginForm onSubmit={authHandler} animation={formAnimation} setIsLogin={setIsLogin}/>
-                        : <RegisterForm onSubmit={authHandler} animation={formAnimation} setIsLogin={setIsLogin}/>
+                        ? <LoginForm onSubmit={authHandler} animation={formAnimation} setIsLogin={setIsLogin} />
+                        : <RegisterForm onSubmit={authHandler} animation={formAnimation} setIsLogin={setIsLogin} />
                 }
             </AuthContainer>
         </>
