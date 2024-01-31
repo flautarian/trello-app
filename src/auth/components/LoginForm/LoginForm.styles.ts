@@ -90,4 +90,5 @@ export const Title = styled.h2`
 `
 
 export const LabelElement = styled.label`
+    padding-bottom: 15px;
 `

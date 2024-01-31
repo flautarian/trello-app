@@ -33,6 +33,7 @@ const RegisterForm = (props: Props) => {
           type="text"
           required
           placeholder="Full Name"
+          style={{borderRadius: 5, height: 25, borderWidth: 1, marginTop: 5}}
         />
       </ElementContainer>
       <ElementContainer>
@@ -43,6 +44,7 @@ const RegisterForm = (props: Props) => {
           type="email"
           required
           placeholder="Email Address"
+          style={{borderRadius: 5, height: 25, borderWidth: 1, marginTop: 5}}
         />
       </ElementContainer>
       <div>
@@ -53,6 +55,7 @@ const RegisterForm = (props: Props) => {
           type="password"
           required
           placeholder="Password"
+          style={{borderRadius: 5, height: 25, borderWidth: 1, marginTop: 5}}
         />
       </div>
       <SubmitButton type="submit">{t("submit")}</SubmitButton>
