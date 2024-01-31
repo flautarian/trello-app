@@ -9,5 +9,7 @@
     "login_success": "Connexion réussie",
     "data_updated": "Data updated",
     "lang_changed": "Language changed",
+    "lang_select": "Choisir la langue",
+    "style_select": "Sélectionnez le style",
     "edit": "Modifier"
 }

@@ -8,6 +8,7 @@ import LanguageButton from '../../../utils/components/LanguageButton/LanguageBut
 import { LanguageContainer } from "../../../utils/components/LanguageButton/LanguageButton.style";
 import { UserPlus } from "react-feather";
 import { LoginState } from "../../../utils/components/globalUtils/globalutils";
+import { Tooltip } from "react-tooltip";
 
 type Props = {
   onSubmit: FormEventHandler<HTMLFormElement>;
@@ -46,9 +47,13 @@ const LoginForm = (props: Props) => {
       </div>
       <SubmitButton type="submit">{t("submit")}</SubmitButton>
       <RegisterContainer>
-        <RegisterButton onClick={() => {props.setIsLogin(LoginState.REGISTER)}}>
+        <RegisterButton 
+          onClick={() => {props.setIsLogin(LoginState.REGISTER)}}
+          data-tooltip-id={"login-register-btn-tooltip"}
+          data-tooltip-content={t("register")}>
             <UserPlus size={30}></UserPlus>
         </RegisterButton>
+        <Tooltip noArrow={true} place="bottom" id={"login-register-btn-tooltip"} />
         <LanguageContainer>
           <LanguageButton />
         </LanguageContainer>

@@ -6,6 +6,8 @@ import {
 } from './Options.styles';
 import { CirclePicker } from 'react-color';
 import { Edit2 } from 'react-feather';
+import { Tooltip } from 'react-tooltip';
+import { useTranslation } from 'react-i18next';
 
 interface IOptionsProps {
   handleBgColorChange: any;
@@ -17,10 +19,14 @@ const Options: FunctionComponent<IOptionsProps> = ({
   backgroundColor,
 }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { t } = useTranslation(['home']);
 
   return (
     <Container>
-      <MenuButton onClick={() => setSidebarOpen(!sidebarOpen)}>
+      <MenuButton 
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        data-tooltip-id={"style-select-btn-tooltip"}
+        data-tooltip-content={t("lang_select")}>
         <Edit2></Edit2>
       </MenuButton>
       <CirclePickerContainer color={backgroundColor} display={sidebarOpen}>
@@ -31,6 +37,7 @@ const Options: FunctionComponent<IOptionsProps> = ({
           }}
         />
       </CirclePickerContainer>
+      <Tooltip noArrow={true} place="bottom" id={"style-select-btn-tooltip"} />
     </Container>
   );
 };

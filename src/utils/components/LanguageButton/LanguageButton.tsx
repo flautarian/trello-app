@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import React from "react";
 import { toast } from "sonner";
+import { Tooltip } from "react-tooltip";
 
 const flags = [
     {
@@ -36,7 +37,9 @@ const LanguageButton = () => {
                 src={flags.find(flag => flag.code === i18n.language)?.img}
                 alt="Current language"
                 onClick={(evt) => setSelectorState(!selectorState)}
-                activategrayscale={1} />
+                activategrayscale={1} 
+                data-tooltip-id={"language-select-btn-tooltip"}
+                data-tooltip-content={t("lang_select")}/>
             <LanguagesContainer enabled={selectorState ? 1 : 0}>
                 {
                     flags.map((flag: any, index: number) => (
@@ -44,6 +47,7 @@ const LanguageButton = () => {
                     ))
                 }
             </LanguagesContainer>
+            <Tooltip noArrow={true} place="bottom" id={"language-select-btn-tooltip"} />
         </>
     );
 };

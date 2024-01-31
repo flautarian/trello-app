@@ -9,5 +9,7 @@
     "login_success": "Login successful",
     "data_updated": "Data updated",
     "lang_changed": "Language changed",
+    "lang_select": "Select language",
+    "style_select": "Select style",
     "edit": "Edit"
 }

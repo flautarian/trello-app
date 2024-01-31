@@ -15,7 +15,7 @@ const Header: FunctionComponent = ({ }) => {
 
     const [isEditingBoardTitle, setEditingBoardTitle] = useState(false);
     const { updateState, currentBoardIndex, trelloState, isLoading } = useContext(trelloCtx);
-    const { globalLogOutDispatch} = useContext(authCtx);
+    const { globalLogOutDispatch } = useContext(authCtx);
     const { t } = useTranslation(['home']);
 
     const handleBoardNameChange = (evt: any) => {
@@ -32,12 +32,14 @@ const Header: FunctionComponent = ({ }) => {
     const handleBgColorChange = (color: { hex: string, rgb: { r: number, g: number, b: number, a: number } }) => {
         updateState({
             type: TrelloActionEnum.UPDATE_COLORS,
-            payload: { newColors: {
-                bgColorFromLs: color.hex,
-                bgColorFromLsD: darkenColor(color.rgb, 0.1) || 'white',
-                bgColorFromLsL: lightenColor(color.rgb, 0.5) || 'grey',
-                bgColorFromLsN: createNegativeColor(color.rgb) || 'black'
-            } }
+            payload: {
+                newColors: {
+                    bgColorFromLs: color.hex,
+                    bgColorFromLsD: darkenColor(color.rgb, 0.1) || 'white',
+                    bgColorFromLsL: lightenColor(color.rgb, 0.5) || 'grey',
+                    bgColorFromLsN: createNegativeColor(color.rgb) || 'black'
+                }
+            }
         });
     };
 
@@ -68,18 +70,19 @@ const Header: FunctionComponent = ({ }) => {
             <Tooltip id={"board-edit-tooltip"} />
             <ItemsContainer>
                 <LanguageContainer >
-                    <LanguageButton/>
+                    <LanguageButton />
                 </LanguageContainer>
-                <Options 
+                <Options
                     handleBgColorChange={handleBgColorChange}
-                    backgroundColor={trelloState.colors.bgColorFromLsL}/>
+                    backgroundColor={trelloState.colors.bgColorFromLsL} />
                 <LogOutButton
                     textColor={trelloState.colors.bgColorFromLsN}
                     onClick={() => globalLogOutDispatch()}
-                    data-tooltip-id={"board-logout-tooltip"}
+                    data-tooltip-id={"board-logout-btn-tooltip"}
                     data-tooltip-content={t("logout")}>
                     <LogOut></LogOut>
                 </LogOutButton>
+                <Tooltip noArrow={true} place="bottom" id={"board-logout-btn-tooltip"} />
             </ItemsContainer>
         </Container>
     )

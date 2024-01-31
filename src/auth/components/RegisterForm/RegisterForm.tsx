@@ -24,7 +24,7 @@ const RegisterForm = (props: Props) => {
 
   return (
     <RegisterFormContainer onSubmit={onSubmit} animation={props.animation}>
-      <h2 className="poppins-medium">Register</h2>
+      <Title className="poppins-medium" style={{marginTop: 25}}>{t("register")}</Title>
       <ElementContainer>
         <LabelElement htmlFor="name">{t("username")}</LabelElement>
         <input
