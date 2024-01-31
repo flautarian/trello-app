@@ -1,6 +1,6 @@
-# MyLists
+# GiacconiDev TrelloApp
 
-MyLists is a React TypeScript application designed to facilitate task management, inspired by Trello's functionality. This README provides an overview of the project structure, dependencies, and how to get started with development.
+TrelloApp is a React TypeScript application designed to facilitate task management, inspired by Trello's functionality and made to practice the react framework concepts and workflow. This README provides an overview of the project structure, dependencies, and how to get started with development.
 
 ## Table of Contents
 
