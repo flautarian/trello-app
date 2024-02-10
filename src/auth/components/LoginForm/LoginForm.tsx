@@ -23,7 +23,13 @@ const LoginForm = (props: Props) => {
   const { t } = useTranslation(['home']);
 
   return (
-    <LoginFormContainer onSubmit={onSubmit} $animation={props.animation}>
+    <LoginFormContainer 
+      onSubmit={onSubmit} 
+      $animation={props.animation}
+      $xorigin='-50%' 
+      $yorigin='-20%' 
+      $xtarget='-50%' 
+      $ytarget='-50%'>
       <Title className="poppins-medium">My FG TrelloApp</Title>
       <ElementContainer>
         <LabelElement htmlFor="email">{t("email")}</LabelElement>

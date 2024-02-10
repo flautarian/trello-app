@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { AnimationName, animations } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent'
 
-export const LoginFormContainer = styled.form<{ $animation: AnimationName }>`
+export const LoginFormContainer = styled.form<{ $animation: AnimationName, $xorigin?: string, $yorigin?: string, $xtarget?: string, $ytarget?: string }>`
     height: 50vh;
     width: 30vh;
     background-color: rgba(230,230,230,1);

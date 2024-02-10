@@ -23,7 +23,13 @@ const RegisterForm = (props: Props) => {
   const { t } = useTranslation(['home']);
 
   return (
-    <RegisterFormContainer onSubmit={onSubmit} $animation={props.animation}>
+    <RegisterFormContainer 
+      onSubmit={onSubmit} 
+      $animation={props.animation}
+      $xorigin='-50%' 
+      $yorigin='-20%' 
+      $xtarget='-50%' 
+      $ytarget='-50%'>
       <Title className="poppins-medium" style={{marginTop: 25}}>{t("register")}</Title>
       <ElementContainer>
         <LabelElement htmlFor="name">{t("username")}</LabelElement>
