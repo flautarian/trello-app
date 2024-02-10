@@ -23,7 +23,7 @@ const LoginForm = (props: Props) => {
   const { t } = useTranslation(['home']);
 
   return (
-    <LoginFormContainer onSubmit={onSubmit} animation={props.animation}>
+    <LoginFormContainer onSubmit={onSubmit} $animation={props.animation}>
       <Title className="poppins-medium">My FG TrelloApp</Title>
       <ElementContainer>
         <LabelElement htmlFor="email">{t("email")}</LabelElement>
@@ -36,8 +36,8 @@ const LoginForm = (props: Props) => {
           style={{borderRadius: 5, height: 25, borderWidth: 1, marginTop: 5}}
         />
       </ElementContainer>
-      <div>
-        <label htmlFor="password">{t("password")}</label>
+      <ElementContainer>
+        <LabelElement htmlFor="password">{t("password")}</LabelElement>
         <input
           id="password"
           name="password"
@@ -46,7 +46,7 @@ const LoginForm = (props: Props) => {
           placeholder="Password"
           style={{borderRadius: 5, height: 25, borderWidth: 1, marginTop: 5}}
         />
-      </div>
+      </ElementContainer>
       <SubmitButton type="submit">{t("submit")}</SubmitButton>
       <RegisterContainer>
         <RegisterButton 

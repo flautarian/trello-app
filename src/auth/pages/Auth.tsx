@@ -105,7 +105,7 @@ const Auth = () => {
 
     return (
         <>
-            <AuthContainer animationorientation={isLogin === LoginState.LOG_IN ? 1 : 0}>
+            <AuthContainer $animationorientation={isLogin === LoginState.LOG_IN ? 1 : 0}>
                 {
                     isLogin === LoginState.LOG_IN
                         ? <LoginForm onSubmit={authHandler} animation={formAnimation} setIsLogin={setIsLogin} />

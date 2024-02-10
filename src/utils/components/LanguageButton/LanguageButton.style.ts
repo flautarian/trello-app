@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 
-export const LanguageButtonContainer = styled.img<{activategrayscale?: number}>`
+export const LanguageButtonContainer = styled.img<{$activategrayscale?: number}>`
     backgroundColor: white;
     border-radius: 50%;
     height: 30px;
@@ -9,7 +9,7 @@ export const LanguageButtonContainer = styled.img<{activategrayscale?: number}>`
     margin-left: 5px;
     cursor: pointer;
     transition: transform 0.2s, filter 0.2s;
-    filter: grayscale(${({activategrayscale: activateGrayscale}) => activateGrayscale == 1? "100%" : "0%"});
+    filter: grayscale(${({$activategrayscale: $activategrayscale}) => $activategrayscale == 1? "100%" : "0%"});
 
     &:hover {
         transform: scale(0.95);
@@ -21,7 +21,7 @@ export const LanguageButtonContainer = styled.img<{activategrayscale?: number}>`
         transform: scale(1);
     }
 `
-export const LanguagesContainer = styled.div<{ enabled: number }>`
+export const LanguagesContainer = styled.div<{ $enabled: number }>`
     background-color: rgba(220,220,220,1);
     border: none;
     border-radius: 5%;
@@ -36,8 +36,8 @@ export const LanguagesContainer = styled.div<{ enabled: number }>`
     transform: translate(-65%, 50%);
     transition: opacity 0.2s, transform 0.25s;
 
-    ${({ enabled }) =>
-        enabled == 1
+    ${({ $enabled }) =>
+        $enabled == 1
             ? css`
           opacity: 1;
           transform: translate(-65%, 100%);

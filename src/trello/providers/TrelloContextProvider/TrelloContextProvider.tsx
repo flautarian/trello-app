@@ -5,22 +5,21 @@ import React, {
     useCallback,
     useEffect,
     useState,
-    Dispatch,
 } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Project dependencies
-import { trelloReducer, TrelloState, defaultTrelloState } from "../reducers/TrelloReducer";
+import { trelloReducer, TrelloState, defaultTrelloState } from "../../reducers/TrelloReducer";
 
 // trello actionEnums
-import { TrelloActionEnum } from "../action/TrelloActions";
+import { TrelloActionEnum } from "../../action/TrelloActions";
 
 // auth state interface
-import { AuthState } from '../../auth/reducers/AuthReducer';
+import { AuthState } from '../../../auth/reducers/AuthReducer';
 
 // useApi middleware
-import useApi from '../../auth/hooks/api/useApi';
-import { initialBoards, initialColors } from "../utils";
+import useApi from '../../../auth/hooks/api/useApi';
+import { initialBoards, initialColors } from "../../utils";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 

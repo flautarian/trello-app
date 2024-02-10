@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-export const Container = styled.div<{ color: string, textColor: string }>`
+export const Container = styled.div<{ color: string, $textcolor: string }>`
     padding: 10px;
     text-align: center;
     background: ${({ color }) => color};
-    color: ${({ textColor }) => textColor};
+    color: ${({ $textcolor }) => $textcolor};
     font-size: 20px;
     display: flex;
     flex-direction: row;
@@ -16,10 +16,10 @@ export const EditTitle = styled.input`
     width: fit-content;
 `;
 
-export const LogOutButton = styled.button<{ textColor: string }>`
+export const LogOutButton = styled.button<{ $textcolor: string }>`
     border-radius: 25%;
     max-height: 30px;
-    color: ${({ textColor }) => textColor};
+    color: ${({ $textcolor }) => $textcolor};
 
     transition: background 0.15s ease-in-out, transform 0.1s ease-in-out;
     transform: scale(1);

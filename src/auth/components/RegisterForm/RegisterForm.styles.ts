@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { AnimationName, animations } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent';
 
-export const RegisterFormContainer = styled.form<{ animation: AnimationName }>`
+export const RegisterFormContainer = styled.form<{ $animation: AnimationName }>`
     height: 50vh;
     width: 30vh;
     background-color: rgba(230,230,230,1);
@@ -28,7 +28,7 @@ export const RegisterFormContainer = styled.form<{ animation: AnimationName }>`
     font-style: bold;
 
     transition: transform 0.15s ease-in-out;
-    animation: ${({ animation }) => animations[animation].keyframes} ${({ animation }) => animations[animation].duration} ${({ animation }) => animations[animation].type};
+    animation: ${({ $animation }) => animations[$animation].keyframes} ${({ $animation }) => animations[$animation].duration} ${({ $animation }) => animations[$animation].type};
 `;
 
 export const SubmitButton = styled.button`

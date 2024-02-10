@@ -116,11 +116,11 @@ body {
 
 export default GlobalStyle;
 
-export const AuthContainer = styled.div<{animationorientation: number}>`
+export const AuthContainer = styled.div<{$animationorientation: number}>`
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
 	background-size: 400% 400%;
 	height: 100vh;
   
   transition: background-position 0.15s ease-in-out;
-  animation: ${({animationorientation: animationOrientation}) => animationOrientation == 1 ? authBackgroundAnimation : authBackgroundAnimationReverse} 1s forwards;
+  animation: ${({$animationorientation}) => $animationorientation ? authBackgroundAnimation : authBackgroundAnimationReverse} 1s forwards;
 `

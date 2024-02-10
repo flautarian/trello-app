@@ -70,7 +70,7 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
       break;
 
     case "EDIT_CARD":
-      state.boards[action.payload.indexBoard].list[action.payload.indexList].cards[action.payload.indexCard].text = action.payload.editCardValue;
+      state.boards[action.payload.indexBoard].list[action.payload.indexList].cards[action.payload.indexCard] = action.payload.editCardValue;
       break;
 
     case "PULL":

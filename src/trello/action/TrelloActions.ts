@@ -1,4 +1,4 @@
-import { IBoard, IColors } from '../models/index';
+import { IBoard, ICard, IColors } from '../models/index';
 
 export enum TrelloActionEnum {
     EDIT_BOARD = 'EDIT_BOARD',
@@ -96,7 +96,7 @@ export enum TrelloActionEnum {
         indexBoard: number;
         indexList: number;
         indexCard: number;
-        editCardValue: string;
+        editCardValue: ICard;
     }
   } | 
    

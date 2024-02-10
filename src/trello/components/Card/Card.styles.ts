@@ -6,6 +6,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   user-select: none;
+  font-family: "Poppins", sans-serif;
 `;
 
 export const Left = styled.div`

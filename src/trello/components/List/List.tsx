@@ -9,7 +9,7 @@ import {
 import Card from '../Card/Card';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { IList, ICard } from '../../models';
-import trelloCtx from '../../providers/TrelloContextProvider';
+import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
 import { AnimationName } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent';
 
@@ -24,12 +24,12 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
 
   const { trelloState, updateState, currentBoardIndex } = useContext(trelloCtx);
 
-  const [animation, setAnimation] = useState<AnimationName>("listappear");
+  const [animation, setAnimation] = useState<AnimationName>("appear");
 
 
 
   const getItemStyle = (
-    isDragging: boolean,
+    isdragging: boolean,
     draggableStyle: any,
   ) => ({
     background: 'white',
@@ -58,13 +58,17 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
     <Draggable key={currentBoardIndex + "-" + indexList} draggableId={`${indexList}`} index={indexList}>
       {(provided, snapshot) => (
         <Container
-          colorL={trelloState.colors.bgColorFromLsL}
-          isDragging={snapshot.isDragging}
+          $colorl={trelloState.colors.bgColorFromLsL}
+          $isdragging={snapshot.isDragging ? 1 : 0}
           ref={provided.innerRef}
-          animation={animation}
+          $animation={animation}
+          $xorigin='0%' 
+          $yorigin='25%' 
+          $xtarget='0%'
+          $ytarget='0%'
           {...provided.draggableProps}
           {...provided.dragHandleProps}>
-          <Header colorD={trelloState.colors.bgColorFromLsD} isDragging={snapshot.isDragging}>
+          <Header $colord={trelloState.colors.bgColorFromLsD} $isdragging={snapshot.isDragging ? 1 : 0}>
             {isEditingName ? (
               <input
                 type="text"
@@ -120,7 +124,7 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
                       >
                         <Card
                           key={cardIndex}
-                          text={card.text}
+                          card={card}
                           indexCard={cardIndex}
                           indexList={indexList}
                         />

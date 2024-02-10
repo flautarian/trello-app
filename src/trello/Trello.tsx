@@ -1,17 +1,13 @@
-import React, {
-  useCallback,
-  useContext,
-  FunctionComponent,
-} from 'react';
-import List from './components/List/List';
 import { DragDropContext, DropResult, Droppable, ResponderProvided } from 'react-beautiful-dnd';
 import { BoardContainer, Container, Lists, NewListButton } from './Trello.styles';
-import './styles.css';
-import Header from './components/Header/Header';
-import Sidebar from './components/Sidebar/Sidebar';
-import trelloCtx from './providers/TrelloContextProvider';
+import trelloCtx from './providers/TrelloContextProvider/TrelloContextProvider';
+import React, { useCallback, useContext, FunctionComponent } from 'react';
 import { TrelloActionEnum } from './action/TrelloActions';
+import Sidebar from './components/Sidebar/Sidebar';
+import Header from './components/Header/Header';
+import List from './components/List/List';
 import { IList } from './models';
+import './styles.css';
 
 const Trello: FunctionComponent = ({ }) => {
   // Trello context
@@ -55,43 +51,52 @@ const Trello: FunctionComponent = ({ }) => {
   }
 
   return (
-      <Container bgColor={trelloState.colors.bgColorFromLs}>
-        <>
-            <Header />
-            <Sidebar></Sidebar>
-            <Lists>
-              <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable
-                  droppableId={"board"}
-                  type="COLUMN"
-                  direction="horizontal"
-                  ignoreContainerClipping={false}
-                  isCombineEnabled={false}>
-                  {(provided, snapshot) => (
-                    <BoardContainer bgColor={trelloState.colors.bgColorFromLs} ref={provided.innerRef} {...provided.droppableProps}>
-                      {trelloState.boards[currentBoardIndex].list.map((list: IList, index: number) => (
-                        <List indexList={index} list={list} />
-                      ))}
-                      {provided.placeholder}
-                      <NewListButton
-                        key={"new-list-board-" + currentBoardIndex}
-                        onClick={() => {
-                          updateState({
-                            type: TrelloActionEnum.ADD_LIST,
-                            payload: {
-                              indexBoard: currentBoardIndex
-                            }
-                          });
-                        }}>
-                        + New list
-                      </NewListButton>
-                    </BoardContainer>
-                  )}
-                </Droppable>
-              </DragDropContext>
-            </Lists>
-          </>
-      </Container>
+    <Container $bgcolor={trelloState.colors.bgColorFromLs}>
+      <>
+        <Header />
+        <Sidebar></Sidebar>
+        <Lists>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable
+              droppableId={"board"}
+              type="COLUMN"
+              direction="horizontal"
+              ignoreContainerClipping={false}
+              isCombineEnabled={false}
+              key={"board-droppable"}>
+              {(provided, snapshot) => (
+                <BoardContainer
+                  $bgcolor={trelloState.colors.bgColorFromLs}
+                  ref={provided.innerRef} 
+                  key={"board-container"}
+                  {...provided.droppableProps}>
+                  {trelloState.boards[currentBoardIndex].list.map((list: IList, index: number) => (
+                    <List indexList={index} list={list} key={"list-"+index}/>
+                  ))}
+                  {provided.placeholder}
+                  <NewListButton
+                    key={"new-list-board-" + currentBoardIndex}          
+                    $xorigin='0%' 
+                    $yorigin='25%' 
+                    $xtarget='0%'
+                    $ytarget='0%'
+                    onClick={() => {
+                      updateState({
+                        type: TrelloActionEnum.ADD_LIST,
+                        payload: {
+                          indexBoard: currentBoardIndex
+                        }
+                      });
+                    }}>
+                    + New list
+                  </NewListButton>
+                </BoardContainer>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Lists>
+      </>
+    </Container>
   );
 }
 

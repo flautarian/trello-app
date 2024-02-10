@@ -3,7 +3,7 @@ import { Container, EditTitle, ItemsContainer, LoadingIcon, LogOutButton, Title 
 import Options from '../Options/Options';
 import { Tooltip } from 'react-tooltip';
 import { Edit2, LogOut, Save } from 'react-feather';
-import trelloCtx from '../../providers/TrelloContextProvider';
+import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
 import authCtx from '../../../auth/providers/AuthContextProvider';
 import { useTranslation } from 'react-i18next';
@@ -44,7 +44,7 @@ const Header: FunctionComponent = ({ }) => {
     };
 
     return (
-        <Container color={trelloState.colors.bgColorFromLsL} textColor={trelloState.colors.bgColorFromLsN}>
+        <Container color={trelloState.colors.bgColorFromLsL} $textcolor={trelloState.colors.bgColorFromLsN}>
             {isEditingBoardTitle ? (
                 <>
                     <EditTitle
@@ -76,7 +76,7 @@ const Header: FunctionComponent = ({ }) => {
                     handleBgColorChange={handleBgColorChange}
                     backgroundColor={trelloState.colors.bgColorFromLsL} />
                 <LogOutButton
-                    textColor={trelloState.colors.bgColorFromLsN}
+                    $textcolor={trelloState.colors.bgColorFromLsN}
                     onClick={() => globalLogOutDispatch()}
                     data-tooltip-id={"board-logout-btn-tooltip"}
                     data-tooltip-content={t("logout")}>
