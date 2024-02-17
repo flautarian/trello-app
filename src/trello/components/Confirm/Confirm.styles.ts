@@ -1,14 +1,16 @@
 import styled from "styled-components";
 import { AnimationName, animations } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent';
 
-export const ModalBackground = styled.div<({ $animation: AnimationName }) >`
-height: 100%;
-width: 100%;
-animation: ${(props) => animations[props.$animation].keyframes} ${({ $animation }) => animations[$animation].duration} ${({ $animation }) => animations[$animation].type};
+export const ConfirmBackground = styled.div<({ $animation: AnimationName }) >`
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 14;
+    animation: ${(props) => animations[props.$animation].keyframes} ${({ $animation }) => animations[$animation].duration} ${({ $animation }) => animations[$animation].type};
 `
 
 export const CardModalContainer = styled.div<({ $bgcolor: string, $animation: AnimationName, $xorigin?: string, $yorigin?: string, $xtarget?: string, $ytarget?: string }) >`
-    z-index: 10;
+    z-index: 15;
     width: auto;
     height: auto;
     position: absolute;
@@ -16,7 +18,7 @@ export const CardModalContainer = styled.div<({ $bgcolor: string, $animation: An
     font-family: poppins-medium, sans-serif;
     border-radius: 15px;
     left: 30%;
-    top: 15%;
+    top: 5%;
 
     display: flex;
     flex-direction: column;
@@ -26,8 +28,6 @@ export const CardModalContainer = styled.div<({ $bgcolor: string, $animation: An
     border-width: 1px 1px 2px
     border: solid rgba(220,220,220,0.1);
     box-shadow: 0 0 40px rgba(8,7,16,0.6);
-    
-    pointer-events: auto;
     
     animation: ${(props) => animations[props.$animation].keyframes} ${({ $animation }) => animations[$animation].duration} ${({ $animation }) => animations[$animation].type};
 `
@@ -49,10 +49,10 @@ export const HeaderModal = styled.div<{ $bgcolor: string }>`
 }
 `
 
-export const BodyModalForm = styled.form<{ $bgcolor: string }>`
+export const BodyModalForm = styled.div<{ $bgcolor: string }>`
     width: 70vh;
-    height: 40vh;
-    max-height: 60vh;
+    height: 10vh;
+    max-height: 20vh;
     background-color: ${({ $bgcolor }) => $bgcolor};
     font-family: poppins;
     margin-top: 10px;

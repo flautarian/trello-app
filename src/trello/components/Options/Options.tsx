@@ -29,7 +29,7 @@ const Options: FunctionComponent<IOptionsProps> = ({
     const handleClickOutside = (event: MouseEvent) => {
       if (!sidebarOpen)
         return;
-      if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
+      if (event.button == 0 && componentRef.current && !componentRef.current.contains(event.target as Node)) {
         setSidebarOpen(!sidebarOpen);
       }
     };

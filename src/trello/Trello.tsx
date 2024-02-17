@@ -67,17 +67,17 @@ const Trello: FunctionComponent = ({ }) => {
               {(provided, snapshot) => (
                 <BoardContainer
                   $bgcolor={trelloState.colors.bgColorFromLs}
-                  ref={provided.innerRef} 
+                  ref={provided.innerRef}
                   key={"board-container"}
                   {...provided.droppableProps}>
                   {trelloState.boards[currentBoardIndex].list.map((list: IList, index: number) => (
-                    <List indexList={index} list={list} key={"list-"+index}/>
+                    <List indexList={index} list={list} key={"list-" + index} />
                   ))}
                   {provided.placeholder}
                   <NewListButton
-                    key={"new-list-board-" + currentBoardIndex}          
-                    $xorigin='0%' 
-                    $yorigin='25%' 
+                    key={"new-list-board-" + currentBoardIndex}
+                    $xorigin='0%'
+                    $yorigin='25%'
                     $xtarget='0%'
                     $ytarget='0%'
                     onClick={() => {

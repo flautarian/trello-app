@@ -16,10 +16,12 @@ export const reorder = <T>(
 
 export const initialCards: ICard[] = [
   {
-    text: 'First Card',
+    title: "Title first card",
+    description: 'First card description',
   },
   {
-    text: 'Second Card',
+    title: "Title second card",
+    description: 'Second card description',
   },
 ];
 

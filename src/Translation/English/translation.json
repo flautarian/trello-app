@@ -12,5 +12,7 @@
     "lang_changed": "Language changed",
     "lang_select": "Select language",
     "style_select": "Select style",
-    "edit": "Edit"
+    "edit": "Edit",
+    "title": "Title",
+    "description": "Description"
 }

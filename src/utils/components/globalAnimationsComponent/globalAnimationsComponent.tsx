@@ -1,7 +1,7 @@
 import { keyframes } from 'styled-components';
 import { Keyframes } from 'styled-components/dist/types';
 
-export type AnimationName = 'appear' | 'disappear' | 'none';
+export type AnimationName = 'appear' | 'disappear' | 'fadeInBackground' | 'fadeOutBackground' | 'none';
 
 interface Animation {
     keyframes: (params: any) => Keyframes;
@@ -49,6 +49,34 @@ export const animations: Record<AnimationName, Animation> = {
         `,
         duration: '0.5s',
         type: 'ease-in',
+    },
+    fadeInBackground: {
+        keyframes: (params: any) => keyframes`
+            0% {
+                background-color: rgba(0,0,0,0);
+                pointer-events: none;
+            }
+            100% {
+                background-color: rgba(0,0,0,0.5);
+                pointer-events: auto;
+            }
+        `,
+        duration: '0.3s',
+        type: 'forwards',
+    },
+    fadeOutBackground: {
+        keyframes: (params: any) => keyframes`
+            0% {
+                background-color: rgba(0,0,0,0.5);
+                pointer-events: none;
+            }
+            100% {
+                background-color: rgba(0,0,0,0);
+                pointer-events: auto;
+            }
+        `,
+        duration: '0.5s',
+        type: 'forwards',
     }
 };
 

@@ -37,7 +37,7 @@ const LanguageButton = () => {
         const handleClickOutside = (event: MouseEvent) => {
             if (!selectorState)
                 return;
-            if (componentRef.current && !componentRef.current.contains(event.target as Node)) {
+            if (event.button == 0 && componentRef.current && !componentRef.current.contains(event.target as Node)) {
                 setSelectorState(!selectorState);
             }
         };

@@ -23,6 +23,7 @@
     "react-i18next": "^14.0.1",
     "react-jwt": "^1.2.0",
     "react-modal": "^3.16.1",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^6.21.2",
     "react-tooltip": "^5.25.1",
     "sonner": "^1.4.0",

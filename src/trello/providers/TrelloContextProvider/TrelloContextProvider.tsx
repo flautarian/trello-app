@@ -22,6 +22,7 @@ import useApi from '../../../auth/hooks/api/useApi';
 import { initialBoards, initialColors } from "../../utils";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { loadingSpinnerStyle } from "../../../utils/components/globalUtils/globalutils";
 
 type TrelloProviderProps = {
     children: React.ReactElement;
@@ -170,7 +171,24 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
         setCurrentBoardIndex,
     };
 
-    return <trelloCtx.Provider value={ctx}>{children}</trelloCtx.Provider>;
+    return <trelloCtx.Provider value={ctx}>
+        {
+            isLoading &&
+            <div style={{
+                position: "absolute",
+                height: "100%",
+                width: "100%",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+            }}>
+                <style>{loadingSpinnerStyle}</style>
+                <span className="loader"></span>
+            </div>
+        }
+        {children}
+        </trelloCtx.Provider>;
 };
 
 export default trelloCtx;

@@ -9,12 +9,30 @@ export interface IList {
 }
 
 export interface ICard {
-  text: string;
+  title: string;
+  description: string;
 }
 
-export interface IColors{
+export interface IColors {
   bgColorFromLs: string;
   bgColorFromLsD: string;
   bgColorFromLsL: string;
   bgColorFromLsN: string;
+}
+
+export const CardFormTemplate = {
+  values: [
+    {
+      name: "title",
+      iname: "title",
+      type: "text",
+      defaultValue: "Title"
+    },
+    {
+      name: "description",
+      iname: "description",
+      type: "textarea",
+      defaultValue: "Description"
+    }
+  ]
 }

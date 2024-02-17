@@ -3,7 +3,7 @@ import { Container, DeleteButton, EditButton, Left, Right, SaveButton } from './
 import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
 import { ModalComponent, TrelloModalTypeEnum } from '../Modal/Modal';
-import { ICard } from '../../models';
+import { ICard, CardFormTemplate } from '../../models';
 import ReactDOM from 'react-dom';
 import { AnimationName } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent';
 
@@ -22,12 +22,12 @@ const Card: FunctionComponent<ICardComponent> = ({
   const { updateState, currentBoardIndex } = useContext(trelloCtx);
 
   const [showModal, setShowModal] = useState(false);
-  
+
   const [modalAnimation, setModalAnimation] = useState<AnimationName>("none");
 
   const toggleModal = (state: boolean) => {
     setModalAnimation('disappear');
-    //setTimeout(() => setShowModal(state), 1000);
+    setTimeout(() => setShowModal(state), 1000);
   };
 
   const onDeleteClick = () => {
@@ -48,22 +48,16 @@ const Card: FunctionComponent<ICardComponent> = ({
   };
 
   return (
-    <Container>
+    <Container onClickCapture={() => {
+      setShowModal(true);
+      setModalAnimation('appear');
+    }}>
       <Left>
-        {card.text}
+        {card.title || "--"}
       </Left>
-      <Right>
-        <>
-          <EditButton onClick={() => {
-            setShowModal(true);
-            setModalAnimation('appear');
-          }}>✎</EditButton>
-          <DeleteButton onClick={onDeleteClick}>&times;</DeleteButton>
-        </>
-      </Right>
-      { showModal &&
+      {showModal &&
         ReactDOM.createPortal(
-          <ModalComponent toggleModal={toggleModal} currentObject={card} callback={handleNameChange} animation={modalAnimation} />, 
+          <ModalComponent toggleModal={toggleModal} templateObject={CardFormTemplate} currentObject={card} callback={handleNameChange} deleteCallback={onDeleteClick} animation={modalAnimation} />,
           document.getElementById("modal-root") as HTMLElement
         )
       }

@@ -54,7 +54,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
 
     case "ADD_CARD":
       let newCard: ICard = {
-        text: 'New Card'
+        title: 'Title',
+        description: 'Description'
       };
       state.boards[action.payload.indexBoard].list[action.payload.indexList].cards.push(newCard);
       break;
