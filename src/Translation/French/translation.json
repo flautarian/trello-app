@@ -6,13 +6,18 @@
     "password": "Mot de passe",
     "submit": "Soumettre",
     "register": "S'inscrire",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "save": "Sauvegarder",
+    "yes": "oui",
+    "no": "non",
     "login_success": "Connexion réussie",
     "register_success": "S'inscriure réussie",
     "data_updated": "Data updated",
     "lang_changed": "Language changed",
     "lang_select": "Choisir la langue",
     "style_select": "Sélectionnez le style",
-    "edit": "Modifier",
     "title": "Titre",
-    "description": "Description"
+    "description": "Description",
+    "deleteCard": "Vous allez supprimer cette carte, en êtes-vous sûr?"
 }

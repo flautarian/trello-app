@@ -2,7 +2,10 @@ import styled from 'styled-components';
 import { AnimationName, animations } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent'
 
 export const Container = styled.div<{ $isdragging: number, $colorl : string, $animation: AnimationName, $xorigin?: string, $yorigin?: string, $xtarget?: string, $ytarget?: string }>`
+  width: 250px;
   min-width: 250px;
+  min-height: 100px;
+  height: max-content;
   padding: 5px;
   box-sizing: border-box;
   margin-left: 5px;
@@ -10,8 +13,6 @@ export const Container = styled.div<{ $isdragging: number, $colorl : string, $an
   background: white;
   transition: background-color 0.1s ease-out;
   background-color: ${({ $isdragging, $colorl }) => $isdragging ? $colorl : "rgb(200, 200, 200)"};
-  width: 250px;
-  min-height: 100px;
   font-family: "Poppins", sans-serif;
   animation: ${(props) => animations[props.$animation].keyframes} ${({ $animation }) => animations[$animation].duration} ${({ $animation }) => animations[$animation].type};
 `;

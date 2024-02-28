@@ -6,7 +6,7 @@ import {
   Title,
   AddCardButton,
 } from './List.styles';
-import Card from '../Card/Card';
+import CardComponent from '../Card/Card';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import { IList, ICard } from '../../models';
 import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
@@ -18,7 +18,7 @@ interface IListProps {
   indexList: number;
 }
 
-const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
+const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
 
   const [isEditingName, setEditingName] = useState(false);
 
@@ -122,7 +122,7 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
                           provided.draggableProps.style,
                         )}
                       >
-                        <Card
+                        <CardComponent
                           key={cardIndex}
                           card={card}
                           indexCard={cardIndex}
@@ -155,4 +155,4 @@ const List: FunctionComponent<IListProps> = ({ list, indexList }) => {
   );
 };
 
-export default List;
+export default ListComponent;

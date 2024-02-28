@@ -1,6 +1,6 @@
 import React, { useState, FunctionComponent, useContext } from 'react';
 import { Container, EditTitle, ItemsContainer, LoadingIcon, LogOutButton, Title } from './Header.styles';
-import Options from '../Options/Options';
+import OptionsComponent from '../Options/Options';
 import { Tooltip } from 'react-tooltip';
 import { Edit2, LogOut, Save } from 'react-feather';
 import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
@@ -11,7 +11,7 @@ import LanguageButton from '../../../utils/components/LanguageButton/LanguageBut
 import { LanguageContainer } from '../../../utils/components/LanguageButton/LanguageButton.style';
 import { createNegativeColor, darkenColor, lightenColor } from '../../../utils/components/globalUtils/globalutils';
 
-const Header: FunctionComponent = ({ }) => {
+const HeaderComponent: FunctionComponent = ({ }) => {
 
     const [isEditingBoardTitle, setEditingBoardTitle] = useState(false);
     const { updateState, currentBoardIndex, trelloState, isLoading } = useContext(trelloCtx);
@@ -72,7 +72,7 @@ const Header: FunctionComponent = ({ }) => {
                 <LanguageContainer >
                     <LanguageButton />
                 </LanguageContainer>
-                <Options
+                <OptionsComponent
                     handleBgColorChange={handleBgColorChange}
                     backgroundColor={trelloState.colors.bgColorFromLsL} />
                 <LogOutButton
@@ -88,4 +88,4 @@ const Header: FunctionComponent = ({ }) => {
     )
 };
 
-export default Header;
+export default HeaderComponent;

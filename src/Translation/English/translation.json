@@ -6,13 +6,18 @@
     "password": "Password",
     "submit": "Submit",
     "register": "Register",
+    "delete": "Delete",
+    "edit": "Edit",
+    "save": "Save",
+    "yes": "yes",
+    "no": "no",
     "login_success": "Login successful",
     "register_success": "Register successful",
     "data_updated": "Data updated",
     "lang_changed": "Language changed",
     "lang_select": "Select language",
     "style_select": "Select style",
-    "edit": "Edit",
     "title": "Title",
-    "description": "Description"
+    "description": "Description",
+    "deleteCard": "You are going to delete this card, are you sure?"
 }

@@ -3,9 +3,9 @@ import { BoardContainer, Container, Lists, NewListButton } from './Trello.styles
 import trelloCtx from './providers/TrelloContextProvider/TrelloContextProvider';
 import React, { useCallback, useContext, FunctionComponent } from 'react';
 import { TrelloActionEnum } from './action/TrelloActions';
-import Sidebar from './components/Sidebar/Sidebar';
-import Header from './components/Header/Header';
-import List from './components/List/List';
+import SidebarComponent from './components/Sidebar/Sidebar';
+import HeaderComponent from './components/Header/Header';
+import ListComponent from './components/List/List';
 import { IList } from './models';
 import './styles.css';
 
@@ -51,10 +51,10 @@ const Trello: FunctionComponent = ({ }) => {
   }
 
   return (
-    <Container $bgcolor={trelloState.colors.bgColorFromLs}>
+    <Container $bgcolor={trelloState.colors.bgColorFromLs} style={{maxWidth: "100vw", overflow: "none"}}>
       <>
-        <Header />
-        <Sidebar></Sidebar>
+        <HeaderComponent />
+        <SidebarComponent></SidebarComponent>
         <Lists>
           <DragDropContext onDragEnd={onDragEnd}>
             <Droppable
@@ -71,7 +71,7 @@ const Trello: FunctionComponent = ({ }) => {
                   key={"board-container"}
                   {...provided.droppableProps}>
                   {trelloState.boards[currentBoardIndex].list.map((list: IList, index: number) => (
-                    <List indexList={index} list={list} key={"list-" + index} />
+                    <ListComponent indexList={index} list={list} key={"list-" + index} />
                   ))}
                   {provided.placeholder}
                   <NewListButton

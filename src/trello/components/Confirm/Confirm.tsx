@@ -1,20 +1,21 @@
-import { BodyModalForm, CardModalContainer, ConfirmBackground, FooterModal, HeaderModal } from './Confirm.styles';
+import { BodyModalForm, CardModalContainer, ConfirmBackground, ConfirmButton, FooterModal, HeaderModal } from './Confirm.styles';
 import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 import { useTranslation } from "react-i18next";
 import { AnimationName } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent';
-import { Delete } from 'react-feather';
 
 
 interface TrelloModalProviderType {
   callback: (state: boolean) => void;
   title: string;
   text: string;
+  confirmColor: string;
+  cancelColor: string;
   animation: AnimationName;
 }
 
-export const ConfirmComponent: React.FC<TrelloModalProviderType> = ({ callback, title, text, animation }) => {
+export const ConfirmComponent: React.FC<TrelloModalProviderType> = ({ callback, title, text, animation, confirmColor, cancelColor }) => {
 
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -58,9 +59,12 @@ export const ConfirmComponent: React.FC<TrelloModalProviderType> = ({ callback, 
         </BodyModalForm>
 
         <FooterModal $bgcolor={trelloState.colors.bgColorFromLsL}>
-          <button onClick={() => { invokeCallback(true) }}>
-            <Delete></Delete>
-          </button>
+          <ConfirmButton onClick={() => { invokeCallback(true) }} $bgcolor={trelloState.colors.bgColorFromLsD} $bghovercolor={confirmColor}>
+            {t("yes")}
+          </ConfirmButton>
+          <ConfirmButton onClick={() => { invokeCallback(false) }} $bgcolor={trelloState.colors.bgColorFromLsD} $bghovercolor={cancelColor}>
+            {t("no")}
+          </ConfirmButton>
         </FooterModal>
       </CardModalContainer>
     </ConfirmBackground >

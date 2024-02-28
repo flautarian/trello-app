@@ -1,4 +1,4 @@
-import { BodyModalElementContainer, BodyModalForm, CardModalContainer, CloseButton, FooterModal, HeaderModal, ModalBackground } from './Modal.styles';
+import { BodyModalElementContainer, BodyModalForm, CardModalContainer, CloseButton, FooterButton, FooterModal, HeaderModal, ModalBackground } from './EditModal.styles';
 import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Delete, Save, XCircle } from 'react-feather';
@@ -51,27 +51,27 @@ export const XCircleStyled = styled(XCircle) <{ $colorl: string, $colord: string
   }
 `
 
-export const ModalComponent: React.FC<TrelloModalProviderType> = ({ callback, deleteCallback, currentObject, templateObject, toggleModal, animation }) => {
+export const EditModalComponent: React.FC<TrelloModalProviderType> = ({ callback, deleteCallback, currentObject, templateObject, toggleModal, animation }) => {
 
   const componentRef = useRef<HTMLDivElement>(null);
 
-  
+
   const { trelloState } = useContext(trelloCtx);
-  
+
   const { t } = useTranslation(['home']);
 
   const [quilModule] = useState(quilModules);
-  
+
   const [quilFormat] = useState(quilFormats);
-  
+
   const [formData, setFormData] = useState<any>(currentObject);
-  
+
   const [formTemplate, setFormTemplate] = useState<IFormTemplate>(templateObject);
-  
+
   const formRef = useRef<HTMLFormElement>(null);
-  
+
   const [backgroundAnimation, setBackgroundAnimation] = useState<AnimationName>("fadeInBackground");
-  
+
   const [modalDeleteAnimation, setModalDeleteAnimation] = useState<AnimationName>("none");
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(false);
@@ -114,7 +114,7 @@ export const ModalComponent: React.FC<TrelloModalProviderType> = ({ callback, de
   };
 
   useEffect(() => {
-    if(!deleteConfirmModal)
+    if (!deleteConfirmModal)
       document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
@@ -126,7 +126,7 @@ export const ModalComponent: React.FC<TrelloModalProviderType> = ({ callback, de
     <ModalBackground $animation={backgroundAnimation}>
       <CardModalContainer ref={componentRef} $bgcolor={trelloState.colors.bgColorFromLsD} $animation={animation} $xorigin='0%' $yorigin='-150%' $xtarget='0%' $ytarget='0%'>
         <HeaderModal $bgcolor={trelloState.colors.bgColorFromLsL}>
-          <h1>Edit Card</h1>
+          <h1>{t("edit")}</h1>
         </HeaderModal>
 
         <CloseButton onClick={() => changeModalDisplay(false)}>
@@ -169,21 +169,21 @@ export const ModalComponent: React.FC<TrelloModalProviderType> = ({ callback, de
         </BodyModalForm>
 
         <FooterModal $bgcolor={trelloState.colors.bgColorFromLsL}>
-          <button onClick={() => { saveModal(null) }}>
-            <Save></Save>
-          </button>
+          <FooterButton onClick={() => { saveModal(null) }} $bgcolor={trelloState.colors.bgColorFromLsD} $bghovercolor={trelloState.colors.bgColorFromLsL}>
+            {t("save")}
+          </FooterButton>
           {
             !!deleteCallback &&
-            <button onClick={() => {
+            <FooterButton $bgcolor={trelloState.colors.bgColorFromLsD} $bghovercolor={trelloState.colors.bgColorFromLsL} onClick={() => {
               setModalDeleteAnimation('appear');
               setDeleteConfirmModal(true);
             }}>
-              <Delete></Delete>
-            </button>
+              {t("delete")}
+            </FooterButton>
           }
 
           {
-            deleteConfirmModal && createPortal(<ConfirmComponent animation={modalDeleteAnimation} title='delete' text='deleteCard' callback={deleteModalCallback} />,
+            deleteConfirmModal && createPortal(<ConfirmComponent animation={modalDeleteAnimation} title='delete' text='deleteCard' callback={deleteModalCallback} confirmColor='#1CFF59' cancelColor='#FF6464'/>,
               document.getElementById("modal-root") as HTMLElement)
           }
 

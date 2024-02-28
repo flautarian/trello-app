@@ -14,7 +14,7 @@ interface IOptionsProps {
   backgroundColor: string;
 }
 
-const Options: FunctionComponent<IOptionsProps> = ({
+const OptionsComponent: FunctionComponent<IOptionsProps> = ({
   handleBgColorChange,
   backgroundColor,
 }) => {
@@ -57,4 +57,4 @@ const Options: FunctionComponent<IOptionsProps> = ({
   );
 };
 
-export default Options;
+export default OptionsComponent;

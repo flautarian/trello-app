@@ -1,8 +1,8 @@
 import React, { FunctionComponent, useContext, useState } from 'react';
-import { Container, DeleteButton, EditButton, Left, Right, SaveButton } from './Card.styles';
+import { Container, Left } from './Card.styles';
 import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
-import { ModalComponent, TrelloModalTypeEnum } from '../Modal/Modal';
+import { EditModalComponent } from '../EditModal/EditModal';
 import { ICard, CardFormTemplate } from '../../models';
 import ReactDOM from 'react-dom';
 import { AnimationName } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent';
@@ -13,7 +13,7 @@ interface ICardComponent {
   indexList: number;
 }
 
-const Card: FunctionComponent<ICardComponent> = ({
+const CardComponent: FunctionComponent<ICardComponent> = ({
   card,
   indexCard,
   indexList,
@@ -57,7 +57,7 @@ const Card: FunctionComponent<ICardComponent> = ({
       </Left>
       {showModal &&
         ReactDOM.createPortal(
-          <ModalComponent toggleModal={toggleModal} templateObject={CardFormTemplate} currentObject={card} callback={handleNameChange} deleteCallback={onDeleteClick} animation={modalAnimation} />,
+          <EditModalComponent toggleModal={toggleModal} templateObject={CardFormTemplate} currentObject={card} callback={handleNameChange} deleteCallback={onDeleteClick} animation={modalAnimation} />,
           document.getElementById("modal-root") as HTMLElement
         )
       }
@@ -65,4 +65,4 @@ const Card: FunctionComponent<ICardComponent> = ({
   );
 };
 
-export default Card;
+export default CardComponent;

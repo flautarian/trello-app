@@ -32,6 +32,28 @@ export const CardModalContainer = styled.div<({ $bgcolor: string, $animation: An
     animation: ${(props) => animations[props.$animation].keyframes} ${({ $animation }) => animations[$animation].duration} ${({ $animation }) => animations[$animation].type};
 `
 
+export const ConfirmButton = styled.button<{$bgcolor: string, $bghovercolor: string}>`
+    border-radius: 5px;
+    font-family: poppins;
+    font-size: 18px;
+    width: 125px;
+    height: 40px;
+    
+    background-color: ${({ $bgcolor }) => $bgcolor};
+    transition: background-color 0.3s ease, transform 0.15s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${({ $bghovercolor }) => $bghovercolor};
+        transform: scale(0.95);
+    }
+
+    &:active {
+        background-color: ${({ $bgcolor }) => $bgcolor};
+        transform: scale(0.9);
+    }
+`
+
 export const HeaderModal = styled.div<{ $bgcolor: string }>`
     width: 70vh;
     height: auto;
@@ -44,7 +66,8 @@ export const HeaderModal = styled.div<{ $bgcolor: string }>`
 
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
+    align: center;
     align-items: center;
 }
 `
@@ -59,8 +82,9 @@ export const BodyModalForm = styled.div<{ $bgcolor: string }>`
 
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align: center;
+    align-items: center;
     overflow: auto;
 `
 
@@ -78,6 +102,8 @@ export const FooterModal = styled.div<{ $bgcolor: string }>`
     font-family: poppins;
     display: flex;
     margin-top: 10px;
+    justify-content: space-evenly;
+    align-items: center;
 `
 
 export const CloseButton = styled.div`

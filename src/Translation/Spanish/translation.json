@@ -6,13 +6,18 @@
     "password": "Contraseña",
     "submit":  "Enviar",
     "register": "Registrarse",
+    "delete": "Borrar",
+    "edit": "Editar",
+    "save": "Guardar",
+    "yes": "si",
+    "no": "no",
     "login_success": "Inicio de sesión exitoso",
     "register_success": "Registro de usuario exitoso",
     "data_updated": "Datos guardados correctamente",
     "lang_changed": "Idioma cambiado",
     "lang_select": "Seleccione el idioma",
     "style_select": "Seleccionar estilo",
-    "edit": "Editar",
     "title": "Título",
-    "description": "Descripción"
+    "description": "Descripción",
+    "deleteCard": "Estas a punto de borrar esta ficha. ¿Estas seguro?"
 }

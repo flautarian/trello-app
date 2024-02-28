@@ -81,6 +81,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
 
     const pullState = useCallback(() => {
         try {
+            setIsLoading(true);
             const user = localStorage.getItem("user");
             const userData: AuthState = JSON.parse(user || '');
             const params = {
@@ -102,12 +103,12 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
                         colors
                     }
                 })
-                setIsLoading(false);
             });
         } catch (error: any) {
             setError(error.message || error);
-            setIsLoading(false);
             //navigate('user/login');
+        } finally {
+            setIsLoading(false);
         }
     }, [navigate]);
 

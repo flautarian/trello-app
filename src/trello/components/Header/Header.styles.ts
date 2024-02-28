@@ -10,6 +10,7 @@ export const Container = styled.div<{ color: string, $textcolor: string }>`
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    height: 3vh;
 `;
 
 export const EditTitle = styled.input`
@@ -33,8 +34,7 @@ export const LogOutButton = styled.button<{ $textcolor: string }>`
 export const ItemsContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
-    width: 250px;
-    position: fixed;
+    width: 100vw;
     right: 10px;
 `;
 

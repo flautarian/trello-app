@@ -1,13 +1,12 @@
 import React, { useState, FunctionComponent, useContext } from 'react';
 import { BoardElement, BoardElementAdd, Container, SidebarButton } from './Sidebar.styles';
-import { IBoard, IColors } from '../../models';
 import { ChevronsLeft, ChevronsRight, Plus } from 'react-feather';
 import { Tooltip } from 'react-tooltip'
 import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
 import { useTranslation } from 'react-i18next';
 
-const Sidebar: FunctionComponent = ({ }) => {
+const SidebarComponent: FunctionComponent = ({ }) => {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -73,4 +72,4 @@ const Sidebar: FunctionComponent = ({ }) => {
   )
 };
 
-export default Sidebar;
+export default SidebarComponent;

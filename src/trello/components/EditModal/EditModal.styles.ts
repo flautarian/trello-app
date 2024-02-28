@@ -78,6 +78,30 @@ export const FooterModal = styled.div<{ $bgcolor: string }>`
     font-family: poppins;
     display: flex;
     margin-top: 10px;
+    justify-content: space-evenly;
+    align-items: center;
+`
+
+export const FooterButton = styled.button<{$bgcolor: string, $bghovercolor: string}>`
+    border-radius: 5px;
+    font-family: poppins;
+    font-size: 18px;
+    width: 125px;
+    height: 40px;
+    
+    background-color: ${({ $bgcolor }) => $bgcolor};
+    transition: background-color 0.3s ease, transform 0.15s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+        background-color: ${({ $bghovercolor }) => $bghovercolor};
+        transform: scale(0.95);
+    }
+
+    &:active {
+        background-color: ${({ $bgcolor }) => $bgcolor};
+        transform: scale(0.9);
+    }
 `
 
 export const CloseButton = styled.div`

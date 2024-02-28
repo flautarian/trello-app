@@ -26,7 +26,7 @@ export const CirclePickerContainer = styled.div<{ color: string, display: number
   
   pointer-events: none;
   opacity: 0;
-  z-index: -1;
+  z-index: auto;
   transform: translateY(-20px);
   transition: opacity 0.3s, transform 0.3s;
 

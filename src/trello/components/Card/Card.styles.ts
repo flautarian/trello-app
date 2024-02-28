@@ -7,6 +7,12 @@ export const Container = styled.div`
   justify-content: space-between;
   user-select: none;
   font-family: "Poppins", sans-serif;
+
+  
+  :hover {
+    background: lightseagreen;
+  }
+
 `;
 
 export const Left = styled.div`
