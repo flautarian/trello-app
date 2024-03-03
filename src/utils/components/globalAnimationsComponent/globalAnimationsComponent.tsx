@@ -23,7 +23,7 @@ export const animations: Record<AnimationName, Animation> = {
                 pointer-events: auto;
             }
         `,
-        duration: '1s',
+        duration: '0.5s',
         type: 'ease-in-out',
     },
     disappear: {

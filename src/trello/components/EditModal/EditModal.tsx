@@ -79,10 +79,12 @@ export const EditModalComponent: React.FC<TrelloModalProviderType> = ({ callback
   const deleteModalCallback = (state: boolean) => {
     setModalDeleteAnimation(state ? 'appear' : 'disappear');
     setTimeout(() => {
-      if (state)
-        deleteCallback();
       setDeleteConfirmModal(false);
-    }, 1000);
+      if (state) {
+        changeModalDisplay(false);
+        deleteCallback();
+      }
+    }, 500);
   };
 
   const saveModal = (e: React.FormEvent<HTMLFormElement> | null) => {
@@ -183,7 +185,7 @@ export const EditModalComponent: React.FC<TrelloModalProviderType> = ({ callback
           }
 
           {
-            deleteConfirmModal && createPortal(<ConfirmComponent animation={modalDeleteAnimation} title='delete' text='deleteCard' callback={deleteModalCallback} confirmColor='#1CFF59' cancelColor='#FF6464'/>,
+            deleteConfirmModal && createPortal(<ConfirmComponent animation={modalDeleteAnimation} title='delete' text='deleteCard' callback={deleteModalCallback} confirmColor='#1CFF59' cancelColor='#FF6464' />,
               document.getElementById("modal-root") as HTMLElement)
           }
 

@@ -19,6 +19,13 @@ const CardComponent: FunctionComponent<ICardComponent> = ({
   indexList,
 }) => {
 
+  const openEditCard = () => {
+    if(!showModal){
+      setShowModal(true);
+      setModalAnimation('appear');
+    }
+  }
+
   const { updateState, currentBoardIndex } = useContext(trelloCtx);
 
   const [showModal, setShowModal] = useState(false);
@@ -48,10 +55,7 @@ const CardComponent: FunctionComponent<ICardComponent> = ({
   };
 
   return (
-    <Container onClickCapture={() => {
-      setShowModal(true);
-      setModalAnimation('appear');
-    }}>
+    <Container onClick={openEditCard}>
       <Left>
         {card.title || "--"}
       </Left>

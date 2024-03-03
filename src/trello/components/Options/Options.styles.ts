@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components';
 
 export const Container = styled.div`
+display: flex;
+flex-direction: column;
+margin-top: 135px;
 `;
 
 export const MenuButton = styled.button`
@@ -16,7 +19,6 @@ export const MenuButton = styled.button`
 
 export const CirclePickerContainer = styled.div<{ color: string, display: number }>`
   background: ${({ color }) => color};
-  position: absolute;
   padding: 10px;
   box-sizing: border-box;
   right: 0;

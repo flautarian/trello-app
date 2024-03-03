@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { AnimationName, animations } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent'
 
-export const Container = styled.div<{ $isdragging: number, $colorl : string, $animation: AnimationName, $xorigin?: string, $yorigin?: string, $xtarget?: string, $ytarget?: string }>`
+export const Container = styled.div<{ $isdragging: number, $colorl: string, $animation: AnimationName, $xorigin?: string, $yorigin?: string, $xtarget?: string, $ytarget?: string }>`
   width: 250px;
   min-width: 250px;
   min-height: 100px;
@@ -17,7 +17,7 @@ export const Container = styled.div<{ $isdragging: number, $colorl : string, $an
   animation: ${(props) => animations[props.$animation].keyframes} ${({ $animation }) => animations[$animation].duration} ${({ $animation }) => animations[$animation].type};
 `;
 
-export const Header = styled.header<{ $isdragging: number, $colord : string  }>`
+export const Header = styled.header<{ $isdragging: number, $colord: string }>`
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -45,6 +45,22 @@ background-color: rgb(200, 200, 200);
   background-color: rgb(255, 100, 100);
 }
 `;
+
+export const CardContainer = styled.div<{ $bghovercolor: string, $bgcolor: string }>`
+
+transition: background-color 0.15s ease-in-out, transform 0.1s ease-in-out;
+cursor: pointer;
+
+&:hover {
+    background-color: ${({ $bghovercolor }) => $bghovercolor};
+    transform: scale(0.95);
+}
+
+&:active {
+    background-color: ${({ $bgcolor }) => $bgcolor};
+    transform: scale(0.9);
+}
+`
 
 export const AddCardButton = styled.button`
   width: 100%;

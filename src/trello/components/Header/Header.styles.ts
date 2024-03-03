@@ -11,6 +11,12 @@ export const Container = styled.div<{ color: string, $textcolor: string }>`
     align-items: center;
     justify-content: center;
     height: 3vh;
+    
+    display: flex;
+    align-content: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around
 `;
 
 export const EditTitle = styled.input`
@@ -34,8 +40,9 @@ export const LogOutButton = styled.button<{ $textcolor: string }>`
 export const ItemsContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
-    width: 100vw;
-    right: 10px;
+    width: 33vw;
+    align-items: center;
+    max-height: 40px;
 `;
 
 export const Title = styled.div``;

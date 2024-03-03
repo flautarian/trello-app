@@ -5,6 +5,7 @@ import {
   CloseButton,
   Title,
   AddCardButton,
+  CardContainer,
 } from './List.styles';
 import CardComponent from '../Card/Card';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
@@ -33,7 +34,7 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
     draggableStyle: any,
   ) => ({
     background: 'white',
-    padding: '10px',
+    padding: '0px',
     marginBottom: '5px',
     borderRadius: '5px',
     border: '1px solid rgb(178,185,197)',
@@ -113,7 +114,10 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
                     index={cardIndex}
                     draggableId={`draggable-${indexList}-${cardIndex}`}>
                     {(provided, snapshot) => (
-                      <div
+                      <CardContainer
+                        $bgcolor={trelloState.colors.bgColorFromLs}
+                        $bghovercolor={trelloState.colors.bgColorFromLsD}
+                        onClick={() => {console.log("test");}}
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
@@ -128,7 +132,7 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
                           indexCard={cardIndex}
                           indexList={indexList}
                         />
-                      </div>
+                      </CardContainer>
                     )}
                   </Draggable>
                 ))}
