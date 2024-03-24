@@ -127,6 +127,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
         }, 0);
     }
 
+    
     const pushState = useCallback(async () => {
         try {
             // block loading
@@ -151,14 +152,15 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
 
             const endpoint = '/push';
             request(endpoint, params, (result) => {
-                setIsLoading(false);
                 toast.success(t("data_updated"), {duration: 1500});
             });
 
         } catch (error: any) {
             setError(error.message || error);
+            // navigate('user/login');
+        }
+        finally {
             setIsLoading(false);
-            //navigate('user/login');
         }
     }, [trelloState]);
 

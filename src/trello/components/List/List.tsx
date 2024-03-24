@@ -33,6 +33,14 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
     isdragging: boolean,
     draggableStyle: any,
   ) => ({
+    ...draggableStyle,
+  });
+
+  
+  const getItemCardInnerStyle = (
+    isdragging: boolean,
+    draggableStyle: any,
+  ) => ({
     background: 'white',
     padding: '0px',
     marginBottom: '5px',
@@ -40,7 +48,6 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
     border: '1px solid rgb(178,185,197)',
     borderBottom: '2px solid rgb(178,185,197)',
     transform: 'rotate 45',
-    ...draggableStyle,
   });
 
   const handleNameChange = (evt: any) => {
@@ -63,8 +70,8 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
           $isdragging={snapshot.isDragging ? 1 : 0}
           ref={provided.innerRef}
           $animation={animation}
-          $xorigin='0%' 
-          $yorigin='25%' 
+          $xorigin='0%'
+          $yorigin='25%'
           $xtarget='0%'
           $ytarget='0%'
           {...provided.draggableProps}
@@ -106,33 +113,34 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                style={{minHeight: 70}}
-                >
+                style={{ minHeight: 70 }}
+              >
                 {list.cards.map((card: ICard, cardIndex: number) => (
                   <Draggable
                     key={cardIndex}
                     index={cardIndex}
                     draggableId={`draggable-${indexList}-${cardIndex}`}>
                     {(provided, snapshot) => (
-                      <CardContainer
-                        $bgcolor={trelloState.colors.bgColorFromLs}
-                        $bghovercolor={trelloState.colors.bgColorFromLsD}
-                        onClick={() => {console.log("test");}}
+                      <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
+                        {...provided.dragHandleProps} 
                         style={getItemStyle(
                           snapshot.isDragging,
                           provided.draggableProps.style,
-                        )}
-                      >
-                        <CardComponent
-                          key={cardIndex}
-                          card={card}
-                          indexCard={cardIndex}
-                          indexList={indexList}
-                        />
-                      </CardContainer>
+                        )}>
+                        <CardContainer
+                          $bgcolor={trelloState.colors.bgColorFromLs}
+                          $bghovercolor={trelloState.colors.bgColorFromLsD}
+                          >
+                          <CardComponent
+                            key={cardIndex}
+                            card={card}
+                            indexCard={cardIndex}
+                            indexList={indexList}
+                          />
+                        </CardContainer>
+                      </div>
                     )}
                   </Draggable>
                 ))}

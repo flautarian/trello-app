@@ -47,8 +47,8 @@ background-color: rgb(200, 200, 200);
 `;
 
 export const CardContainer = styled.div<{ $bghovercolor: string, $bgcolor: string }>`
-
-transition: background-color 0.15s ease-in-out, transform 0.1s ease-in-out;
+transition: background-color 0.15s ease-in-out;
+transition: transform 0.1s ease;
 cursor: pointer;
 
 &:hover {
