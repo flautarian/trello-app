@@ -6,7 +6,7 @@ const BASE_URL = process.env.REACT_APP_SOCKET_URL || "localhost:5000";
 
 const useSocket = () => {
     // socket state
-    const [socket, setSocket] = useState(io(BASE_URL, {autoConnect: false, transports: ['websocket']}));
+    const [socket, setSocket] = useState(io(BASE_URL, {autoConnect: false}));
     // socket clients room number
     const [roomClientNumber, setRoomClientNumber] = useState(0);
     // SocketIO roomName
