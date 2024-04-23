@@ -19,6 +19,7 @@ import { AuthState } from '../../../auth/reducers/AuthReducer';
 
 // useApi middleware
 import useApi from '../../../auth/hooks/api/useApi';
+import useSocket from '../../../auth/hooks/websocket/useSocket';
 import { initialBoards, initialColors } from "../../utils";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -35,21 +36,25 @@ export type TrelloData = {
 
 export interface TrelloContext {
     isLoading: boolean,
+    isSocketConected: boolean,
     trelloState: TrelloState;
     currentBoardIndex: number,
     updateState: (props: TrelloData) => void;
     pullState: () => void;
     setCurrentBoardIndex: (props: number) => void;
+    roomClientNumber: number;
 };
 
 // Trello context
 const trelloCtx = createContext<TrelloContext>({
     isLoading: false,
+    isSocketConected: false,
     trelloState: defaultTrelloState,
     currentBoardIndex: 0,
     updateState: () => { },
     pullState: () => { },
     setCurrentBoardIndex: () => { },
+    roomClientNumber: 0
 });
 
 export const TrelloContextProvider = (props: TrelloProviderProps) => {
@@ -66,11 +71,17 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     // initial load security indicator
     const [initialChange, setInitialChange] = useState(true);
 
+    // Security save board boolean
+    const [ableToSave, setAbleToSave] = useState(false);
+
     // main object reducer
     const [trelloState, trelloDispatch] = useReducer(trelloReducer, defaultTrelloState);
 
     // request api connection
     const { request, setError } = useApi();
+
+    // socketIO api connection
+    const { isSocketConected, initiateSocket, disconnectSocket, sendMessage, room, roomClientNumber } = useSocket();
 
     // useNavigate
     const navigate = useNavigate();
@@ -118,16 +129,63 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
             setInitialChange(false);
             pullState();
         }
-    }, []);
+    }, [navigate, trelloState]);
+
+    // Check for first pull of data to get the trello's info at first rendering
+    useEffect(() => {
+        let roomName = localStorage.getItem("user") || null;
+        if (!!roomName) {
+            initiateSocket(JSON.parse(roomName), updateFromSocket);
+            // event to disconnect on page chnage of refresh
+            window.addEventListener('beforeunload', disconnectSocket);
+        }
+        return () => {
+            window.removeEventListener('beforeunload', disconnectSocket);
+        }
+    }, [navigate, room]);
+
+    const updateFromSocket = useCallback((msg: any) => {
+        try {
+            // get and parse message to change locally
+            if (typeof msg == 'object')
+                return;
+
+            let jsonProps = JSON.parse(msg);
+            if (!!jsonProps["result"])
+                return;
+
+            let props: TrelloData = {
+                payload: jsonProps["payload"],
+                type: jsonProps["type"] || 'EDIT_BOARD' as keyof typeof TrelloActionEnum
+            };
+            if (!props.payload || !props.type)
+                throw new Error("data bad format");
+
+            // dispatch change locally
+            trelloDispatch(props);
+            toast.success(t("data_updated"), { duration: 1500 });
+        }
+        catch (e) {
+            console.log(e);
+        }
+    },[isSocketConected, trelloDispatch]);
 
     const updateState = (props: TrelloData) => {
         trelloDispatch(props);
-        setTimeout(() => {
-            pushState();
-        }, 0);
+        // send socketIO msg to other instances of trello in this account
+        sendMessage(JSON.stringify(props))
+        setAbleToSave(true);
     }
 
-    
+    useEffect(() => {
+        if(ableToSave){
+            // This effect will run after trelloState has been updated
+            pushState(); // Now pushState will receive the updated state
+            setAbleToSave(false);
+        }
+    }, [trelloState, ableToSave]);
+
+
     const pushState = useCallback(async () => {
         try {
             // block loading
@@ -152,7 +210,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
 
             const endpoint = '/push';
             request(endpoint, params, (result) => {
-                toast.success(t("data_updated"), {duration: 1500});
+                toast.success(t("data_updated"), { duration: 1500 });
             });
 
         } catch (error: any) {
@@ -162,16 +220,18 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
         finally {
             setIsLoading(false);
         }
-    }, [trelloState]);
+    }, [trelloState, room]);
 
     // context values to be passed down to children
     const ctx = {
         isLoading,
+        isSocketConected,
         trelloState,
         currentBoardIndex,
         updateState,
         pullState,
         setCurrentBoardIndex,
+        roomClientNumber
     };
 
     return <trelloCtx.Provider value={ctx}>
@@ -191,7 +251,8 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
             </div>
         }
         {children}
-        </trelloCtx.Provider>;
+    </trelloCtx.Provider>;
 };
 
 export default trelloCtx;
+

@@ -1,6 +1,8 @@
 {
     "login": "L' identificant",
     "logout": "Se déconnecter",
+    "socket-status-disconnected": "Non synchronisé",
+    "socket-status-connected": "# utilisateur dans la carte",
     "username": "Username",
     "email": "E-mail",
     "password": "Mot de passe",

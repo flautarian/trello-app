@@ -16,7 +16,7 @@ export const Container = styled.div<{ color: string, $textcolor: string }>`
     align-content: center;
     flex-direction: row;
     align-items: center;
-    justify-content: space-around
+    justify-content: space-between
 `;
 
 export const EditTitle = styled.input`

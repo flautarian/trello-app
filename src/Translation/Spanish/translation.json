@@ -1,6 +1,8 @@
 {
     "login": "Iniciar sesión",
     "logout": "Cerrar sesión",
+    "socket-status-disconnected": "Sin sincronizar",
+    "socket-status-connected": "# usuarios en vista",
     "username": "Usuario",
     "email": "Correo electrónico",
     "password": "Contraseña",

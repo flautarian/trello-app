@@ -2,7 +2,7 @@ import React, { useState, FunctionComponent, useContext } from 'react';
 import { Container, EditTitle, ItemsContainer, LoadingIcon, LogOutButton, Title } from './Header.styles';
 import OptionsComponent from '../Options/Options';
 import { Tooltip } from 'react-tooltip';
-import { Edit2, LogOut, Save } from 'react-feather';
+import { Circle, Edit2, LogOut, Save } from 'react-feather';
 import trelloCtx from '../../providers/TrelloContextProvider/TrelloContextProvider';
 import { TrelloActionEnum } from '../../action/TrelloActions';
 import authCtx from '../../../auth/providers/AuthContextProvider';
@@ -14,7 +14,7 @@ import { createNegativeColor, darkenColor, lightenColor } from '../../../utils/c
 const HeaderComponent: FunctionComponent = ({ }) => {
 
     const [isEditingBoardTitle, setEditingBoardTitle] = useState(false);
-    const { updateState, currentBoardIndex, trelloState, isLoading } = useContext(trelloCtx);
+    const { updateState, currentBoardIndex, trelloState, isLoading, isSocketConected, roomClientNumber } = useContext(trelloCtx);
     const { globalLogOutDispatch } = useContext(authCtx);
     const { t } = useTranslation(['home']);
 
@@ -69,12 +69,18 @@ const HeaderComponent: FunctionComponent = ({ }) => {
             )}
             <Tooltip id={"board-edit-tooltip"} />
             <ItemsContainer>
-                <LanguageContainer >
-                    <LanguageButton />
-                </LanguageContainer>
                 <OptionsComponent
                     handleBgColorChange={handleBgColorChange}
                     backgroundColor={trelloState.colors.bgColorFromLsL} />
+                <Circle
+                    size={34}
+                    fill={isSocketConected ? '#1CFF59' : '#FF6464'}
+                    data-tooltip-id={"board-socket-status-tooltip"}
+                    data-tooltip-content={t(isSocketConected ? "socket-status-connected" : "socket-status-disconnected").replace("#", (roomClientNumber || 0).toString())}>
+                </Circle>
+                <LanguageContainer >
+                    <LanguageButton />
+                </LanguageContainer>
                 <LogOutButton
                     $textcolor={trelloState.colors.bgColorFromLsN}
                     onClick={() => globalLogOutDispatch()}
@@ -82,8 +88,9 @@ const HeaderComponent: FunctionComponent = ({ }) => {
                     data-tooltip-content={t("logout")}>
                     <LogOut></LogOut>
                 </LogOutButton>
-                <Tooltip noArrow={true} place="bottom" id={"board-logout-btn-tooltip"} />
             </ItemsContainer>
+            <Tooltip noArrow={true} place="bottom" id={"board-logout-btn-tooltip"} />
+            <Tooltip noArrow={true} place="bottom" id={"board-socket-status-tooltip"} />
         </Container>
     )
 };

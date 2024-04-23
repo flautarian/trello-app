@@ -15,73 +15,239 @@ export const defaultTrelloState: TrelloState = {
 
 
 export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action) => {
-
   switch (action.type) {
-
     case "EDIT_BOARD":
-      state.boards[action.payload.indexBoard].title = action.payload.editBoardValue;
-      break;
-
+      return {
+        ...state,
+        boards: state.boards.map((board, index) => {
+          if (index === action.payload.indexBoard) {
+            return {
+              ...board,
+              title: action.payload.editBoardValue
+            };
+          }
+          return board;
+        })
+      };
     case "ADD_BOARD":
-      state.boards.push({
-        title: 'New Board',
-        list: []
-      });
-      break;
-
+      return {
+        ...state,
+        boards: [
+          ...state.boards,
+          {
+            title: 'New Board',
+            list: []
+          }
+        ]
+      };
     case "ADD_LIST":
-      let newList: IList = {
-        listTitle: 'New list',
-        cards: []
+      return {
+        ...state,
+        boards: state.boards.map((board, index) => {
+          if (index === action.payload.indexBoard) {
+            return {
+              ...board,
+              list: [
+                ...board.list,
+                {
+                  listTitle: 'New list',
+                  cards: []
+                }
+              ]
+            };
+          }
+          return board;
+        })
       };
-      state.boards[action.payload.indexBoard].list.push(newList);
-      break;
-
     case "REMOVE_LIST":
-      state.boards[action.payload.indexBoard].list = state.boards[action.payload.indexBoard].list.filter((l, i) => i !== action.payload.indexList);
-      break;
-
-    case "REORDER_LIST":
-      let element = state.boards[action.payload.indexBoard].list[action.payload.indexList];
-      const lCopy = state.boards[action.payload.indexBoard].list.filter((l, i) => i !== action.payload.indexList);
-      lCopy.splice(action.payload.indexDestinationList, 0, element);
-      state.boards[action.payload.indexBoard].list = lCopy;
-      break;
-
-    case "EDIT_LIST":
-      state.boards[action.payload.indexBoard].list[action.payload.indexList].listTitle = action.payload.editListValue;
-      break;
-
-    case "ADD_CARD":
-      let newCard: ICard = {
-        title: 'Title',
-        description: 'Description'
+      return {
+        ...state,
+        boards: state.boards.map((board, index) => {
+          if (index === action.payload.indexBoard) {
+            return {
+              ...board,
+              list: board.list.filter((list, listIndex) => listIndex !== action.payload.indexList)
+            };
+          }
+          return board;
+        })
       };
-      state.boards[action.payload.indexBoard].list[action.payload.indexList].cards.push(newCard);
-      break;
-
+    case "REORDER_LIST":
+      return {
+        ...state,
+        boards: state.boards.map((board, index) => {
+          if (index === action.payload.indexBoard) {
+            const { indexList, indexDestinationList } = action.payload;
+            const list = [...board.list];
+            const [removed] = list.splice(indexList, 1);
+            list.splice(indexDestinationList, 0, removed);
+            return {
+              ...board,
+              list
+            };
+          }
+          return board;
+        })
+      };
+    case "EDIT_LIST":
+      return {
+        ...state,
+        boards: state.boards.map((board, index) => {
+          if (index === action.payload.indexBoard) {
+            return {
+              ...board,
+              list: board.list.map((list, listIndex) => {
+                if (listIndex === action.payload.indexList) {
+                  return {
+                    ...list,
+                    listTitle: action.payload.editListValue
+                  };
+                }
+                return list;
+              })
+            };
+          }
+          return board;
+        })
+      };
+    case "ADD_CARD":
+      return {
+        ...state,
+        boards: state.boards.map((board, index) => {
+          if (index === action.payload.indexBoard) {
+            return {
+              ...board,
+              list: board.list.map((list, listIndex) => {
+                if (listIndex === action.payload.indexList) {
+                  return {
+                    ...list,
+                    cards: [
+                      ...list.cards,
+                      {
+                        title: 'Title',
+                        description: 'Description'
+                      }
+                    ]
+                  };
+                }
+                return list;
+              })
+            };
+          }
+          return board;
+        })
+      };
     case "REMOVE_CARD":
-      state.boards[action.payload.indexBoard].list[action.payload.indexList].cards = state.boards[action.payload.indexBoard].list[action.payload.indexList].cards.filter((c, i) => i !== action.payload.indexCard);
-      break;
-
+      return {
+        ...state,
+        boards: state.boards.map((board, index) => {
+          if (index === action.payload.indexBoard) {
+            return {
+              ...board,
+              list: board.list.map((list, listIndex) => {
+                if (listIndex === action.payload.indexList) {
+                  return {
+                    ...list,
+                    cards: list.cards.filter((card, cardIndex) => cardIndex !== action.payload.indexCard)
+                  };
+                }
+                return list;
+              })
+            };
+          }
+          return board;
+        })
+      };
     case "REORDER_CARD":
-      let card = state.boards[action.payload.indexBoard].list[action.payload.indexList].cards[action.payload.indexCard];
-      state.boards[action.payload.indexBoard].list[action.payload.indexList].cards = state.boards[action.payload.indexBoard].list[action.payload.indexList].cards.filter((c, i) => i !== action.payload.indexCard);
-      state.boards[action.payload.indexBoard].list[action.payload.indexDestinationList].cards.splice(action.payload.indexDestinationCard, 0, card);
-      break;
+      const {
+        indexBoard,
+        indexList,
+        indexCard,
+        indexDestinationList,
+        indexDestinationCard
+      } = action.payload;
 
+      const cardToMove = state.boards[indexBoard].list[indexList].cards[indexCard];
+      const updatedSourceCards = indexList === indexDestinationList
+        ? state.boards[indexBoard].list[indexList].cards
+        : state.boards[indexBoard].list[indexList].cards.filter((_, i) => i !== indexCard);
+
+      const updatedDestinationCards = indexList === indexDestinationList ?
+      [
+        ...state.boards[indexBoard].list[indexDestinationList].cards.filter((_, i) => i !== indexCard).slice(0, indexDestinationCard),
+        cardToMove,
+        ...state.boards[indexBoard].list[indexDestinationList].cards.filter((_, i) => i !== indexCard).slice(indexDestinationCard)
+      ]
+      :
+      [
+        ...state.boards[indexBoard].list[indexDestinationList].cards.slice(0, indexDestinationCard),
+        cardToMove,
+        ...state.boards[indexBoard].list[indexDestinationList].cards.slice(indexDestinationCard)
+      ];
+
+      return {
+        ...state,
+        boards: state.boards.map((board, i) => {
+          if (i === indexBoard) {
+            return {
+              ...board,
+              list: board.list.map((list, j) => {
+                if (j === indexList) {
+                  return {
+                    ...list,
+                    cards: indexList === indexDestinationList ? updatedDestinationCards : updatedSourceCards
+                  };
+                } else if (j === indexDestinationList) {
+                  return {
+                    ...list,
+                    cards: updatedDestinationCards
+                  };
+                }
+                return list;
+              })
+            };
+          }
+          return board;
+        })
+      };
     case "EDIT_CARD":
-      state.boards[action.payload.indexBoard].list[action.payload.indexList].cards[action.payload.indexCard] = action.payload.editCardValue;
-      break;
-
+      return {
+        ...state,
+        boards: state.boards.map((board, index) => {
+          if (index === action.payload.indexBoard) {
+            return {
+              ...board,
+              list: board.list.map((list, listIndex) => {
+                if (listIndex === action.payload.indexList) {
+                  return {
+                    ...list,
+                    cards: list.cards.map((card, cardIndex) => {
+                      if (cardIndex === action.payload.indexCard) {
+                        return action.payload.editCardValue;
+                      }
+                      return card;
+                    })
+                  };
+                }
+                return list;
+              })
+            };
+          }
+          return board;
+        })
+      };
     case "PULL":
-      state.boards = action.payload.boards;
-      state.colors = action.payload.colors;
-      break;
-    
+      return {
+        ...state,
+        boards: action.payload.boards,
+        colors: action.payload.colors
+      };
     case "UPDATE_COLORS":
-      state.colors = action.payload.newColors;
-      break;
+      return {
+        ...state,
+        colors: action.payload.newColors
+      };
+    default:
+      return state;
   }
-  return state;
-}
+};

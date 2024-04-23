@@ -1,6 +1,8 @@
 {
     "login": "Login",
     "logout": "Logout",
+    "socket-status-disconnected": "Not synchronized",
+    "socket-status-connected": "# user in board",
     "username": "Username",
     "email": "Email",
     "password": "Password",
