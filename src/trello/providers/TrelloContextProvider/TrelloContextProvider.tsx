@@ -83,7 +83,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     const { request, setError, globalLogOutDispatch } = useApi();
 
     // socketIO api connection
-    const { isSocketConected, initiateSocket, disconnectSocket, sendMessage, room, roomClientNumber } = useSocket();
+    const { isSocketConected, initiateSocket, disconnectSocket, sendMessage, roomRef, roomClientNumber, room } = useSocket();
 
     // useNavigate
     const navigate = useNavigate();
@@ -93,14 +93,15 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
 
     const logOutDispatch = useCallback(() => {
         // disconnect socket before logout
+        console.log("logging out");
         if(isSocketConected)
             disconnectSocket();
         // logout
         globalLogOutDispatch();
-    }, [isSocketConected, request]);
+    }, [isSocketConected, request, roomRef]);
 
 
-    const pullState = useCallback(() => {
+    const pullState = useCallback(async () => {
         try {
             setIsLoading(true);
             const user = localStorage.getItem("user");
@@ -113,7 +114,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
                 }
             };
             const endpoint = '/pull';
-            request(endpoint, params, (result) => {
+            await request(endpoint, params, (result) => {
                 const requestData = result.data;
                 const boards = requestData?.boards || initialBoards;
                 const colors = requestData?.colors || initialColors;
@@ -127,10 +128,9 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
             });
         } catch (error: any) {
             setError(error?.message || error);
-            console.log(error?.message);
-            if(error?.message === "Unauthorized")
+            if((error?.message || error) === "Unauthorized")
                 logOutDispatch();
-            toast.error(error.message || error.error || error, { duration: 2000 });
+            toast.error(error.message, { duration: 2000 });
         } finally {
             setIsLoading(false);
         }
@@ -147,15 +147,25 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     // Check for first pull of data to get the trello's info at first rendering
     useEffect(() => {
         let roomName = localStorage.getItem("user") || null;
-        if (!!roomName) {
-            initiateSocket(JSON.parse(roomName), updateFromSocket);
-            // event to disconnect on page chnage of refresh
-            window.addEventListener('beforeunload', disconnectSocket);
+        if(!isSocketConected){
+            if (!!roomName && roomName.length > 0) {
+                initiateSocket(JSON.parse(roomName), updateFromSocket);
+                // event to disconnect on page chnage of refresh
+                window.addEventListener('beforeunload', () => disconnectSocket(roomRef.current));
+            }
         }
         return () => {
-            window.removeEventListener('beforeunload', disconnectSocket);
+            if(isSocketConected){
+                if (!!roomRef.current && roomRef.current.length > 0)
+                    disconnectSocket();
+                window.removeEventListener('beforeunload', () => disconnectSocket(roomRef.current));
+            }
         }
-    }, [navigate, room]);
+    }, [navigate]);
+
+    useEffect(() => {
+        roomRef.current = room;
+    }, [room]);
 
     const updateFromSocket = useCallback((msg: any) => {
         try {
@@ -235,7 +245,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
         finally {
             setIsLoading(false);
         }
-    }, [trelloState, room]);
+    }, [trelloState, roomRef]);
 
     // context values to be passed down to children
     const ctx = {

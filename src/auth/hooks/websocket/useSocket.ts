@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import io from 'socket.io-client';
 import { UserData } from '../../providers/AuthContextProvider';
 
@@ -11,6 +11,7 @@ const useSocket = () => {
     const [roomClientNumber, setRoomClientNumber] = useState(0);
     // SocketIO roomName
     const [room, setRoom] = useState("");
+    const roomRef = useRef(room);
 
     const initiateSocket = useCallback((_room: UserData, callback: any) => {
         //console.log(`Connecting socket...`);
@@ -33,7 +34,6 @@ const useSocket = () => {
             socket.on("disconnect", () => {
                 //console.log('Websocket disconnected');
                 localStorage.removeItem("socket-io-user");
-                setRoom("")
             });
             if(!socket.connected){
                 socket.connect();
@@ -42,10 +42,12 @@ const useSocket = () => {
         }
     }, [socket, room]); // Include room in the dependency array
 
-    const disconnectSocket = useCallback(() => {
+    const disconnectSocket = useCallback((roomRef : String = "") => {
         if (socket) {
+            let roomToLeave = roomRef.length > 0 ? roomRef : room;
+            console.log('exiting room: ' + roomToLeave);
+            socket.emit('exit_room', JSON.stringify({ id: roomToLeave }));
             console.log('Disconnecting socket...');
-            socket.emit('exit_room', JSON.stringify({ id: room }));
             socket.disconnect();
         }
     }, [socket, room]);
@@ -59,11 +61,12 @@ const useSocket = () => {
 
     return {
         isSocketConected: socket.connected,
-        initiateSocket: initiateSocket,
-        disconnectSocket: disconnectSocket,
-        sendMessage: sendMessage,
-        room: room,
-        roomClientNumber: roomClientNumber
+        initiateSocket,
+        disconnectSocket,
+        sendMessage,
+        roomRef,
+        room,
+        roomClientNumber
     }
 }
 

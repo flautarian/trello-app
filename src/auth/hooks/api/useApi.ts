@@ -23,13 +23,12 @@ const useApi = () => {
       try {
         // NOTE: If user is logged in, insert the auth token into request headers for authorization
         if (authState.isLoggedIn) {
-          //params.headers['Authorization'] = authState.authToken;
-
           params.headers["x-access-token"] = authState.authToken;
         }
 
         const response = await fetch(BASE_URL + endpoint, { ...params });
         if (!response.ok) {
+          console.log(response?.body);
           const data = await response.json(); // Assume always json response
           throw data;
         }
