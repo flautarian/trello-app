@@ -14,8 +14,7 @@ import { createNegativeColor, darkenColor, lightenColor } from '../../../utils/c
 const HeaderComponent: FunctionComponent = ({ }) => {
 
     const [isEditingBoardTitle, setEditingBoardTitle] = useState(false);
-    const { updateState, currentBoardIndex, trelloState, isLoading, isSocketConected, roomClientNumber } = useContext(trelloCtx);
-    const { globalLogOutDispatch } = useContext(authCtx);
+    const { updateState, currentBoardIndex, trelloState, isLoading, isSocketConected, roomClientNumber, logOutDispatch } = useContext(trelloCtx);
     const { t } = useTranslation(['home']);
 
     const handleBoardNameChange = (evt: any) => {
@@ -83,7 +82,7 @@ const HeaderComponent: FunctionComponent = ({ }) => {
                 </LanguageContainer>
                 <LogOutButton
                     $textcolor={trelloState.colors.bgColorFromLsN}
-                    onClick={() => globalLogOutDispatch()}
+                    onClick={() => logOutDispatch()}
                     data-tooltip-id={"board-logout-btn-tooltip"}
                     data-tooltip-content={t("logout")}>
                     <LogOut></LogOut>

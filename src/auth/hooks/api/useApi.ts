@@ -15,8 +15,7 @@ const useApi = () => {
     async (
       endpoint: string,
       params: { [key: string]: any },
-      handleSuccessResponse: (data: any) => void,
-      handleErrorResponse?: (error: Error) => void
+      handleSuccessResponse: (data: any) => void
     ) => {
       setLoading(true);
       setError(null);
@@ -25,10 +24,10 @@ const useApi = () => {
         // NOTE: If user is logged in, insert the auth token into request headers for authorization
         if (authState.isLoggedIn) {
           //params.headers['Authorization'] = authState.authToken;
-          
+
           params.headers["x-access-token"] = authState.authToken;
         }
-        
+
         const response = await fetch(BASE_URL + endpoint, { ...params });
         if (!response.ok) {
           const data = await response.json(); // Assume always json response
@@ -36,7 +35,7 @@ const useApi = () => {
         }
         const data = await response.json(); // Assume always json response
 
-        if(authState.isLoggedIn && !!data.user){
+        if (authState.isLoggedIn && !!data.user) {
           const user = data.user;
           globalRefreshDispatch({
             authToken: user.auth_token,
@@ -46,17 +45,7 @@ const useApi = () => {
         // If response is okay and no errors, then successful request
         handleSuccessResponse && (await handleSuccessResponse(data));
       } catch (error: any) {
-        // NOTE: If it's unauthorized error, then we will auto log user out
-        if (error && error.message && error.message === "Unauthorized") {
-          globalLogOutDispatch();
-        }
-
-        // Handle error if specified
-        if (handleErrorResponse) {
-          handleErrorResponse(error.message || error.error || error);
-        } else {
-          setError(error.message || error.error || error);
-        }
+        throw error;
       }
 
       setLoading(false);
@@ -66,10 +55,11 @@ const useApi = () => {
   );
 
   return {
-    loading: loading,
-    error: error,
-    request: request,
-    setError: setError,
+    loading,
+    error,
+    request,
+    setError,
+    globalLogOutDispatch,
   };
 };
 

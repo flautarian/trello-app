@@ -43,6 +43,7 @@ export interface TrelloContext {
     pullState: () => void;
     setCurrentBoardIndex: (props: number) => void;
     roomClientNumber: number;
+    logOutDispatch: () => void;
 };
 
 // Trello context
@@ -54,7 +55,8 @@ const trelloCtx = createContext<TrelloContext>({
     updateState: () => { },
     pullState: () => { },
     setCurrentBoardIndex: () => { },
-    roomClientNumber: 0
+    roomClientNumber: 0,
+    logOutDispatch: () => { },
 });
 
 export const TrelloContextProvider = (props: TrelloProviderProps) => {
@@ -78,7 +80,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     const [trelloState, trelloDispatch] = useReducer(trelloReducer, defaultTrelloState);
 
     // request api connection
-    const { request, setError } = useApi();
+    const { request, setError, globalLogOutDispatch } = useApi();
 
     // socketIO api connection
     const { isSocketConected, initiateSocket, disconnectSocket, sendMessage, room, roomClientNumber } = useSocket();
@@ -88,6 +90,14 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
 
     // I18n const
     const { t } = useTranslation(['home']);
+
+    const logOutDispatch = useCallback(() => {
+        // disconnect socket before logout
+        if(isSocketConected)
+            disconnectSocket();
+        // logout
+        globalLogOutDispatch();
+    }, [isSocketConected, request]);
 
 
     const pullState = useCallback(() => {
@@ -116,8 +126,11 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
                 })
             });
         } catch (error: any) {
-            setError(error.message || error);
-            //navigate('user/login');
+            setError(error?.message || error);
+            console.log(error?.message);
+            if(error?.message === "Unauthorized")
+                logOutDispatch();
+            toast.error(error.message || error.error || error, { duration: 2000 });
         } finally {
             setIsLoading(false);
         }
@@ -215,7 +228,9 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
 
         } catch (error: any) {
             setError(error.message || error);
-            // navigate('user/login');
+            if(error?.message === "Unauthorized")
+                logOutDispatch();
+            toast.error(error.message || error.error || error, { duration: 2000 });
         }
         finally {
             setIsLoading(false);
@@ -231,7 +246,8 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
         updateState,
         pullState,
         setCurrentBoardIndex,
-        roomClientNumber
+        roomClientNumber,
+        logOutDispatch,
     };
 
     return <trelloCtx.Provider value={ctx}>

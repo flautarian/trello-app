@@ -76,8 +76,8 @@ const Auth = () => {
 
             const endpoint = `/${isLogin === LoginState.LOG_IN ? 'login' : 'register'}`
             await request(endpoint, params, (data) => {
-                
-                if (isLogin === LoginState.LOG_IN){
+
+                if (isLogin === LoginState.LOG_IN) {
                     toast.success(t("login_success"), { duration: 1000 });
                     setAuthData(data);
                 }
@@ -86,22 +86,12 @@ const Auth = () => {
                     setIsLogin(LoginState.LOG_IN);
                     setFormAnimation("appear");
                 }
-            }, (error: any) => {
-                toast.error(error.message || error.error || error, { duration: 2000 });
-                setFormAnimation("appear");
             });
         } catch (error: any) {
-            toast.error(error.message || error.error || error);
+            toast.error(error.message || error.error || error, { duration: 2000 });
             setFormAnimation("appear");
         }
     };
-
-    const getContainerStyle = (color: string): React.CSSProperties => ({
-        width: "100%",
-        height: "100%",
-        background: "linear-gradient(to bottom, " + color + " 0%, " + color + " 90%, rgba(255,255,255,1) 100%)",
-        transition: 'background linear-gradient 5s ease',
-    });
 
     return (
         <>
