@@ -151,17 +151,23 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
             if (!!roomName && roomName.length > 0) {
                 initiateSocket(JSON.parse(roomName), updateFromSocket);
                 // event to disconnect on page chnage of refresh
-                window.addEventListener('beforeunload', () => disconnectSocket(roomRef.current));
+                
             }
         }
-        return () => {
+        /* return () => {
             if(isSocketConected){
                 if (!!roomRef.current && roomRef.current.length > 0)
                     disconnectSocket();
-                window.removeEventListener('beforeunload', () => disconnectSocket(roomRef.current));
             }
-        }
+        } */
     }, [navigate]);
+
+    if (typeof window !== "undefined") {
+        window.addEventListener('beforeunload', () => {
+            disconnectSocket(roomRef.current);
+            window.removeEventListener('beforeunload', () => disconnectSocket(roomRef.current));
+        });
+      }
 
     useEffect(() => {
         roomRef.current = room;
