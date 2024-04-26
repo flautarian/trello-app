@@ -1,6 +1,8 @@
 import { IBoard, ICard, IColors } from '../models/index';
+import { TrelloState } from '../reducers/TrelloReducer';
 
 export enum TrelloActionEnum {
+    UNDO = 'UNDO',
     EDIT_BOARD = 'EDIT_BOARD',
     ADD_BOARD = 'ADD_BOARD',
     ADD_LIST = 'ADD_LIST',
@@ -16,6 +18,9 @@ export enum TrelloActionEnum {
   };
   
   export type TrelloAction = {
+    type: TrelloActionEnum.UNDO,
+    payload?: TrelloState
+  } |{
     type: TrelloActionEnum.EDIT_BOARD,
     payload: {
         indexBoard: number;

@@ -6,6 +6,7 @@ import { TrelloAction } from "../action/TrelloActions";
 export interface TrelloState {
   boards: IBoard[];
   colors: IColors;
+  prev?: TrelloState;
 };
 
 export const defaultTrelloState: TrelloState = {
@@ -16,6 +17,10 @@ export const defaultTrelloState: TrelloState = {
 
 export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action) => {
   switch (action.type) {
+    case "UNDO":
+      if(action.payload) 
+        return action.payload;
+      return state;
     case "EDIT_BOARD":
       return {
         ...state,
@@ -27,7 +32,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "ADD_BOARD":
       return {
@@ -38,7 +44,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             title: 'New Board',
             list: []
           }
-        ]
+        ],
+        prev: state
       };
     case "ADD_LIST":
       return {
@@ -57,7 +64,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "REMOVE_LIST":
       return {
@@ -70,7 +78,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "REORDER_LIST":
       return {
@@ -87,7 +96,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "EDIT_LIST":
       return {
@@ -108,7 +118,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "ADD_CARD":
       return {
@@ -135,7 +146,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "REMOVE_CARD":
       return {
@@ -156,7 +168,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "REORDER_CARD":
       const {
@@ -208,7 +221,8 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "EDIT_CARD":
       return {
@@ -234,18 +248,21 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
             };
           }
           return board;
-        })
+        }),
+        prev: state
       };
     case "PULL":
       return {
         ...state,
         boards: action.payload.boards,
-        colors: action.payload.colors
+        colors: action.payload.colors,
+        prev: state
       };
     case "UPDATE_COLORS":
       return {
         ...state,
-        colors: action.payload.newColors
+        colors: action.payload.newColors,
+        prev: state
       };
     default:
       return state;

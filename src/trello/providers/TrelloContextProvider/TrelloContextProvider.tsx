@@ -73,8 +73,13 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     // initial load security indicator
     const [initialChange, setInitialChange] = useState(true);
 
+    const defaultTrelloData: TrelloData = {
+        type: TrelloActionEnum.PULL,
+        payload: ""
+    }
+
     // Security save board boolean
-    const [ableToSave, setAbleToSave] = useState(false);
+    const [propsToSave, setPropsToSave] = useState(defaultTrelloData);
 
     // main object reducer
     const [trelloState, trelloDispatch] = useReducer(trelloReducer, defaultTrelloState);
@@ -91,10 +96,12 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     // I18n const
     const { t } = useTranslation(['home']);
 
+    type CallbackFunction = () => void;
+
     const logOutDispatch = useCallback(() => {
         // disconnect socket before logout
         console.log("logging out");
-        if(isSocketConected)
+        if (isSocketConected)
             disconnectSocket();
         // logout
         globalLogOutDispatch();
@@ -128,7 +135,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
             });
         } catch (error: any) {
             setError(error?.message || error);
-            if((error?.message || error) === "Unauthorized")
+            if ((error?.message || error) === "Unauthorized")
                 logOutDispatch();
             toast.error(error.message, { duration: 2000 });
         } finally {
@@ -147,19 +154,16 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     // Check for first pull of data to get the trello's info at first rendering
     useEffect(() => {
         let roomName = localStorage.getItem("user") || null;
-        if(!isSocketConected){
-            if (!!roomName && roomName.length > 0) {
+        if (!isSocketConected) {
+            if (!!roomName && roomName.length > 0)
                 initiateSocket(JSON.parse(roomName), updateFromSocket);
-                // event to disconnect on page chnage of refresh
-                
-            }
         }
-        /* return () => {
-            if(isSocketConected){
+        return () => {
+            if (isSocketConected) {
                 if (!!roomRef.current && roomRef.current.length > 0)
                     disconnectSocket();
             }
-        } */
+        }
     }, [navigate]);
 
     if (typeof window !== "undefined") {
@@ -167,7 +171,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
             disconnectSocket(roomRef.current);
             window.removeEventListener('beforeunload', () => disconnectSocket(roomRef.current));
         });
-      }
+    }
 
     useEffect(() => {
         roomRef.current = room;
@@ -197,29 +201,37 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
         catch (e) {
             console.log(e);
         }
-    },[isSocketConected, trelloDispatch]);
+    }, [isSocketConected, trelloDispatch]);
 
     const updateState = (props: TrelloData) => {
+        // reduce new state
         trelloDispatch(props);
-        // send socketIO msg to other instances of trello in this account
-        sendMessage(JSON.stringify(props))
-        setAbleToSave(true);
+        // signal to upload new state
+        setPropsToSave(props);
     }
 
     useEffect(() => {
-        if(ableToSave){
-            // This effect will run after trelloState has been updated
-            pushState(); // Now pushState will receive the updated state
-            setAbleToSave(false);
+        if (JSON.stringify(propsToSave) !== JSON.stringify(defaultTrelloData)) {
+            // upload new state
+            pushState(myCallbackFunction);
+            // restart signal
+            setPropsToSave(defaultTrelloData);
         }
-    }, [trelloState, ableToSave]);
+    }, [trelloState, propsToSave]);
+
+    const myCallbackFunction: CallbackFunction = useCallback(() => {
+        // after successful upload of new state we send socketIO msg to other instances of trello in this account
+        if (isSocketConected)
+            sendMessage(JSON.stringify(propsToSave));
+      }, [trelloState, propsToSave]);
 
 
-    const pushState = useCallback(async () => {
+    const pushState = useCallback(async (callback?: CallbackFunction) => {
         try {
-            // block loading
+            // block pushing in use
             if (isLoading)
                 return;
+            // block loading
             setIsLoading(true);
             const user = localStorage.getItem("user");
             const userData: AuthState = JSON.parse(user || '');
@@ -237,14 +249,21 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
                 }),
             };
 
+            // request send
             const endpoint = '/push';
-            request(endpoint, params, (result) => {
+            await request(endpoint, params, (result) => {
+                // if a callback is given, we execute it
+                if(callback)
+                    callback();
+                // sooner toast
                 toast.success(t("data_updated"), { duration: 1500 });
             });
 
         } catch (error: any) {
             setError(error.message || error);
-            if(error?.message === "Unauthorized")
+            // if an error occurs, we undo changes
+            trelloDispatch({ type: TrelloActionEnum.UNDO, payload: trelloState.prev });
+            if (error?.message === "Unauthorized")
                 logOutDispatch();
             toast.error(error.message || error.error || error, { duration: 2000 });
         }
@@ -267,7 +286,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
     };
 
     return <trelloCtx.Provider value={ctx}>
-        {
+        {/* {
             isLoading &&
             <div style={{
                 position: "absolute",
@@ -281,7 +300,7 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
                 <style>{loadingSpinnerStyle}</style>
                 <span className="loader"></span>
             </div>
-        }
+        } */}
         {children}
     </trelloCtx.Provider>;
 };
