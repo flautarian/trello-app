@@ -18,9 +18,16 @@ const useSocket = () => {
         if (socket && _room) {
             socket.on("connect", () => {
                 //console.log('Websocket connected as ' + socket.id);
-                localStorage.setItem("socket-io-user", socket.id || "");
+                debugger;
+                if(!localStorage.getItem("socket-io-user"))
+                    localStorage.setItem("socket-io-user", socket.id || "");
                 //console.log('room: ' + room);
                 setRoom(_room.email);
+
+                const socketClientId = localStorage.getItem("socket-io-user");
+                if(socketClientId)
+                    socket.emit('enter_room', JSON.stringify({ id: _room.email, socketClientId: socketClientId }));
+
                 socket.on('message', (msg: string) => {
                     //console.log('Websocket event received!');
                     if (callback)
@@ -33,11 +40,9 @@ const useSocket = () => {
             
             socket.on("disconnect", () => {
                 //console.log('Websocket disconnected');
-                localStorage.removeItem("socket-io-user");
             });
             if(!socket.connected){
                 socket.connect();
-                socket.emit('enter_room', JSON.stringify({ id: _room.email }));
             }
         }
     }, [socket, room]); // Include room in the dependency array
@@ -45,10 +50,13 @@ const useSocket = () => {
     const disconnectSocket = useCallback((roomRef : String = "") => {
         if (socket) {
             let roomToLeave = roomRef.length > 0 ? roomRef : room;
-            console.log('exiting room: ' + roomToLeave);
-            socket.emit('exit_room', JSON.stringify({ id: roomToLeave }));
-            console.log('Disconnecting socket...');
-            socket.disconnect();
+            const socketClientId = localStorage.getItem("socket-io-user");
+            if(socketClientId){
+                console.log('exiting room: ' + roomToLeave);
+                socket.emit('exit_room', JSON.stringify({ id: roomToLeave, socketClientId: socketClientId }));
+                console.log('Disconnecting socket...');
+                socket.disconnect();
+            }
         }
     }, [socket, room]);
     
