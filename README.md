@@ -49,7 +49,7 @@ TrelloApp is a React TypeScript application designed to facilitate task manageme
 
 - **start**: `react-scripts start` - Launches the development server.
 - **build**: `react-scripts build` - Builds the production-ready bundle of the application.
-- **test**: `react-scripts test --env=jsdom` - Runs tests using Jest with the jsdom environment.
+- **test**: `react-scripts test --env=jsdom` - Runs tests with the jsdom environment.
 - **eject**: `react-scripts eject` - Ejects from Create React App configuration.
 
 ## Installation
