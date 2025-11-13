@@ -62,6 +62,11 @@ To set up the project locally, follow these steps:
 4. Start the development server:
 5. Open your web browser and navigate to [http://localhost:3000](http://localhost:3000) to view the application.
 
+You can check a demo at live web example of running app: https://trello-app-giacconidev.vercel.app
+Demo credentials:
+- user: demo
+- password: D3m0Tr3110
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
