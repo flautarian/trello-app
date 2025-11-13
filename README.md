@@ -65,6 +65,7 @@ To set up the project locally, follow these steps:
 You can check a demo at live web example of running app: https://trello-app-giacconidev.vercel.app
 Demo credentials:
 - user: demo
+- mail: demo.dev@gmail.com
 - password: D3m0Tr3110
 
 ## License
