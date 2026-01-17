@@ -10,12 +10,8 @@ import "./i18n";
 // @ts-ignore
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
-  // strict mode deactivated because beautiful dnd not works then
-  //<React.StrictMode>
   <>
-    {/* Sooner declaration */}
     <Toaster position="bottom-center" richColors style={{marginTop: "25px"}}/>
-    {/* global style constant */}
     <GlobalStyle />
     <BrowserRouter>
       <AuthContextProvider>
@@ -23,5 +19,4 @@ root.render(
       </AuthContextProvider>
     </BrowserRouter>
   </>
-  //</React.StrictMode>
 );

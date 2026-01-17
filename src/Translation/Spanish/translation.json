@@ -21,5 +21,7 @@
     "style_select": "Seleccionar estilo",
     "title": "Título",
     "description": "Descripción",
-    "deleteCard": "Estas a punto de borrar esta ficha. ¿Estas seguro?"
+    "deleteCard": "Estas a punto de borrar esta ficha. ¿Estas seguro?",
+    "deleteBoard": "Borrar tablero",
+    "deleteBoardConfirm": "Estas a punto de borrar este tablero. ¿Estas seguro?"
 }

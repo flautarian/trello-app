@@ -5,7 +5,6 @@ import React from 'react';
 import Trello from "./trello/Trello";
 import { TrelloContextProvider } from './trello/providers/TrelloContextProvider/TrelloContextProvider';
 import authCtx from "./auth/providers/AuthContextProvider";
-import { loadingSpinnerStyle } from "./utils/components/globalUtils/globalutils";
 
 function App() {
   const { authState } = useContext(authCtx);

@@ -5,6 +5,7 @@ export enum TrelloActionEnum {
     UNDO = 'UNDO',
     EDIT_BOARD = 'EDIT_BOARD',
     ADD_BOARD = 'ADD_BOARD',
+    DELETE_BOARD = 'DELETE_BOARD',
     ADD_LIST = 'ADD_LIST',
     REMOVE_LIST = 'REMOVE_LIST',
     REORDER_LIST = 'REORDER_LIST',
@@ -31,6 +32,12 @@ export enum TrelloActionEnum {
     type: TrelloActionEnum.ADD_BOARD,
     payload: {
         editBoardValue: string;
+    }
+  } | 
+  {
+    type: TrelloActionEnum.DELETE_BOARD,
+    payload: {
+        indexBoard: number;
     }
   } | 
    

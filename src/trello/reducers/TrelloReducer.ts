@@ -47,6 +47,12 @@ export const trelloReducer: Reducer<TrelloState, TrelloAction> = (state, action)
         ],
         prev: state
       };
+    case "DELETE_BOARD":
+      return {
+        ...state,
+        boards: state.boards.filter((board, index) => index !== action.payload.indexBoard),
+        prev: state
+      };
     case "ADD_LIST":
       return {
         ...state,

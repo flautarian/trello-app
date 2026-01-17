@@ -46,7 +46,7 @@ const OptionsComponent: FunctionComponent<IOptionsProps> = ({
       <MenuButton
         onClick={() => setSidebarOpen(!sidebarOpen)}
         data-tooltip-id={"style-select-btn-tooltip"}
-        data-tooltip-content={t("lang_select")}>
+        data-tooltip-content={t("style_select")}>
         <Edit2></Edit2>
       </MenuButton>
       <CirclePickerContainer color={backgroundColor} display={sidebarOpen ? 1 : 0} ref={componentRef}>
