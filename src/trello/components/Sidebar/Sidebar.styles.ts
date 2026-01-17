@@ -33,7 +33,7 @@ export const SidebarButton = styled.button<{$showsidebar: number}>`
 export const BoardElement = styled.div<{color: string, $textcolor: string}>`
     border-radius: 25px;
     width: 40px;
-    height: 40px;
+    height: 35px;
     margin-top: 20px;
     background: ${({ color }) => color};
     color: ${({ $textcolor }) => $textcolor};
@@ -70,4 +70,36 @@ export const BoardElementAdd = styled.div<{color: string, $textcolor: string}>`
     &:hover {
       background-color: rgba(255, 255, 255, 0.6);
     }
-`
+  `
+
+export const BoardElementContainer = styled.div<{ $showsidebar: number }>`
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    position: relative;
+    
+    &:hover .delete-button {
+        opacity: ${({ $showsidebar }) => $showsidebar ? '1' : '0'};
+    }
+  `
+
+export const DeleteButton = styled.button<{ $textcolor: string, $showsidebar: number }>`
+    background: none;
+    background-color: rgba(255, 99, 99, 0.3);
+    position: absolute;
+    right: -10px;
+    border: none;
+    color: ${({ $textcolor }) => $textcolor};
+    cursor: pointer;
+    padding: 5px;
+    margin-left: 8px;
+    border-radius: 15px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    display: ${({ $showsidebar }) => $showsidebar ? 'flex' : 'none'};
+
+    &:hover {
+        background-color: rgba(255, 99, 99, 0.8);
+        transform: scale(1.1);
+    }
+  `

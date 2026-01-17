@@ -21,5 +21,7 @@
     "style_select": "Sélectionnez le style",
     "title": "Titre",
     "description": "Description",
-    "deleteCard": "Vous allez supprimer cette carte, en êtes-vous sûr?"
+    "deleteCard": "Vous allez supprimer cette carte, en êtes-vous sûr?",
+    "deleteBoard": "Supprimer le tableau",
+    "deleteBoardConfirm": "Vous allez supprimer ce tableau, en êtes-vous sûr?"
 }

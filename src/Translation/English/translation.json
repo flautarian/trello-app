@@ -21,5 +21,7 @@
     "style_select": "Select style",
     "title": "Title",
     "description": "Description",
-    "deleteCard": "You are going to delete this card, are you sure?"
+    "deleteCard": "You are going to delete this card, are you sure?",
+    "deleteBoard": "Delete board",
+    "deleteBoardConfirm": "You are going to delete this board, are you sure?"
 }
