@@ -1,13 +1,15 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  background: white;
+export const Container = styled.div<{ $isfocused?: boolean, $bgcolor?: string,  $bglsColor?: string}>`
+  background: ${({ $isfocused, $bgcolor }) => ($isfocused ? $bgcolor : 'white')};
+  outline: ${({ $isfocused, $bglsColor }) => ($isfocused ? '2px solid ' + $bglsColor : 'none')};
   margin-top: 5px;
   display: flex;
   justify-content: space-between;
   user-select: none;
   font-family: "Poppins", sans-serif;
   padding: 10px;
+  border-radius: 5px;
 `;
 
 export const Left = styled.div`

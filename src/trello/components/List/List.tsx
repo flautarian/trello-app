@@ -36,7 +36,7 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
     ...draggableStyle,
   });
 
-  
+
   const getItemCardInnerStyle = (
     isdragging: boolean,
     draggableStyle: any,
@@ -124,7 +124,7 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps} 
+                        {...provided.dragHandleProps}
                         style={getItemStyle(
                           snapshot.isDragging,
                           provided.draggableProps.style,
@@ -132,7 +132,7 @@ const ListComponent: FunctionComponent<IListProps> = ({ list, indexList }) => {
                         <CardContainer
                           $bgcolor={trelloState.colors.bgColorFromLs}
                           $bghovercolor={trelloState.colors.bgColorFromLsD}
-                          >
+                        >
                           <CardComponent
                             key={cardIndex}
                             card={card}

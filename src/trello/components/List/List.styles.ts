@@ -50,6 +50,7 @@ export const CardContainer = styled.div<{ $bghovercolor: string, $bgcolor: strin
 transition: background-color 0.15s ease-in-out;
 transition: transform 0.1s ease;
 cursor: pointer;
+border-radius: 5px;
 
 &:hover {
     background-color: ${({ $bghovercolor }) => $bghovercolor};

@@ -11,7 +11,7 @@ import './styles.css';
 
 const Trello: FunctionComponent = ({ }) => {
   // Trello context
-  const { trelloState, updateState, currentBoardIndex } = useContext(trelloCtx);
+  const { trelloState, updateState, currentBoardIndex, currentCardIndex, setCurrentCardIndex } = useContext(trelloCtx);
 
   const onDragEnd = useCallback((result: DropResult, provided: ResponderProvided) => {
     // dropped outside the list or same position
@@ -51,7 +51,7 @@ const Trello: FunctionComponent = ({ }) => {
   }
 
   return (
-    <Container $bgcolor={trelloState.colors.bgColorFromLs} style={{maxWidth: "100vw", overflow: "none"}}>
+    <Container $bgcolor={trelloState.colors.bgColorFromLs} style={{maxWidth: "100vw", overflow: "none"}} onClick={() => setCurrentCardIndex("")}>
       <>
         <HeaderComponent />
         <SidebarComponent></SidebarComponent>

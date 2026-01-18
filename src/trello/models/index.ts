@@ -20,6 +20,10 @@ export interface IColors {
   bgColorFromLsN: string;
 }
 
+export interface ContainerProps {
+  isFocused: boolean;
+}
+
 export const CardFormTemplate = {
   values: [
     {

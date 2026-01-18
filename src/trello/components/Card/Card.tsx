@@ -7,6 +7,7 @@ import { ICard, CardFormTemplate } from '../../models';
 import ReactDOM from 'react-dom';
 import { AnimationName } from '../../../utils/components/globalAnimationsComponent/globalAnimationsComponent';
 
+
 interface ICardComponent {
   card: ICard;
   indexCard: number;
@@ -20,15 +21,16 @@ const CardComponent: FunctionComponent<ICardComponent> = ({
 }) => {
 
   const openEditCard = () => {
-    if(!showModal){
+    if (!showModal) {
       setShowModal(true);
       setModalAnimation('appear');
     }
   }
 
-  const { updateState, currentBoardIndex } = useContext(trelloCtx);
+  const { trelloState, updateState, currentBoardIndex, currentCardIndex, setCurrentCardIndex } = useContext(trelloCtx);
 
   const [showModal, setShowModal] = useState(false);
+  const cardId = "" + indexList +  indexCard;
 
   const [modalAnimation, setModalAnimation] = useState<AnimationName>("none");
 
@@ -54,8 +56,22 @@ const CardComponent: FunctionComponent<ICardComponent> = ({
     setModalAnimation('disappear');
   };
 
+  const handleDoubleClick = () => {
+    openEditCard();
+  }
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setCurrentCardIndex(cardId === currentCardIndex ? "" : cardId);
+  }
+
   return (
-    <Container onClick={openEditCard}>
+    <Container 
+      onDoubleClick={handleDoubleClick}
+      onClick={handleClick} $isfocused={currentCardIndex === cardId} 
+      $bgcolor={trelloState.colors.bgColorFromLsL} 
+      $bglsColor={trelloState.colors.bgColorFromLs}
+      tabIndex={0}>
       <Left>
         {card.title || "--"}
       </Left>

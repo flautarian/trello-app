@@ -23,7 +23,6 @@ import useSocket from '../../../auth/hooks/websocket/useSocket';
 import { initialBoards, initialColors } from "../../utils";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
-import { loadingSpinnerStyle } from "../../../utils/components/globalUtils/globalutils";
 
 type TrelloProviderProps = {
     children: React.ReactElement;
@@ -39,9 +38,11 @@ export interface TrelloContext {
     isSocketConected: boolean,
     trelloState: TrelloState;
     currentBoardIndex: number,
+    currentCardIndex: string,
     updateState: (props: TrelloData) => void;
     pullState: () => void;
     setCurrentBoardIndex: (props: number) => void;
+    setCurrentCardIndex: (props: string) => void;
     roomClientNumber: number;
     logOutDispatch: () => void;
 };
@@ -52,9 +53,11 @@ const trelloCtx = createContext<TrelloContext>({
     isSocketConected: false,
     trelloState: defaultTrelloState,
     currentBoardIndex: 0,
+    currentCardIndex: "",
     updateState: () => { },
     pullState: () => { },
     setCurrentBoardIndex: () => { },
+    setCurrentCardIndex: () => { },
     roomClientNumber: 0,
     logOutDispatch: () => { },
 });
@@ -69,6 +72,9 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
 
     // current board indicator state
     const [currentBoardIndex, setCurrentBoardIndex] = useState(0);
+
+    // current board indicator state
+    const [currentCardIndex, setCurrentCardIndex] = useState("");
 
     // initial load security indicator
     const [initialChange, setInitialChange] = useState(true);
@@ -278,29 +284,17 @@ export const TrelloContextProvider = (props: TrelloProviderProps) => {
         isSocketConected,
         trelloState,
         currentBoardIndex,
+        currentCardIndex,
         updateState,
         pullState,
         setCurrentBoardIndex,
+        setCurrentCardIndex,
         roomClientNumber,
         logOutDispatch,
     };
 
     return <trelloCtx.Provider value={ctx}>
-        {/* {
-            isLoading &&
-            <div style={{
-                position: "absolute",
-                height: "100%",
-                width: "100%",
-                backgroundColor: "rgba(0,0,0,0.5)",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-            }}>
-                <style>{loadingSpinnerStyle}</style>
-                <span className="loader"></span>
-            </div>
-        } */}
+        {}
         {children}
     </trelloCtx.Provider>;
 };
